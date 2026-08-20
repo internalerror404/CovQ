@@ -1,0 +1,356 @@
+project: CovQ
+version: 0.3
+status: pre_pilot_research_protocol
+supersedes: archive/v0.2/CovQ_Experiment_Protocol_v0.2.yaml
+basis:
+  - docs/proofs/THEOREM_PAIR_WIDTH_AND_INFORMATION_FLOOR_v0.1.md
+  - docs/audits/PRIOR_ART_SWEEP_TASK0B5_v0.1.md
+  - docs/audits/TASK0AB_NOVELTY_THEOREM_AUDIT_v0.2.md
+  - docs/decisions/DECISION_001_PIVOT_TO_BOUNDED_WIDTH.md
+paper_identity: quantum_compilation
+
+working_title: "CovQ: Compiling Fisher-Information Contracts to Pair-Entangled Quantum Programs"
+subtitle: "Hardware Matching Polytopes, Certified Minimum-Cost Schedules, and Information Floors"
+
+# --------------------------------------------------------------------------
+# Compiler interface
+# --------------------------------------------------------------------------
+primary_input:                       # the contract: (G, H, A, G_req, C) -> Pi
+  generators: independent_commuting_Pauli_strings
+  hardware_graph: specified
+  downstream_map_A: real_m_by_d       # the parameter combinations the caller cares about
+  requirement_G_req: psd_d_by_d       # the Fisher floor those combinations must clear
+  contract: "A^T F_Pi A >= G_req"     # Loewner
+  objective: "min sum_e c_e t_e"      # = expected per-shot native Bell-pair bill
+  exact_matching_mode: retained_as_verification_and_benchmark_only
+  tolerance: specified
+
+realised_probe_sector: unit_diagonal      # F_ii = 1 <=> <P_i> = 0; one condition, not two
+excluded_sector:
+  subunit_diagonal_realised_probes:
+    reason: >
+      feasibility is the joint moment condition (mu, M) in conv{(s, s s^T)} with
+      M = F + mu mu^T, not M in Q_m; the prescribed-moment literature is unaudited.
+
+cost_model:
+  - branch_count_or_settings
+  - k_logical                      # branch width in the Z frame
+  - k_physical                     # product width of the emitted physical branch
+  - clifford_two_qubit_cost
+  - two_qubit_gate_count
+  - two_qubit_depth
+  - SWAP_count
+  - ancilla_count
+  - flag_dimension                 # coherent programs only
+  - schmidt_rank_flag_cut          # coherent programs only
+  - predicted_noisy_QFIM_error
+
+# --------------------------------------------------------------------------
+# Program semantics
+# --------------------------------------------------------------------------
+program_semantics:
+  bounded_width_theorem_applies_to: labelled_randomized_schedule_only
+  backends:
+    labelled_randomized_schedule:
+      per_shot_qfim: sum_r p_r F_r
+      width_is_a_valid_resource: true
+    coherent_accessible_flag:
+      exact_identity: "F_Psi = sum_r p_r F_r + Cov_p(mu_r)"
+      equality_condition: branch_means_coincide      # not merely vanish
+      width_is_a_valid_resource: false
+      reason: >
+        |Psi_p> = sum_s sqrt(p(s)) |s>_flag |s>_data realises ANY feasible target with
+        every conditional data branch a product eigenstate (width 1), while dephasing
+        the flag sends the QFIM to zero. The resource moved into flag-data entanglement,
+        flag dimension, Schmidt rank and joint readout.
+      report_instead: [flag_dimension, schmidt_rank_flag_cut, controlled_prep_cost, joint_readout]
+  forbidden_shortcut: unlabelled_mixed_state_QFI_equals_average_branch_QFI
+  measured_caveat_on_forbidden_shortcut: >
+    For signed-cat schedules the gap is exactly zero, because Z_i|C_s> = s_i|C^-_s> maps
+    supp(rho) into ker(rho). The rule still stands in general; the positive control is
+    (|C_s>, |C^-_s>) at equal weight, whose covariance is s s^T and whose QFI is zero.
+  comparability_rule: >
+    Programs on opposite sides of the C2c dephasing test are NOT comparable on gate count.
+
+# --------------------------------------------------------------------------
+# Scope
+# --------------------------------------------------------------------------
+scope_v1:
+  qubits_m: [3, 4, 5, 6, 8, 10, 12]
+  enumeration_caps:                      # split; these are different operations
+    vertex_generation_max_m: 20          # 2^(m-1) quotiented columns; 2048 at m=12
+    exact_membership_max_m: 16
+    width_k_generator_enumeration_max_m: 8
+    minimum_support_MILP_max_m: 6
+    odd_set_enumeration_max_m: 20        # Padberg-Rao separation is the poly-time route
+  generator_classes:
+    - physical_Z_generators
+    - random_independent_commuting_Pauli_generators_via_Clifford
+  noise_stages:
+    - ideal_statevector
+    - local_dephasing
+    - two_qubit_depolarizing
+    - readout_error
+    - topology_routing_cost
+
+# --------------------------------------------------------------------------
+# Benchmarks
+# --------------------------------------------------------------------------
+benchmark_families:
+  feasible_hidden_decomposition:
+    support_sizes: [2, 4, 8, 16]
+    structures: [random_signed_cat_mixtures, block_diagonal, signed_community]
+  contract_probes:                       # closed-form; these make the floor non-trivial
+    common_mode:
+      A: "1/sqrt(m)"
+      G_req: "[gamma]"
+      closed_form_cost: "m (gamma - 1) / 2"
+      valid_range: "1 <= gamma <= 1 + 2*floor(m/2)/m"
+      product_probe_reaches: 1.0
+    collective_mode_ceiling:
+      A: "1_S / sqrt(k)"
+      ceiling_even_k: 2.0
+      ceiling_odd_k: "2 - 1/k"
+      note: >
+        the odd-size deficit is the blossom inequality expressed as information; an odd
+        collective mode always leaves one qubit unmatched and provably cannot reach the
+        pair-entanglement ceiling. Degree constraints alone would permit 2.
+    overlapping_modes:                   # forces a genuine multi-direction trade-off
+      m: 6
+      modes: [[0, 1, 2], [2, 3, 4]]      # share qubit 2
+      joint_threshold_gamma: 1.330412
+      single_mode_threshold_gamma: 1.666667
+      disjoint_modes_threshold_gamma: 1.666667
+  width_probes:                          # sharp, analytically known thresholds
+    matching_target: {width2_feasible: always}
+    path_target:
+      width2_threshold: 0.5
+      psd_threshold: "1 / (2 cos(pi/(m+1)))"
+      note: the window between the two is a good QFIM that provably needs width 3
+    star_target:
+      width2_threshold: "1/(m-1)"
+      psd_threshold: "1/sqrt(m-1)"
+    blossom_triangle:
+      degree_bound_permits: 0.5
+      odd_set_bound_permits: 0.3333333333
+      note: >
+        the whole family lies in Q_m; only the blossom inequality separates it, so this
+        is the instance family proving the characterisation exceeds degree counting.
+  structured_unknown: [toeplitz_like, banded, hierarchical, low_effective_rank]
+  infeasible_certified:
+    hypermetric_violator: {k_odd: [3, 5, 7], margin_delta: [0.02, 0.2, 0.4, 0.6]}
+    reference_instance:
+      m: 3
+      F: [[1.0, -0.4, -0.4], [-0.4, 1.0, -0.4], [-0.4, -0.4, 1.0]]
+      spectrum: [0.2, 1.4, 1.4]
+      certificate: {b: [1, 1, 1], b_F_b: 0.6, required: ">= 1", margin: 0.4}
+  boundary: [on_facet_targets]
+  generator_transformed: [random_Clifford_conjugated_commuting_Paulis]
+  application: [one_spacetime_derived_target_from_Paper1]
+
+compiler_arms:
+  - information_floor_cutting_plane       # PRIMARY: LP over MATCH(H) + Loewner cuts
+  - edmonds_width2_hardware_native        # the engine: MATCH(H) membership + Bell-pair schedule
+  - edmonds_width2_complete_graph
+  - routing_backend_over_width2           # priced separately, never folded in
+  - exact_global_cat_LP                   # background control
+  - bounded_width_exact_small_m
+  - column_generation
+  - frank_wolfe_with_away_steps           # = Fedorov-Wynn; cite as such
+  - noise_aware_block_cat_compiler
+
+baselines:
+  realisation_matched:                    # all four from the SAME decomposition
+    - caratheodory_sparse_pure_state
+    - randomized_cat_schedule
+    - coherent_sparse_data_state
+    - explicit_flag_data_purification
+  reference_probes:                       # fixed probes; realise exactly one QFIM each
+    - global_GHZ                          # J
+    - product_probe                       # I
+    - Hadamard_sign_schedule              # I, m settings
+    - fixed_state_cat_backend             # the "no equivalence-class freedom" control
+  deliberately_weak:
+    - generic_full_state_preparation_then_transpile
+  absent_blocking_claims:
+    - QUEST_expectation_targeting
+    - hardware_efficient_VQA_moment_matching
+    - ADAPT_style_Pauli_rotation_targeting
+
+caratheodory_support_bound:
+  augmented_moment_vector: "(s, offdiag(s s^T))"
+  bound: "m(m+1)/2 + 1"                   # 79 at m=12
+  note: >
+    gate counts depend on the sparse-preparation routine and topology; report O(m^3) only
+    as a generic polynomial upper bound, never as measured or optimal.
+
+hardware_topologies:
+  - all_to_all
+  - line
+  - ring
+  - square_grid
+  - heavy_hex_like
+  - modular_two_cluster
+  - programmable_neutral_atom_geometries
+
+# --------------------------------------------------------------------------
+# Metrics
+# --------------------------------------------------------------------------
+metrics:
+  contract:
+    - contract_satisfied                  # min eig of (A^T F_Pi A - G_req) >= -tol
+    - satisfaction_margin                 # that eigenvalue, reported not thresholded
+    - compiled_cost                       # sum_e c_e |F_e|
+    - relaxation_lower_bound              # from the cutting-plane LP; valid bound
+    - optimality_gap                      # compiled_cost - lower_bound
+    - n_loewner_cuts
+    - certificate_status                  # feasible | infeasible | iteration_limit
+    - cost_identity_residual              # |expected active edges/shot - sum_e |F_e||
+  semantic:
+    - operator_norm_QFIM_error            # exact-matching mode only
+    - frobenius_QFIM_error                # exact-matching mode only
+    - blossom_violation_margin
+  conditioning:                           # replaces downstream_error_bound_tightness
+    - rank_F
+    - lambda_min_positive
+    - condition_number_positive
+    - max_principal_angle_between_kernels
+    - pinv_error
+    - pinv_error_bound                    # eps / (gamma (gamma - eps)), gamma > eps
+  compiler_resources:
+    - branch_count_or_settings
+    - k_logical
+    - k_physical
+    - clifford_two_qubit_cost
+    - two_qubit_gate_count
+    - two_qubit_depth
+    - SWAP_count
+    - ancilla_count
+    - flag_dimension
+    - schmidt_rank_flag_cut
+    - compile_time
+  noisy_execution:
+    - realized_observable_covariance_error
+    - noisy_QFIM_or_bound
+    - attainable_classical_Fisher_information
+    - success_probability_if_postselected
+
+# --------------------------------------------------------------------------
+# Correctness gates
+# --------------------------------------------------------------------------
+correctness_gates:
+  C0a_contract_satisfaction:
+    criterion: >
+      the emitted circuits' realised QFIM satisfies A^T F A >= G_req to tolerance, verified
+      by simulation rather than by the solver's own report
+  C0b_cost_identity:
+    criterion: >
+      expected active native edges per shot equals sum_e |F_e| to 1e-9; the objective must BE
+      the Bell-pair bill, not a proxy for it
+  C0c_bound_validity:
+    criterion: relaxation_lower_bound <= compiled_cost, always
+  C0d_closed_form_agreement:
+    criterion: >
+      compiled cost equals m(gamma-1)/2 on the common-mode contract, and the collective-mode
+      thresholds equal 2 (even k) and 2 - 1/k (odd k)
+  C0e_infeasibility_is_certified:
+    criterion: >
+      a floor above the width-2 support value is rejected AND the boundary value itself is
+      accepted; rejection carries a certificate
+  C1_signed_cat_semantics:
+    criterion: "relative_Frobenius_error(F_statevector, s s^T) < 1e-12"
+  C2a_labelled_composition:
+    criterion: "F_CQ == sum_r p_r F_r"
+    note: implementation test only; this is the definition of the labelled backend
+  C2b_coherent_flag_identity:
+    criterion: "F_coh == sum_r p_r F_r + Cov_p(mu_r)"
+    required: must_include_nonzero_mean_test_branches
+    note: those branches may sit outside the main benchmark sector; without them untested
+  C2c_flag_coherence_discriminator:
+    criterion: >
+      dephasing the flag separates labelled-equivalent programs (dephasing costs nothing)
+      from genuinely coherent ones (dephasing destroys the QFIM); the sign purification
+      must land on the coherent side with conditional width 1, the literal controlled-cat
+      form on the labelled-equivalent side
+  C3_exact_feasibility:
+    criterion: >
+      full-vertex LP, column generation with exact pricing, and certificate search agree
+      on a suite containing feasible, infeasible AND boundary instances
+    note: enumeration cannot be its own cross-check
+  C4_infeasible_rejection:
+    criterion: rejected AND emitted certificate independently verifies
+    ground_truth_instance: see benchmark_families.infeasible_certified.reference_instance
+  C5_exact_reconstruction:
+    criterion: "Frobenius_error < 1e-10 from the emitted circuits"
+  C6a_width_integrity_logical:
+    criterion: every emitted branch factorises across its declared Z-frame blocks
+  C6b_width_integrity_physical:
+    criterion: k_physical measured on the emitted physical branch and reported separately
+    note: >
+      a globally entangling Clifford makes k_physical > k_logical; the converse also
+      occurs, so the generator frame is a compiler degree of freedom, not only a caveat
+  C7_Clifford_mapping:
+    criterion: QFIM preserved under generator basis mapping, verified end to end
+  C8_hardware_legality:
+    criterion: every two-qubit gate uses a legal edge after routing
+  C9_resource_accounting:
+    criterion: >
+      lowered circuits are unitarily equivalent to the emitted circuits, and every count
+      is an independent recount of the instruction list
+  C10_conditioning_stability:
+    status: MEASURED_not_PASS
+    criterion: report the conditioning metrics above; submultiplicativity is not a test
+  C11_sld_saturability:
+    criterion: "max_ij |Im <psi|P_i P_j|psi>| < 1e-12"
+    note: local at the operating point; report attainable classical Fisher separately
+  C12_convexity_gap:
+    status: MEASURED_not_PASS
+    criterion: >
+      F(unlabelled rho) <= sum_r p_r F_r per schedule shape, with a positive control
+      that exhibits a strictly positive gap
+  stop_rule: write_report_then_abort_without_tolerance_changes
+
+# --------------------------------------------------------------------------
+pilot_questions:
+  - Does hardware-native width-2 compilation beat routing a complete-graph schedule?
+  - How often do blossom inequalities, rather than degree constraints, decide width 2?
+  - How much does Caratheodory sparsity save against dense state preparation, with a
+    competitive sparse-preparation routine in place?
+  - Where does the settings / per-shot-gates / ancilla / coherence trade actually sit?
+  - At what noise level do pair-entangled schedules dominate global cats?
+  - Does frame choice (Clifford normalisation) reduce k_physical in practice?
+
+performance_thresholds:
+  status: freeze_after_pilot
+  rule: no_directional_success_thresholds_before_effect_size_measurement
+
+novelty_kill_gates:
+  K1a: specification_collision_with_QUEST          # FIRED; abstract rewritten
+  K1b: identical_end_to_end_compiler_with_certificates   # not established; still live
+  K2: width2_theorem_is_known_matching_result_with_no_quantum_content
+  K3: no_material_advantage_over_QUEST_measured
+  K4: no_useful_bounded_width_tradeoff             # CLEARED by the width-2 theorem
+  K5: no_state_equivalence_class_advantage
+  K6: width2_vs_width3_boundary_false_or_known_and_nothing_replaces_it
+  K7: only_application_targets_succeed
+  K8: only_variational_result_survives
+  K9: >
+    the information-floor interface adds nothing over classical Fisher-constrained design
+    once the quantum feasible set is fixed -- i.e. every benchmark contract is met by the
+    product probe or by one fixed state
+
+reproducibility:
+  seeds: [2026, 3407, 9181, 17041, 27183]
+  exact_small_instances: fully_enumerated
+  task_manifests: persisted_and_hashed
+  branch_artifacts:
+    - requirement_matrix
+    - generator_set
+    - decomposition
+    - certificates
+    - emitted_circuits
+    - transpiled_circuits
+    - metrics
+    - environment
+  claims_policy: separate_correctness_gates_from_scientific_hypotheses
+  normalisation_declaration: QFIMs are per shot, everywhere, without exception

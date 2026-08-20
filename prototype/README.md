@@ -20,15 +20,20 @@ rather than discarded because it produced three results that changed the documen
    like comparison: the cheap form moves the information into flag–data coherence and its
    QFIM vanishes under flag dephasing. Gate `C2c` now measures exactly this.
 
-It does **not** close step 6 of Task 0B.5. Missing against that list: noise stages beyond
-the ideal statevector, the information-floor SDP, a competitive sparse-preparation routine,
-and QUEST.
+Since then it has also closed step 2E: `floor.py` implements the contract compiler, and the
+analytic results in the charter are verified against it — the common-mode curve
+`cost*(γ) = m(γ−1)/2` to 1e-8 with zero optimality gap, the odd/even ceiling `2` vs `2 − 1/k`
+exact for `k = 2..8`, and the overlapping-mode threshold `γ* ≈ 1.3304` against `5/3` for a
+single or disjoint mode.
+
+It does **not** close step 6 of Task 0B.5. Missing against that list: noise stages beyond the
+ideal statevector, a competitive sparse-preparation routine, and QUEST.
 
 ## Run
 
 ```bash
 python3 -m pip install -r requirements.txt
-PYTHONPATH=src python3 -m pytest tests -q                       # ~2 s
+PYTHONPATH=src python3 -m pytest tests -q                       # 85 tests, ~22 s
 PYTHONPATH=src python3 scripts/run_evidence.py --out results/prototype_evidence.json
 ```
 
@@ -42,7 +47,8 @@ stops at the first failure and writes the report without touching any tolerance.
 | `paulis.py` | symplectic Pauli algebra; simultaneous Clifford diagonalisation. Signs are read off *numerically* rather than propagated through a phase rule, which removes a whole class of silent sign bugs. |
 | `qfim.py` | per-shot QFIM from statevectors; SLD saturability residual; conditioning and pseudoinverse stability. |
 | `polytope.py` | `Q_m` vertex enumeration, exact LP, Carathéodory reduction, minimum-support MILP, column generation, Frank–Wolfe **with away steps**, and the hypermetric / uncertainty-relation certificates. |
-| `width.py` | **the spine.** Matching-polytope membership and Edmonds separation for `Q^lab_{m,2}` and the hardware-native `Q^lab_{H,2}`; constructive decomposition by column generation over an exact subset-DP max-weight-matching oracle; brute-force width-`k` enumeration as the independent cross-check. |
+| `floor.py` | **the compiler.** The information-floor contract `min Σc_e t_e s.t. AᵀFA ⪰ G_req` as an LP over `MATCH(H)` with Loewner cutting planes; three certificate outcomes; the analytic common-mode contract. |
+| `width.py` | **the engine.** Matching-polytope membership and Edmonds separation for `Q^lab_{m,2}` and the hardware-native `Q^lab_{H,2}`; constructive decomposition by column generation over an exact subset-DP max-weight-matching oracle; brute-force width-`k` enumeration as the independent cross-check. |
 | `circuits.py` | framework-neutral IR, lowering to `{1q, CX}`, routing, resource accounting, QASM export. |
 | `sim.py` | dense statevector simulator; product-partition and finest-partition tests used by the width gates. |
 | `programs.py` | signed cats, labelled schedules, three flagged constructions including the width loophole, and the flag resource report. |
@@ -64,8 +70,11 @@ stops at the first failure and writes the report without touching any tolerance.
   so no per-shot gate-count advantage over the single-state realisation is admissible from
   these numbers.
 - `unlabelled_mixed_qfi` builds a dense density matrix and is capped at `m = 8`.
-- Odd-set separation is by enumeration, capped at `m = 20`. The polynomial-time route
-  (Padberg–Rao) is what the complexity claim rests on and is not implemented.
+- Odd-set separation is by enumeration, capped at `m = 20` (`m = 16` in `floor.py`). The
+  polynomial-time route (Padberg–Rao) is what the complexity claim rests on and is not
+  implemented.
+- The contract solver is a cutting-plane scheme with no convergence-rate analysis. It claims
+  finite-precision certificates only, never a strongly polynomial bound.
 - Exact pricing for `Q_m` column generation enumerates `2^(m-1)` sign vectors. That is the
   known NP-hardness showing up, not an implementation shortcut.
 - No noise model. No QUEST.

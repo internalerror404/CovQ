@@ -1,6 +1,12 @@
 # CovQ — STATUS
 
 Last updated: 2026-08-20. Decision of record: `docs/decisions/DECISION_001_PIVOT_TO_BOUNDED_WIDTH.md`.
+Current documents: `charter/*_v0.3.*`. Proof of record:
+`docs/proofs/THEOREM_PAIR_WIDTH_AND_INFORMATION_FLOOR_v0.1.md`.
+
+**The spine.** information requirement → exact pair-width geometry → certified minimum-cost
+program → hardware-native Bell-pair schedule. The `k = 2` theorem is the engine; the
+information-floor compiler is the reason anyone needs the engine.
 
 ## Disposition
 
@@ -26,7 +32,15 @@ Last updated: 2026-08-20. Decision of record: `docs/decisions/DECISION_001_PIVOT
 | `K2_MATCHING_TRANSLATION` | `NOT_FIRED / CONDITIONAL` | Survives only as identification-plus-achievability, never as new polyhedral combinatorics. |
 | `SUPPORT_FUNCTION_RECOVERS_K_PRODUCIBILITY` | `VERIFIED` | `max{1ᵀF1 : F ∈ Q^prog_{m,k}} = ⌊m/k⌋k² + r²`, exact in all 15 cases with `m ≤ 7, k ≤ 3`; closed form `m + 2⌊m/2⌋` at `k = 2` up to `m = 12`. |
 | `COHERENT_FLAG_WIDTH_LOOPHOLE` | `CONFIRMED_NUMERICALLY` | Conditional data width is not a resource for coherent flags. See below. |
-| `INFORMATION_FLOOR_SEMANTICS` | `ADOPTED` | `min Cost(Π) s.t. F_Π ⪰ G_⋆`. Replaces exact matching as the compiler's primary mode. |
+| `INFORMATION_FLOOR_COMPILER` | `PROMOTED_TO_MAIN_PROBLEM` | `min Cost(Π) s.t. AᵀF_ΠA ⪰ G_req`. Theorem 2, closed. Convex; LP over `MATCH(H)` + Loewner cutting planes; certificate-producing. |
+| `THEOREM_1_PAIR_WIDTH` | `PROVED (2A–2D)` | Necessity, magnitude sufficiency, hardware form, constructive emission. Every branch has two-qubit depth exactly 1. |
+| `THEOREM_2_CONTRACT` | `PROVED (2E)` | Objective **is** the expected Bell-pair bill via `t_e = |F_e|` and down-closedness. |
+| `THEOREM_3_CERTIFICATES` | `PROVED (2F)` | Feasible / lower bound / infeasible, each independently checkable. |
+| `ODD_EVEN_MODE_CEILING` | `PROVED + VERIFIED` | Width-2 caps `u_SᵀFu_S` at 2 (even `k`) and `2 − 1/k` (odd `k`). Blossom as physics. Exact for `k = 2..8`. |
+| `COMMON_MODE_CURVE` | `PROVED + VERIFIED` | `cost*(γ) = m(γ−1)/2`; compiled cost matches to 1e-8 with zero optimality gap. |
+| `SIGN_PARITY_AT_WIDTH_3` | `NOTED` | Inside a 3-block `(s_is_j)(s_js_k)(s_is_k) = +1`, so magnitudes cannot decide feasibility at `k ≥ 3`. Explains why `k = 2` is clean, and where the width-3 difficulty enters. |
+| `K9_FLOOR_ADDS_NOTHING` | `NEW / LIVE` | If every benchmark contract is met by the product probe or one fixed state, the composite claim is empty. |
+| `SUPPLEMENTARY_SWEEP_FLOOR_INTERFACE` | `DONE` | Fisher-information LMI constraints in minimum-cost sensor design are established. The interface alone is **not** claimable. |
 | `SUBUNIT_DIAGONAL_SECTOR` | `REJECTED_FOR_V1` | Needs joint `(μ, M)` moment feasibility, not `M ∈ Q_m`. Not audited. |
 | `K1_SPLIT` | `DONE` | K1a specification collision: **FIRED**. K1b end-to-end compiler collision: **NOT ESTABLISHED**. |
 | `QUEST_BASELINE` | `ABSENT` | Not run. No advantage over QUEST is claimable until it is. |
@@ -76,7 +90,7 @@ flag dephasing. Only the third is interchangeable with a labelled schedule.
 
 `C1 C2 C2c C3 C4 C5 C6 C7 C8 C9 C11` PASS · `C10 C12` MEASURED · 0 FAIL.
 
-65 tests, ~2 s, numpy + scipy only.
+85 tests, ~22 s, numpy + scipy only.
 
 `C10` and `C12` are reported as MEASURED by construction: a gate that cannot fail is not a
 gate, and both of those state facts that hold for every matrix or every cat schedule.
@@ -99,6 +113,11 @@ it doubles as an independent physics check on the construction.
 
 - No advantage over QUEST, generic moment matching, or any VQA. None has been run.
 - No "first" of any kind.
+- No novelty for the information-floor *interface* on its own: minimum-cost design under
+  Fisher-information LMI constraints is established classically. Only the composite object is
+  claimed.
+- No strongly polynomial claim for the contract problem: the matching half inherits strong
+  combinatorics, the contract half carries a semidefinite constraint.
 - No new polyhedral combinatorics. Edmonds at `k = 2` and Partition into Triangles at
   `k ≥ 3` are both classical; the quantum content is the identification and the constructive
   circuit emission.

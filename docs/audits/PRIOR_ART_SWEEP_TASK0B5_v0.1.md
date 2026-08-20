@@ -174,6 +174,47 @@ Only the parts that are actually ours:
 5. **Support-function corollary** recovering `⌊m/k⌋k² + r²` at `b = 1`. *(Ties it to the
    physics literature; verified numerically.)*
 
+## Supplementary sweep — the information-floor interface
+
+Run after the decision to promote the information floor to the main problem, to check the
+interface itself rather than the `k = 2` theorem. Five terms: information-matrix lower bound
+in optimal design, Loewner-constrained design, QFIM domination, minimum-resource Fisher target,
+semidefinite information-covering design.
+
+**Finding: the interface has a clear classical shadow. Do not claim it in isolation.**
+
+- **Loewner-monotone design is standard.** Common optimality criteria are monotone with respect
+  to the Loewner ordering, and spectral design with a prior information matrix updated by
+  rank-one design vectors under a norm budget is an established formulation.
+- **Fisher information as a *constraint* rather than an objective is established.** Sparse
+  sensor selection routinely imposes performance as LMI constraints — Fisher-information lower
+  bounds in localisation — and minimises cost or sensor count subject to them, via SDP
+  relaxations, reweighted ℓ1, and greedy methods. That is structurally the same interface as
+  `min cost s.t. AᵀFA ⪰ G_req`.
+- **On the quantum side**, QFIM equals the minimum covariance over purifications, and the
+  matrix Cramér–Rao statement `Σ ⪰ F⁻¹/M` is standard. Nothing found compiles *to* a
+  requirement.
+
+**Consequence.** The earlier phrasing "no prior-art shadow at all" was wrong and is retracted.
+The defensible claim is the composite object only:
+
+> We found no prior work that combines an information-floor compiler interface with an exact
+> bounded-entanglement QFIM achievable set and constructive hardware-native circuit emission.
+
+This also motivates the new kill gate **K9**: if every benchmark contract is satisfied by the
+product probe or by one fixed state, the composite claim is empty and the quantum feasible set
+is doing no work. The three analytic benchmarks in the charter exist to make K9 answerable —
+the common-mode curve, the odd/even ceiling, and the overlapping-mode trade-off all have
+closed-form separations from the product probe.
+
+**Supplementary sources.** [Optimal spectral design with prior
+information](https://arxiv.org/html/2605.27837v1) ·
+[minimal upper bounds in the Loewner order](https://ar5iv.labs.arxiv.org/html/2606.18173) ·
+[spatially constrained sensor placement (LMI Fisher constraints)](https://www.emergentmind.com/topics/spatially-constrained-sensor-placement) ·
+[Fisher-information-based sensor placement, analytic results and benchmarks](https://arxiv.org/html/2602.02981) ·
+[optimal sensor placement using modified Fisher information matrices](https://journals.sagepub.com/doi/full/10.1177/15501477211023022) ·
+[fundamental and operational limitations of Fisher-information-based quantum metrology](https://arxiv.org/html/2603.08306)
+
 ## Sources
 
 Matching polytopes and decomposition: [Edmonds' matching polytope theorem

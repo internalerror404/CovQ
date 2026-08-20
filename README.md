@@ -11,10 +11,12 @@ superseded, and what is not claimed.
 STATUS.md                                       disposition of every item
 docs/decisions/DECISION_001_PIVOT_TO_BOUNDED_WIDTH.md
 docs/audits/TASK0AB_NOVELTY_THEOREM_AUDIT_v0.2.md
-charter/CovQ_Research_Charter_v0.2.md           current charter
-charter/CovQ_Experiment_Protocol_v0.2.yaml      current protocol
-charter/CovQ_Paper_Skeleton_v0.2.tex            current skeleton
-archive/v0.1/                                   the superseded v0.1 documents, unmodified
+docs/audits/PRIOR_ART_SWEEP_TASK0B5_v0.1.md
+docs/proofs/THEOREM_PAIR_WIDTH_AND_INFORMATION_FLOOR_v0.1.md   2A-2F
+charter/CovQ_Research_Charter_v0.3.md           current charter
+charter/CovQ_Experiment_Protocol_v0.3.yaml      current protocol
+charter/CovQ_Paper_Skeleton_v0.3.tex            current skeleton
+archive/v0.1/, archive/v0.2/                    superseded documents, unmodified
 prototype/                                      PARTIAL; the audit's numerical evidence
 ```
 
@@ -27,30 +29,34 @@ theorems are either inherited (Pitowsky, Huber–Marić), already proved elsewhe
 case of QUEST's input language, so the "we specify something weaker than a state" framing is
 dead.
 
-What survives, and is now the spine:
+What CovQ compiles is a **Fisher-information contract**: given `A` naming the parameter
+combinations that matter, a required floor `G_req`, and a hardware graph `H`, return the
+least-cost program with `AᵀF_ΠA ⪰ G_req` — or a certificate that none exists at the requested
+width.
 
-> **A target QFIM is realisable by a labelled schedule of entanglement width two on a
-> hardware graph `H` exactly when its matrix of off-diagonal magnitudes, supported on `E(H)`,
-> lies in the matching polytope of `H`.**
+The enabling theorem makes that tractable:
 
-Constructive (it emits parallel Bell pairs on physical edges), polynomial-time decidable by
-Edmonds separation against NP-hard membership at unbounded width, and with explicit blossom
-certificates when a target provably needs more than pair entanglement.
+> **A labelled schedule of entanglement width two on `H` realises `F` exactly when
+> `diag F = 1`, `F` is supported on `E(H)`, and the matrix of off-diagonal magnitudes lies in
+> the matching polytope of `H`.**
 
-Compiler semantics move from exact matching to an **information floor**,
-`min Cost(Π) s.t. F_Π ⪰ G⋆`, which un-degenerates Loewner dominance without leaving the
-audited sector.
+Constructive — it emits parallel Bell pairs, every branch of two-qubit depth exactly 1 —
+polynomial-time decidable by Edmonds separation against NP-hard membership at unbounded width,
+and with blossom certificates when a contract provably needs more than pair entanglement. It
+turns the contract into a convex program whose objective *is* the expected per-shot Bell-pair
+bill.
+
+Two consequences are analytic and make good unit tests:
+`cost*(γ) = m(γ−1)/2` for a common-mode contract, and a collective mode on `k` qubits capped at
+`2` for even `k` but `2 − 1/k` for odd `k` — Edmonds' blossom inequality restated as physics.
 
 ## Next
 
-Task 0B.5, in the order given in `DECISION_001`: prior-art sweep → formal proof of the `k=2`
-theorem for `K_m` and `H` → prove or abandon the width-2/width-3 boundary → write up the
-coherent-flag resource semantics → rewrite charter/protocol/abstract *(drafted)* → then the
-prototype.
+Steps 1, 2A–2F and 5 of Task 0B.5 are done. Remaining: the width-3 attribution check (step 3),
+and closing the prototype gaps (noise, a competitive sparse-preparation routine, QUEST).
 
-The paper needs the width-3 hardness result. The `k=2` theorem clears the project's own K4
-gate but does not by itself carry a major paper, because the combinatorics underneath it are
-classical matching theory.
+The width-3 hardness is expected to be a short corollary of Partition into Triangles rather
+than a theorem; its role is to explain why pair width is a privileged tractable regime.
 
 ## Reproducing the prototype numbers
 

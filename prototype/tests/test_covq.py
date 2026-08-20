@@ -368,3 +368,111 @@ def test_support_function_at_b_ones_reproduces_k_producibility_bound(m, k):
 def test_matching_polytope_gives_the_same_bound_at_k_two_without_enumeration(m):
     """At k = 2 the matching polytope reproduces it in closed form: m + 2*floor(m/2)."""
     assert m + 2 * (m // 2) == _toth_bound(m, 2)
+
+
+# -- the information-floor compiler ------------------------------------
+
+from covq.floor import common_mode_contract, emit_floor_program, information_floor_compile  # noqa: E402
+from covq.topology import build as _topo  # noqa: E402
+
+
+def _threshold(A, m, edges, lo=1.0, hi=3.0, iters=44):
+    """Largest gamma with gamma*I feasible, by bisection."""
+    d = A.shape[1]
+    for _ in range(iters):
+        mid = (lo + hi) / 2
+        if information_floor_compile(A, mid * np.eye(d), m, edges).status == "feasible":
+            lo = mid
+        else:
+            hi = mid
+    return lo
+
+
+@pytest.mark.parametrize("m", [4, 5, 6])
+@pytest.mark.parametrize("gamma", [1.1, 1.3])
+def test_common_mode_cost_is_m_gamma_minus_one_over_two(m, gamma):
+    """The analytic compilation curve: cost* = m(gamma-1)/2 at unit edge costs."""
+    u, G, predicted = common_mode_contract(m, gamma)
+    edges = _topo("all_to_all", m)
+    res = information_floor_compile(u, G, m, edges)
+    assert res.status == "feasible"
+    assert res.cost == pytest.approx(predicted, abs=1e-8)
+    assert res.lower_bound == pytest.approx(res.cost, abs=1e-8)  # zero optimality gap
+
+
+@pytest.mark.parametrize("m", [4, 5, 6])
+def test_emitted_floor_program_actually_meets_the_contract(m):
+    u, G, _ = common_mode_contract(m, 1.3)
+    edges = _topo("all_to_all", m)
+    res = information_floor_compile(u, G, m, edges)
+    prog, dec, ident = emit_floor_program(res, edges)
+    F = prog.realised_qfim(z_generators(m))
+    assert (u.T @ F @ u).item() >= 1.3 - 1e-8
+    # the objective IS the expected per-shot Bell-pair bill
+    assert ident["cost_identity_residual"] < 1e-9
+    assert ident["n_branches"] <= ident["caratheodory_bound"]
+
+
+@pytest.mark.parametrize("m", [4, 5])
+def test_floor_above_the_support_value_is_rejected_with_a_certificate(m):
+    gamma_max = 1 + 2 * (m // 2) / m          # = support function at b = 1, over m
+    u, G, _ = common_mode_contract(m, gamma_max + 0.05)
+    res = information_floor_compile(u, G, m, _topo("all_to_all", m))
+    assert res.status == "infeasible"
+    assert res.certificate["kind"] == "lp_infeasible_under_valid_cuts"
+    # and the boundary itself is feasible
+    u2, G2, _ = common_mode_contract(m, gamma_max)
+    assert information_floor_compile(u2, G2, m, _topo("all_to_all", m)).status == "feasible"
+
+
+@pytest.mark.parametrize("k", [2, 3, 4, 5, 6, 7])
+def test_odd_even_collective_mode_ceiling(k):
+    """Width-2 ceiling on a size-k collective mode: 2 if k even, 2 - 1/k if k odd.
+
+    The odd-size deficit is the blossom inequality expressed as information --
+    an odd collective mode always leaves one qubit unmatched and therefore
+    provably cannot reach the pair-entanglement ceiling.
+    """
+    m = 8
+    u = np.zeros((m, 1))
+    u[:k, 0] = 1 / np.sqrt(k)
+    predicted = 2.0 if k % 2 == 0 else 2.0 - 1.0 / k
+    assert _threshold(u, m, _topo("all_to_all", m)) == pytest.approx(predicted, abs=1e-4)
+
+
+def test_overlapping_modes_force_a_genuine_tradeoff():
+    """Two 3-modes sharing a qubit bind well below the independent threshold."""
+    m = 6
+    u1 = np.zeros(m); u1[[0, 1, 2]] = 1 / np.sqrt(3)
+    u2 = np.zeros(m); u2[[2, 3, 4]] = 1 / np.sqrt(3)   # shares qubit 2
+    u3 = np.zeros(m); u3[[3, 4, 5]] = 1 / np.sqrt(3)   # disjoint from u1
+    edges = _topo("all_to_all", m)
+    single = _threshold(u1.reshape(m, 1), m, edges)
+    disjoint = _threshold(np.column_stack([u1, u3]), m, edges)
+    overlapping = _threshold(np.column_stack([u1, u2]), m, edges)
+    assert single == pytest.approx(5 / 3, abs=1e-4)
+    assert disjoint == pytest.approx(single, abs=1e-4)   # no interaction
+    assert overlapping < single - 0.3                    # a real trade-off
+
+
+def test_multi_direction_contract_exercises_the_semidefinite_constraint():
+    """With d >= 2 the Loewner constraint is genuinely active, not linear."""
+    m = 6
+    u1 = np.zeros(m); u1[[0, 1, 2]] = 1 / np.sqrt(3)
+    u2 = np.zeros(m); u2[[2, 3, 4]] = 1 / np.sqrt(3)
+    A = np.column_stack([u1, u2])
+    res = information_floor_compile(A, 1.2 * np.eye(2), m, _topo("all_to_all", m))
+    assert res.status == "feasible"
+    assert res.n_cuts > 1, "a d>=2 contract should need more than one cutting plane"
+    assert res.gap == pytest.approx(0.0, abs=1e-8)
+    assert res.slack_min_eig >= -1e-8
+
+
+def test_product_probe_reaches_only_gamma_one():
+    """The floor is non-trivial: no width-1 program clears gamma > 1."""
+    m = 5
+    ps = z_generators(m)
+    from covq.baselines import product_probe
+    F = product_probe(m).realised_qfim(ps)
+    u = np.ones((m, 1)) / np.sqrt(m)
+    assert (u.T @ F @ u).item() == pytest.approx(1.0, abs=1e-12)

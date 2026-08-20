@@ -1,0 +1,252 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm,booktabs,hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{conjecture}{Conjecture}
+\title{CovQ: Compiling Fisher-Information Contracts to Pair-Entangled Quantum
+Programs\\\large Hardware Matching Polytopes, Certified Minimum-Cost Schedules, and
+Information Floors}
+\author{Hina Chauhan Dixit\\Decompute Inc.}
+\date{Working draft v0.3}
+
+% Supersedes archive/v0.2/CovQ_Paper_Skeleton_v0.2.tex.
+% Basis: docs/proofs/THEOREM_PAIR_WIDTH_AND_INFORMATION_FLOOR_v0.1.md (2A-2F closed),
+%        docs/audits/PRIOR_ART_SWEEP_TASK0B5_v0.1.md,
+%        docs/decisions/DECISION_001_PIVOT_TO_BOUNDED_WIDTH.md.
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Quantum compilers receive a target unitary, statevector, or circuit. We compile a different
+object: a \emph{Fisher-information contract}. The caller supplies a linear map $A$ naming the
+parameter combinations it must estimate, a required information floor $G_{\rm req}$, and a
+hardware graph $H$; the compiler returns the least-cost quantum program whose realised quantum
+Fisher information matrix $F_\Pi$ satisfies $A^{\mathsf T}F_\Pi A\succeq G_{\rm req}$, or a
+certificate that no such program exists at the requested entanglement width. Our enabling
+result makes the feasible set exact for pair-entangled labelled programs: such a program
+realises $F$ on $H$ if and only if $\operatorname{diag}F=\bm1$, $F$ is supported on $E(H)$, and
+the matrix of off-diagonal magnitudes lies in the matching polytope of $H$. The
+characterisation is constructive---it emits a schedule of parallel Bell pairs, each branch of
+two-qubit depth exactly one---and decidable in polynomial time by Edmonds separation, against
+NP-hard membership at unbounded width. It turns the contract into a convex program over the
+matching polytope whose objective \emph{is} the expected per-shot Bell-pair bill, solved by
+cutting planes that return a feasible schedule, a lower bound on achievable cost, or an
+infeasibility proof. Two consequences are analytic: a closed-form compilation curve
+$\mathrm{cost}^\star(\gamma)=m(\gamma-1)/2$ for a common-mode contract, and an odd/even
+ceiling in which a collective mode on $k$ qubits is capped at $2$ for even $k$ but at $2-1/k$
+for odd $k$---Edmonds' blossom inequality restated as physics. We show the standard
+$k$-producibility witness is the support function of the reachable body in a single direction,
+compare against four realisation-matched baselines, and separate labelled schedules from
+coherently flagged programs by an explicit dephasing test.
+\end{abstract}
+
+\section{Introduction}
+\paragraph{Fisher-information contracts, not target states.}
+Motivate $(\mathcal G,H,A,G_{\rm req},\mathcal C)\mapsto\Pi$ with
+$\min_\Pi\operatorname{Cost}(\Pi)$ subject to $A^{\mathsf T}F_\Pi A\succeq G_{\rm req}$. A user
+declares what downstream estimation must be able to resolve; the compiler returns the cheapest
+program that certifiably delivers it. State early why exact matching is \emph{not} the
+semantics: for unit-diagonal $F,F_\star$, $F\succeq F_\star$ forces $F=F_\star$, so exact
+matching, approximate matching and one-sided guarantees collapse into one notion.
+
+\paragraph{Two hazards, cleared before the theorem.}
+Matchings are the standard model for \emph{parallel two-qubit gate scheduling}, where a
+matching is a time slice inside one circuit; here a matching is a \emph{branch of a randomised
+schedule}. And the clique-partitioning polytope is over $0/1$ transitive edge indicators,
+whereas our feasible body is over signed correlations in $[-1,1]$ and equals the correlation
+polytope at $k=m$.
+
+\paragraph{Novelty boundary.}
+Say plainly what is occupied: expectation-value-constrained synthesis (QUEST), correlation
+and cut polytopes, matching and size-constrained clique-partitioning polytopes, QFIM
+entanglement witnessing, optimal experimental design. Claim only the identification of the
+labelled commuting-Pauli program class with a signed \emph{hardware} matching polytope, its
+constructive quantum achievability, and the width-two tractable boundary.
+
+\section{Related Work}
+\subsection{Expectation-value targeting and partial specification}
+\subsection{Correlation, cut, matching, and bounded-cluster polytopes}
+\subsection{QFIM and entanglement structure}
+\subsection{Optimal experimental design over additive Fisher information}
+Frank--Wolfe here is Fedorov--Wynn. Say so.
+\subsection{Fisher-information constraints in classical design}
+Minimum-cost sensor selection and placement under Fisher-information LMI constraints, and
+Loewner-monotone design criteria, already treat information as a \emph{constraint} rather than
+an objective. The contract interface is therefore not novel in isolation; what we claim is the
+composite with an exact bounded-entanglement achievable set and constructive circuit emission.
+\subsection{Matchings in quantum gate scheduling}
+
+\section{Commuting-Pauli Programs, the Fisher IR, and the Resource Vector}
+$U_{\bm\theta}=\exp[-\tfrac i2\sum_i\theta_iP_i]$, $F_{ij}=\operatorname{Cov}_\psi(P_i,P_j)$,
+$F_{ii}=1-\langle P_i\rangle^2$. Declare the per-shot normalisation once. Define the resource
+vector: settings, $k_{\mathrm{logical}}$, $k_{\mathrm{physical}}$, Clifford cost, two-qubit
+count and depth, SWAPs, ancillas, and---for coherent programs only---flag dimension and
+Schmidt rank.
+
+\section{Background}
+\begin{proposition}[Feasibility; inherited]
+By symmetric Bernoulli correlation-polytope theory together with the pure-state amplitude
+realisation, the feasible zero-mean unit-diagonal QFIMs are exactly
+$\operatorname{conv}\{ss^{\mathsf T}\}$.
+\end{proposition}
+\begin{proposition}[Signed-cat primitive]
+$|C_s\rangle=(|s\rangle+|-s\rangle)/\sqrt2$ realises $F=ss^{\mathsf T}$.
+\end{proposition}
+\begin{lemma}[Labelled additivity]
+Per shot, $F_\Pi=\sum_rp_rF_r$. This is a discrete optimal design.
+\end{lemma}
+\begin{lemma}[Attainability]
+$\operatorname{Im}\langle\partial_i\psi|\partial_j\psi\rangle
+=-\tfrac14\operatorname{Im}\langle\psi|P_iP_j|\psi\rangle=0$ identically for commuting
+Hermitian generators. State the qualifications: local at the operating point; POVM may depend
+on it; restrict singular targets to the identifiable support; labelled programs permit
+branch-conditioned measurement, coherent programs require joint flag--data measurement;
+report an attainable classical Fisher matrix unless the measurement is compiled.
+\end{lemma}
+
+\section{Pair-Entangled Compilation and the Hardware Matching Polytope}
+\begin{theorem}[Width two, complete graph]
+$F\in\mathcal Q^{\mathrm{lab}}_{m,2}$ iff
+$(|F_{ij}|)_{i<j}\in\operatorname{MATCH}(K_m)$, i.e.\ iff
+$\sum_{j\neq i}|F_{ij}|\le1$ for all $i$ and
+$\sum_{\{i,j\}\subseteq S}|F_{ij}|\le\frac{|S|-1}2$ for all odd $S$.
+\end{theorem}
+\begin{theorem}[Width two, hardware graph]
+For $H=(V,E)$ with no routing inside the primitive backend,
+\[
+\mathcal Q^{\mathrm{lab}}_{H,2}
+=\Big\{F:\operatorname{diag}F=\bm1,\;F_{ij}=0\ \text{for}\ ij\notin E,\;
+(|F_{ij}|)_{ij\in E}\in\operatorname{MATCH}(H)\Big\}.
+\]
+Sufficiency is constructive: it emits a schedule of parallel Bell pairs on physical edges.
+\end{theorem}
+Corollaries: polynomial-time feasibility by Edmonds separation; at most $O(m^2)$ branches by
+Carath\'eodory; explicit separating certificates.
+
+\section{Certified Information-Floor Compilation}
+\begin{theorem}[Contract compilation]
+For non-negative native edge costs, the least-cost pair-entangled labelled program satisfying
+$A^{\mathsf T}F_\Pi A\succeq G_{\rm req}$ on $H$ is the value of
+\[
+\min_{F,t}\ \sum_{e\in E}c_et_e
+\quad\text{s.t.}\quad
+A^{\mathsf T}FA\succeq G_{\rm req},\
+\operatorname{diag}F=\bm1,\
+F_{ij}=0\ (ij\notin E),\
+|F_{ij}|\le t_{ij},\
+t\in\operatorname{MATCH}(H),
+\]
+and any optimal $F$ is realised by the schedule above at exactly that cost.
+\end{theorem}
+Down-closedness of $\operatorname{MATCH}(H)$ gives $t_e=|F_e|$ at an optimum, so the objective
+is the expected per-shot Bell-pair bill rather than a proxy for it. The only non-polyhedral
+constraint separates by an eigenvector, giving an LP-plus-cutting-plane scheme. \textbf{Claim
+discipline:} convex, certificate-producing optimisation to prescribed precision---not a
+strongly polynomial algorithm.
+
+\paragraph{Certificates.} Exactly one of: a feasible $F$ with its matching decomposition,
+emitted circuits and satisfaction margin; a lower bound on achievable cost from a valid
+relaxation; or an infeasibility proof for the requested floor.
+
+\section{Operational Consequences}
+\begin{proposition}[Odd/even collective-mode ceiling]
+For $u_S=\bm1_S/\sqrt k$, width-two compilation caps $u_S^{\mathsf T}Fu_S$ at $2$ when $k$ is
+even and at $2-1/k$ when $k$ is odd.
+\end{proposition}
+Edmonds' blossom inequality as physics: an odd collective mode always leaves one qubit
+unmatched, so it provably cannot reach the pair-entanglement ceiling.
+\begin{proposition}[Common-mode compilation curve]
+For $A=\bm1/\sqrt m$ and $G_{\rm req}=[\gamma]$, at unit edge costs
+$\mathrm{cost}^\star(\gamma)=m(\gamma-1)/2$ for $1\le\gamma\le1+2\lfloor m/2\rfloor/m$. A
+product probe reaches only $\gamma=1$.
+\end{proposition}
+\begin{proposition}[Relation to $k$-producibility witnesses]
+$\max\{\bm1^{\mathsf T}F\bm1:F\in\mathcal Q^{\rm prog}_{m,k}\}=\lfloor m/k\rfloor k^2+r^2$.
+\end{proposition}
+The established depth criterion is the support function in one direction; we give the complete
+facet description at $k=2$.
+
+\section{Complexity: Width Two versus Width Three}
+\begin{conjecture}
+Linear utility optimisation over $\mathcal Q^{\mathrm{lab}}_{m,3}$ is NP-hard.
+\end{conjecture}
+Candidate reduction: Partition into Triangles, utility $1$ on edges and $0$ on non-edges, so
+that utility $3q$ on $3q$ vertices is achievable iff the vertices partition into $q$
+triangles. \textbf{Unproved, and expected to be a corollary rather than a theorem.} Its role is
+to explain why pair width is a privileged tractable regime. Note the structural reason width
+three is different: inside a $3$-block the signs obey
+$(s_is_j)(s_js_k)(s_is_k)=+1$, so magnitudes alone cannot decide feasibility, and the clean
+absolute-value characterisation of Theorem~1 is a genuine feature of the pair level. Compare carefully against the size-constrained
+clique-partitioning polytope literature before claiming anything. If this fails and nothing
+replaces it, kill gate K6 fires.
+
+\section{Certificates}
+Blossom obstructions. The uncertainty-relation reading: for integer $b$ with $\sum_ib_i$ odd,
+every realisable $F$ obeys $b^{\mathsf T}Fb=\operatorname{Var}(\sum_ib_iP_i)\ge1$, because
+$\sum_ib_iP_i$ has integer spectrum of that parity. A violated inequality is a physical
+obstruction, not merely a separating hyperplane. Worked instance: $m=3$, all off-diagonals
+$-0.4$; spectrum $\{0.2,1.4,1.4\}$; $b=(1,1,1)$ gives $0.6<1$.
+
+\section{Exact, Sparse, and Approximate Algorithms}
+\subsection{Edmonds separation and matching column generation}
+\subsection{Full-polytope LP as a background control}
+\subsection{Minimum-support formulations and their hardness}
+\subsection{Frank--Wolfe with away steps (Fedorov--Wynn) and its duality-gap certificate}
+
+\section{Generator-Aware Clifford Normalisation and Frame-Relative Width}
+$k_{\mathrm{logical}}$ versus $k_{\mathrm{physical}}$. A globally entangling Clifford makes
+the physical branch entangled; the converse also occurs, so frame choice is a compiler degree
+of freedom. Minimum-physical-entanglement language is valid for the physical-$Z$ arm only.
+
+\section{Routing as a Priced Backend}
+Routing enlarges the admissible edge set at an explicit SWAP/path cost. Report against the
+native-graph feasible set, never folded into it.
+
+\section{Coherent Flags as a Separate Resource Model}
+The exact identity $F_\Psi=\sum_rp_rF_r+\operatorname{Cov}_p(\bm\mu_r)$; equality iff branch
+means \emph{coincide}. The loophole: $|\Psi_p\rangle=\sum_s\sqrt{p(s)}|s\rangle_{\mathrm
+f}|s\rangle_{\mathrm d}$ realises any feasible target with conditional data width one, and
+dephasing the flag sends the QFIM to zero. Conclude that conditional branch width is not a
+resource here, and give the replacement resource vector. State the comparability rule:
+programs on opposite sides of the dephasing test are not comparable on gate count.
+
+\section{Conditioning-Aware Stability}
+\begin{proposition}
+If $B_\star=A^{\mathsf T}F_\star A\succeq\gamma I$ on its declared support and
+$\|A^{\mathsf T}(F-F_\star)A\|\le\varepsilon<\gamma$, then
+$\|B^{-1}-B_\star^{-1}\|\le\varepsilon/(\gamma(\gamma-\varepsilon))$. If the kernels differ,
+no stable inverse guarantee follows.
+\end{proposition}
+Report rank, $\lambda^+_{\min}$, $\kappa^+$, kernel principal angles, $\|F^+-F_\star^+\|$.
+Note that the polytope's extreme points $ss^{\mathsf T}$ are rank one: feasible extremes,
+poor full-field estimation targets.
+
+\section{Experimental Methodology}
+\subsection{Benchmark families, including the blossom-triangle and path/star width probes}
+\subsection{Four realisation-matched baselines, plus QUEST}
+\subsection{Correctness gates C1--C12, with C2 split into C2a/C2b/C2c}
+\subsection{Scientific hypotheses, kept separate from the gates}
+\subsection{Reproducibility and forward registration}
+
+\section{Results}
+Placeholder until Task 0B.5 completes and the pilot thresholds are frozen.
+
+\section{Application Benchmark}
+One target derived from Lorentzian light-ray tomography, with the normalisation declared. All
+main claims remain application-independent.
+
+\section{Limitations}
+Noncommuting generators. Mixed-state QFI. Subunit-diagonal realised probes, which require
+joint $(\bm\mu,M)$ moment feasibility rather than $M\in\mathcal Q_m$. Large-scale polytope
+complexity. Hardware noise. Compiler optimality. The width-three hardness conjecture.
+
+\section{Conclusion}
+Target statement: commuting-Pauli information requirements admit an exact, constructive,
+polynomial-time characterisation at pair entanglement on a hardware graph, and that boundary
+--- not full-width feasibility --- is where the compiler has something to say.
+
+\end{document}
