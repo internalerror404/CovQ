@@ -65,10 +65,18 @@ Sufficiency is constructive: it emits a schedule of parallel Bell pairs on physi
 Feasibility is polynomial-time by Edmonds separation, against NP-hard membership at `k = m`,
 with explicit separating certificates and at most `O(m²)` branches by Carathéodory.
 
-**C2 — the complexity boundary.** *Required for the strongest version of the paper, and
-currently unproved.* Width 2 reduces to maximum-weight matching. Target: width 3 linear
-utility optimisation is NP-hard, via Partition into Triangles. Must be compared against the
-size-constrained clique-partitioning polytope literature before any claim.
+**C1a — corollary tying the result to the metrology literature.** The standard
+`k`-producibility bound is the support function of `Q^prog_{m,k}` at `b = 1`:
+`max{1ᵀF1 : F ∈ Q^prog_{m,k}} = ⌊m/k⌋k² + r²`, verified exactly for `m ≤ 7`, `k ≤ 3`, and
+equal to `m + 2⌊m/2⌋` in closed form at `k = 2`. The characterisation gives every other
+direction, and at `k = 2` the complete facet description.
+
+**C2 — the complexity boundary.** *Currently unproved, and expected to be a corollary rather
+than a theorem.* Width 2 reduces to maximum-weight matching (Edmonds). Target: width 3 linear
+utility optimisation is NP-hard, via Partition into Triangles — which is classically
+NP-complete, so the reduction should go through in a paragraph. The live risk is therefore
+not that it is false but that it is **already folklore** in the bounded-cluster partitioning
+literature. Settle that before claiming it.
 
 **C3 — routing as a priced backend.** Routing enlarges the admissible edge set at an
 explicit SWAP/path cost. Reported against `Q^lab_{H,2}` on the native graph, never folded
@@ -173,7 +181,19 @@ emitted programs; the information-floor compiler mode.
 
 **Not claimed.** Any "first". Any advantage over QUEST or any VQA until one is run. The
 discovery of matching or clique-partitioning polytopes. Any minimum-entanglement statement
-for the Clifford-conjugated arm.
+for the Clifford-conjugated arm. **Any new polyhedral combinatorics**: Edmonds at `k = 2` and
+Partition into Triangles at `k ≥ 3` are both classical, and the sufficiency direction uses an
+off-the-shelf strongly-polynomial matching decomposition. The quantum content is the
+identification of the QFIM feasible set with that structure, the exact achievability, and the
+constructive circuit emission. The paper says so in its own introduction rather than letting a
+referee say it first.
+
+**Two presentation hazards to pre-empt in the introduction.** (i) Matchings are the standard
+model for *parallel two-qubit gate scheduling*, where a matching is a time slice inside one
+circuit; here a matching is a *branch of a randomised schedule*. (ii) The clique-partitioning
+polytope is over 0/1 transitive edge indicators; `Q^prog_{m,k}` is over signed correlations in
+`[-1,1]` and equals the correlation polytope at `k = m`. Both distinctions belong before the
+theorem, not after it.
 
 ## Kill criteria
 
@@ -187,6 +207,8 @@ measured.
 K4 the width hierarchy yields no useful or provable resource tradeoff. *(Cleared by C1.)*
 K5 freedom over the QFIM-equivalence class never beats compiling one fixed state.
 K6 the width-2/width-3 boundary is false or already known, **and** nothing replaces it.
+   *Sweep finding: "already known" is now the likelier branch. Step 3 of Task 0B.5 is
+   re-scoped from "prove or abandon" to "prove, then establish whether it is folklore".*
 K7 only spacetime-derived targets work.
 K8 only a VQA result survives.
 

@@ -339,3 +339,32 @@ def test_gate_suite_has_no_failures():
     # C10 and C12 state facts that hold for every matrix / every cat schedule.
     assert statuses["C10_downstream_stability"] == "MEASURED"
     assert statuses["C12_convexity_gap"] == "MEASURED"
+
+
+# -- relationship to the known k-producibility bound --------------------
+
+def _toth_bound(m: int, k: int) -> int:
+    s, r = m // k, m - (m // k) * k
+    return s * k * k + r * r
+
+
+@pytest.mark.parametrize("m,k", [(3, 1), (3, 2), (3, 3), (4, 2), (4, 3),
+                                 (5, 2), (5, 3), (6, 2), (6, 3), (7, 2), (7, 3)])
+def test_support_function_at_b_ones_reproduces_k_producibility_bound(m, k):
+    """The known scalar bound is one direction of our polytope's support function.
+
+    For k-producible states the QFI in the collective direction is bounded by
+    ``floor(m/k) k^2 + r^2``.  In our normalisation that is
+    ``max { 1^T F 1 : F in Q^prog_{m,k} }``, so the literature bound is the value
+    of the support function of ``Q^prog_{m,k}`` at ``b = 1`` -- and nothing more.
+    The characterisation gives every other direction too.
+    """
+    A, _ = wid.width_k_generators(m, k)
+    best = max(m + 2.0 * float(col.sum()) for col in A.T)
+    assert best == pytest.approx(_toth_bound(m, k))
+
+
+@pytest.mark.parametrize("m", [3, 4, 5, 6, 8, 10, 12])
+def test_matching_polytope_gives_the_same_bound_at_k_two_without_enumeration(m):
+    """At k = 2 the matching polytope reproduces it in closed form: m + 2*floor(m/2)."""
+    assert m + 2 * (m // 2) == _toth_bound(m, 2)
