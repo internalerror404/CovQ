@@ -419,7 +419,8 @@ def test_floor_above_the_support_value_is_rejected_with_a_certificate(m):
     u, G, _ = common_mode_contract(m, gamma_max + 0.05)
     res = information_floor_compile(u, G, m, _topo("all_to_all", m))
     assert res.status == "infeasible"
-    assert res.certificate["kind"] == "lp_infeasible_under_valid_cuts"
+    assert res.certificate["kind"] in ("lp_infeasible_under_valid_cuts",
+                                       "farkas_dual_ray")
     # and the boundary itself is feasible
     u2, G2, _ = common_mode_contract(m, gamma_max)
     assert information_floor_compile(u2, G2, m, _topo("all_to_all", m)).status == "feasible"
@@ -476,3 +477,186 @@ def test_product_probe_reaches_only_gamma_one():
     F = product_probe(m).realised_qfim(ps)
     u = np.ones((m, 1)) / np.sqrt(m)
     assert (u.T @ F @ u).item() == pytest.approx(1.0, abs=1e-12)
+
+
+# -- the explicit conic dual and separation oracle ----------------------
+
+from covq.floor import matching_separation_oracle  # noqa: E402
+
+
+@pytest.mark.parametrize("m", [4, 5, 6])
+@pytest.mark.parametrize("gamma", [1.1, 1.3, 1.5])
+def test_dual_certificate_is_valid_and_tight(m, gamma):
+    """Weak duality must hold; here it is attained, so the bound is a proof."""
+    u, G, _ = common_mode_contract(m, gamma)
+    res = information_floor_compile(u, G, m, _topo("all_to_all", m))
+    assert res.status == "feasible"
+    assert res.dual is not None
+    check = res.dual.verify()
+    assert check["valid"], check
+    assert check["Y_min_eigenvalue"] >= -1e-7          # Y >= 0
+    assert check["worst_edge_violation"] <= 1e-7       # dual feasibility
+    assert res.dual.value <= res.cost + 1e-7           # weak duality
+    assert res.dual.value == pytest.approx(res.cost, abs=1e-7)   # attained
+
+
+def test_dual_certificate_on_a_multi_direction_contract():
+    m = 6
+    u1 = np.zeros(m); u1[[0, 1, 2]] = 1 / np.sqrt(3)
+    u2 = np.zeros(m); u2[[2, 3, 4]] = 1 / np.sqrt(3)
+    res = information_floor_compile(np.column_stack([u1, u2]), 1.2 * np.eye(2), m,
+                                    _topo("all_to_all", m))
+    assert res.status == "feasible" and res.dual is not None
+    assert res.dual.verify()["valid"]
+    assert res.dual.value == pytest.approx(res.cost, abs=1e-7)
+
+
+@pytest.mark.parametrize("m", [4, 5])
+def test_farkas_ray_certifies_infeasibility(m):
+    """An infeasible floor must come back with a verifiable dual ray."""
+    gamma_max = 1 + 2 * (m // 2) / m
+    u, G, _ = common_mode_contract(m, gamma_max + 0.05)
+    res = information_floor_compile(u, G, m, _topo("all_to_all", m))
+    assert res.status == "infeasible"
+    assert res.certificate["kind"] == "farkas_dual_ray"
+    assert res.dual is not None and res.dual.kind == "farkas"
+    check = res.dual.verify()
+    assert check["valid"], check
+    assert check["recomputed_objective"] > 1e-9   # strictly positive => no primal point
+
+
+def test_separation_oracle_finds_blossom_degree_and_nothing():
+    m = 5
+    edges = _topo("all_to_all", m)
+    E = sorted({tuple(sorted(e)) for e in edges})
+    idx = {e: k for k, e in enumerate(E)}
+
+    t = np.zeros(len(E))
+    for e in [(0, 1), (0, 2), (1, 2)]:
+        t[idx[e]] = 0.4                      # 1.2 > 1: blossom on {0,1,2}
+    kind, S, lhs, rhs = matching_separation_oracle(t, m, edges)
+    assert kind == "odd_set" and set(S) == {0, 1, 2} and lhs > rhs
+
+    t = np.zeros(len(E))
+    t[idx[(0, 1)]] = t[idx[(0, 2)]] = 0.7    # 1.4 > 1: degree at qubit 0
+    kind, S, lhs, rhs = matching_separation_oracle(t, m, edges)
+    assert kind == "degree" and S == (0,) and lhs > rhs
+
+    t = np.zeros(len(E))
+    t[idx[(0, 1)]] = t[idx[(2, 3)]] = 0.5    # a genuine matching point
+    assert matching_separation_oracle(t, m, edges) is None
+
+
+# -- manuscript v0.2 claims, independently checked ----------------------
+
+from covq.floor import branch_matrix, price_branch, shot_scaled_floor_compile  # noqa: E402
+
+
+@pytest.mark.parametrize("topo,m", [("line", 5), ("line", 6), ("square_grid", 6), ("ring", 6)])
+def test_corollary_5_5_bipartite_odd_sets_are_redundant(topo, m):
+    """On bipartite H the degree constraints alone characterise Q^lab_{H,2}."""
+    rng = np.random.default_rng(11 + m)
+    edges = _topo(topo, m)
+    for _ in range(25):
+        F = np.eye(m)
+        for (i, j) in edges:
+            if rng.random() < 0.8:
+                F[i, j] = F[j, i] = rng.uniform(-1, 1)
+        x = np.abs(F).copy(); np.fill_diagonal(x, 0.0)
+        degree_only = all(x[i].sum() <= 1 + 1e-9 for i in range(m))
+        full = wid.decompose_width2_hardware(F, edges).feasible
+        assert degree_only == full
+
+
+@pytest.mark.parametrize("name,EG,has_partition", [
+    ("two disjoint triangles", [(0, 1), (0, 2), (1, 2), (3, 4), (3, 5), (4, 5)], True),
+    ("prism", [(0, 1), (0, 2), (1, 2), (3, 4), (3, 5), (4, 5), (0, 3), (1, 4), (2, 5)], True),
+    ("C6, triangle-free", [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (5, 0)], False),
+    ("triangle plus path", [(0, 1), (0, 2), (1, 2), (3, 4), (4, 5)], False),
+    ("K4 plus an edge", [(0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (2, 3), (4, 5)], False),
+])
+def test_theorem_7_1_width_three_reduction(name, EG, has_partition):
+    """max L_G over width-3 programs hits 3q exactly when G partitions into triangles."""
+    m, q = 6, 2
+    pos = {p: k for k, p in enumerate(pol.pairs(m))}
+    A3, _ = wid.width_k_generators(m, 3)
+    idx = [pos[tuple(sorted(e))] for e in EG]
+    best = max(float(col[idx].sum()) for col in A3.T)
+    assert (abs(best - 3 * q) < 1e-9) == has_partition, (name, best)
+
+
+@pytest.mark.parametrize("m", [4, 5, 6])
+def test_equation_65_branch_separation_identity(m):
+    """max_{M,sigma}(<B,Y> - c(M)) = tr Y - c0 + max-weight matching on 2|Y_ij| - c_ij."""
+    rng = np.random.default_rng(7 * m)
+    E = [tuple(sorted(e)) for e in _topo("all_to_all", m)]
+    for _ in range(3):
+        B = rng.standard_normal((m, m))
+        Y = B @ B.T / m
+        c0 = float(rng.uniform(0.1, 1.0))
+        ce = {e: float(rng.uniform(0, 0.6)) for e in E}
+
+        def all_matchings(av):
+            if not av:
+                yield []
+                return
+            u = av[0]
+            yield from ([] + r for r in all_matchings(av[1:]))
+            for k in range(1, len(av)):
+                v = av[k]
+                for r in all_matchings(av[1:k] + av[k + 1:]):
+                    yield [tuple(sorted((u, v)))] + r
+
+        brute = max(
+            float(np.trace(Y)) + sum(2 * abs(Y[i, j]) for i, j in M)
+            - (c0 + sum(ce[e] for e in M))
+            for M in all_matchings(list(range(m))))
+        _, _, formula = price_branch(Y, m, E, c0, ce)
+        assert brute == pytest.approx(formula, abs=1e-9)
+
+
+@pytest.mark.parametrize("m", [4, 5, 6])
+def test_problem_8_1_strong_duality_and_equation_63(m):
+    rng = np.random.default_rng(3407 + m)
+    B = rng.standard_normal((m, m))
+    G = B @ B.T / m * 0.8
+    res = shot_scaled_floor_compile(G, m, _topo("all_to_all", m), c0=1.0)
+    assert res["status"] == "solved"
+    assert res["cost"] == pytest.approx(res["dual_bound"], abs=1e-8)     # Thm 8.2
+    assert res["cost"] <= res["product_probe_bound"] + 1e-8              # Eq (63)
+    assert res["floor_slack_min_eig"] >= -1e-8                           # floor met
+
+
+@pytest.mark.parametrize("m,c0", [(4, 1.0), (6, 1.0), (8, 1.0), (6, 2.0)])
+def test_entanglement_phase_boundary_is_two_c0_over_m(m, c0):
+    """Pair entanglement beats the product probe on a common-mode floor iff c_e < 2c0/m.
+
+    A perfect-matching branch has u^T B u = 2, so it needs gamma/2 uses at
+    c0 + (m/2)c_e each, against gamma uses at c0 for the product probe.
+    """
+    u = np.ones((m, 1)) / np.sqrt(m)
+    G = 4.0 * (u @ u.T)
+    edges = _topo("all_to_all", m)
+
+    def uses_entanglement(ce):
+        return shot_scaled_floor_compile(
+            G, m, edges, c0=c0,
+            costs={tuple(sorted(e)): ce for e in edges})["uses_entanglement"]
+
+    lo, hi = 0.0, 3.0
+    for _ in range(30):
+        mid = (lo + hi) / 2
+        lo, hi = (mid, hi) if uses_entanglement(mid) else (lo, mid)
+    assert lo == pytest.approx(2 * c0 / m, abs=1e-3)
+
+
+@pytest.mark.parametrize("m", [4, 6, 8])
+def test_maximum_advantage_over_product_probe_is_exactly_two(m):
+    """As entanglers become free the cost ratio tends to 1/2, the width-2 ceiling."""
+    u = np.ones((m, 1)) / np.sqrt(m)
+    G = 4.0 * (u @ u.T)
+    edges = _topo("all_to_all", m)
+    res = shot_scaled_floor_compile(G, m, edges, c0=1.0,
+                                    costs={tuple(sorted(e)): 1e-6 for e in edges})
+    assert res["cost"] / res["product_probe_bound"] == pytest.approx(0.5, abs=1e-4)
+    assert branch_matrix(m, [(0, 1)])[0, 1] == 1.0

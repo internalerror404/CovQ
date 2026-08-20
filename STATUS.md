@@ -45,6 +45,11 @@ information-floor compiler is the reason anyone needs the engine.
 | `K1_SPLIT` | `DONE` | K1a specification collision: **FIRED**. K1b end-to-end compiler collision: **NOT ESTABLISHED**. |
 | `QUEST_BASELINE` | `ABSENT` | Not run. No advantage over QUEST is claimable until it is. |
 | `SPARSE_PURE_STATE_BASELINE` | `IMPLEMENTED` | Carathéodory-sparse single state, plus three realisation-matched siblings. |
+| `MANUSCRIPT_V0_2` | `AUDITED` | `docs/audits/MANUSCRIPT_V0_2_NUMERICAL_AUDIT.md`. Thm 5.3, Cor 5.4/5.5, Thm 7.1, Eq (65), Thm 8.2, Eq (63) all verified numerically. |
+| `SHOT_SCALED_FLOOR` | `IMPLEMENTED / SUPERSEDES_A_BASED` | Manuscript Problem 8.1 with the Eq-(65) matching oracle. Strong duality exact. The `A`-based version is retained as the downstream-projection mode. |
+| `THEOREM_3_DUAL_EXPLICIT` | `DONE` | Conic dual derived and implemented for both formulations; Farkas rays certify infeasibility; separation oracle is an explicit interface. |
+| `K9_ANSWERED` | `CLOSED_FORM` | Pair entanglement beats the product probe iff `c_e < 2c₀/m`; max advantage exactly `2×`. With `c_e = c₀` the floor compiler is trivial — must be stated in §8. |
+| `WIDTH_3_HARDNESS` | `PROVED_IN_MANUSCRIPT` | Partition Into Triangles, §7.2; verified on 6 graphs. Supersedes the repo's `OPEN` status. |
 | `PROTOTYPE` | `PARTIAL` | `prototype/`. Built before this decision arrived; retained as the audit's evidence, not as Task 0C. See `prototype/README.md`. |
 
 ## Corrections carried into v0.2
@@ -90,7 +95,7 @@ flag dephasing. Only the third is interchangeable with a labelled schedule.
 
 `C1 C2 C2c C3 C4 C5 C6 C7 C8 C9 C11` PASS · `C10 C12` MEASURED · 0 FAIL.
 
-85 tests, ~22 s, numpy + scipy only.
+120 tests, ~36 s, numpy + scipy only.
 
 `C10` and `C12` are reported as MEASURED by construction: a gate that cannot fail is not a
 gate, and both of those state facts that hold for every matrix or every cat schedule.
