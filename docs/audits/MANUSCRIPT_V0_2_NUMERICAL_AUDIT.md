@@ -1,5 +1,7 @@
 # Manuscript v0.2 — independent numerical audit
 
+Covers the 75-page `CovQ_Paper_v0.2.pdf` (18 sections) and the earlier 39-page draft.
+
 Every checkable claim in `CovQ_Certified_QFIM_Compilation_Manuscript_v0.2.pdf` that the
 prototype can reach, run against `prototype/` (120 tests). Nothing here is a re-derivation
 from the manuscript's own algebra; each is an independent computation.
@@ -16,6 +18,10 @@ from the manuscript's own algebra; each is an independent computation.
 | **Thm 8.2** strong duality | column generation over branches with the Eq-(65) oracle, `m ∈ {4,5,6}`, all-to-all and line | primal = dual to 1e-8 in every case |
 | **Eq (63)** `OPT ≤ c₀λ_max(G⋆)` | same runs | holds; **and is frequently tight — see below** |
 | **§8.1** dominance collapse | `F ⪰ F⋆` with equal unit diagonals | forces `F = F⋆`, confirmed |
+| **Prop 6.12** Gershgorin conditioning | `1−ρ ≤ λ_min ≤ λ_max ≤ 1+ρ` and `κ₂ ≤ (1+ρ)/(1−ρ)` over 122 pair-feasible targets, `m ∈ {3..6}` | 0 violations |
+| **Ex 6.13** three-edge schedule | independent compilation of `m=3`, off-diagonals `(0.4, 0.3, −0.2)` | **reproduced exactly**: same four branches at `p = 0.4, 0.3, 0.2, 0.1`, third edge `\|Φ⁻⟩`, expected pair activations `0.900000`, emitted circuits realise `F` to 4e-16 |
+| **Ex 6.14** odd-set obstruction | degree loads `0.8 ≤ 1` yet `\|F₁₂\|+\|F₁₃\|+\|F₂₃\| = 1.2 > 1` | confirmed; smallest instance forcing blossom inequalities |
+| **Frozen controls** `F(±)_ij = ±0.4` | three-way classification: PSD / global / pair | both match their frozen expectations |
 
 The Eq-(65) identity is the load-bearing one: Theorem 8.2's oracle-polynomial claim rests
 entirely on it, and it is exact.
@@ -88,10 +94,39 @@ The repository's earlier hedge that this is "not strongly polynomial" was correc
 but weaker than necessary. Theorem 8.2's oracle-polynomial claim is right, and the Eq-(65)
 check above is the reason to believe it.
 
+## The two shot-scaled modes are not equally solvable
+
+The manuscript gives the shot-scaled compiler in two forms. Both are implemented; they agree
+to machine precision wherever both converge, but only one is usable with a scipy-only stack.
+
+| | branch form (`shot_scaled_floor_compile`) | homogenised edge form (`shot_scaled_edge_compile`) |
+|---|---|---|
+| variables | shot allocations per `(M, σ)` | `t`, edge `y`, activations `a` |
+| constraints | exponentially many, priced by Eq. (65) | polynomially many linear rows + one PSD |
+| **solves at `c_e = c₀`** | yes | yes, agreeing to 1e-15 |
+| **solves at `c_e = 0.1` or `0.02`** | **yes** | **no — hits the cut limit every time** |
+
+The edge form's PSD constraint becomes active on a face with a non-trivial null space as soon
+as entangled edges activate, and eigenvector cutting planes stall there. Adding every violated
+eigendirection per round did not help; nor did bounding all variables by the valid Eq. (63)
+bound. Closing it properly needs an interior-point SDP backend, deliberately not a dependency
+here.
+
+This is a point *in favour* of the manuscript's Theorem 8.2 route: the matching separation
+oracle keeps the master low-dimensional, and that is exactly why it converges where the compact
+formulation does not. The repository recommends the branch form and documents the other as
+limited rather than silently returning a stalled iterate.
+
 ## Not checkable here
 
-- §6 branch-conditioned measurement compilation (attainable classical Fisher matrices) — the
-  prototype computes QFIMs, not compiled POVMs. This is the largest unverified block.
+- §11 measurement compilation (attainable classical Fisher matrices) — the prototype computes
+  QFIMs, not compiled POVMs. This remains the largest unverified block.
+- §12 QFIM-IR / compiler architecture and §14–15 governance: **`MANUSCRIPT_INTEGRATION.md` was
+  never received.** Gates C1–C16, the canonical JSON record schema, the status vocabulary, the
+  manifest and DONE-record rules, and the freeze-before-run conditions are all specified there
+  and cannot be implemented against a document the repository does not have. The prototype's
+  gate set stops at C12 and uses its own status vocabulary; the two must be reconciled before
+  any manuscript table is populated.
 - Integer shot rounding and the matrix-concentration argument of Remark 8.3.
 - Anything requiring QUEST, which remains unrun; no K3 answer is available.
 - Noise-aware sections; the prototype is ideal-statevector only.

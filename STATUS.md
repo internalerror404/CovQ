@@ -45,6 +45,9 @@ information-floor compiler is the reason anyone needs the engine.
 | `K1_SPLIT` | `DONE` | K1a specification collision: **FIRED**. K1b end-to-end compiler collision: **NOT ESTABLISHED**. |
 | `QUEST_BASELINE` | `ABSENT` | Not run. No advantage over QUEST is claimable until it is. |
 | `SPARSE_PURE_STATE_BASELINE` | `IMPLEMENTED` | Carathéodory-sparse single state, plus three realisation-matched siblings. |
+| `MANUSCRIPT_INTEGRATION_MD` | `NOT_RECEIVED / BLOCKING` | The canonical v0.2 implementation contract (gates C1–C16, JSON record schema, status vocabulary, manifest and DONE rules, freeze-before-run) has not reached the repository. No manuscript table may be populated until it does. |
+| `FROZEN_CONTROLS` | `FROZEN` | `F(+)_ij = 0.4` globally feasible / pair infeasible; `F(-)_ij = -0.4` PD / globally infeasible. Both verified with the three-way classifier. |
+| `SHOT_SCALED_EDGE_MODE` | `LIMITED` | Agrees with the branch form to 1e-15 when both converge, but stalls once entanglement activates. Needs an interior-point SDP backend. |
 | `MANUSCRIPT_V0_2` | `AUDITED` | `docs/audits/MANUSCRIPT_V0_2_NUMERICAL_AUDIT.md`. Thm 5.3, Cor 5.4/5.5, Thm 7.1, Eq (65), Thm 8.2, Eq (63) all verified numerically. |
 | `SHOT_SCALED_FLOOR` | `IMPLEMENTED / SUPERSEDES_A_BASED` | Manuscript Problem 8.1 with the Eq-(65) matching oracle. Strong duality exact. The `A`-based version is retained as the downstream-projection mode. |
 | `THEOREM_3_DUAL_EXPLICIT` | `DONE` | Conic dual derived and implemented for both formulations; Farkas rays certify infeasibility; separation oracle is an explicit interface. |
@@ -95,7 +98,7 @@ flag dephasing. Only the third is interchangeable with a labelled schedule.
 
 `C1 C2 C2c C3 C4 C5 C6 C7 C8 C9 C11` PASS · `C10 C12` MEASURED · 0 FAIL.
 
-120 tests, ~36 s, numpy + scipy only.
+126 tests, ~34 s, numpy + scipy only.
 
 `C10` and `C12` are reported as MEASURED by construction: a gate that cannot fail is not a
 gate, and both of those state facts that hold for every matrix or every cat schedule.

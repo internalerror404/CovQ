@@ -660,3 +660,82 @@ def test_maximum_advantage_over_product_probe_is_exactly_two(m):
                                     costs={tuple(sorted(e)): 1e-6 for e in edges})
     assert res["cost"] / res["product_probe_bound"] == pytest.approx(0.5, abs=1e-4)
     assert branch_matrix(m, [(0, 1)])[0, 1] == 1.0
+
+
+# -- frozen canonical controls (manuscript v0.2) ------------------------
+
+from covq.instances import FROZEN_CONTROLS, classify_target, control_minus, control_plus  # noqa: E402
+
+
+def test_control_plus_is_globally_feasible_but_pair_infeasible():
+    """F(+)_ij = 0.4: PD, inside Q_3, outside Q^lab_{3,2} by the blossom inequality."""
+    inst = control_plus()
+    c = classify_target(inst.F)
+    assert c["psd"] is True
+    assert c["global_feasible"] is True          # a width-3 program realises it
+    assert c["pair_feasible"] is False           # but pair width does not
+    assert c["pair_violation"]["kind"] == "odd_set"
+    assert set(c["pair_violation"]["subset"]) == {0, 1, 2}
+    assert c["pair_violation"]["lhs"] == pytest.approx(1.2)
+    assert c["min_width"]["k"] == 3
+
+
+def test_control_minus_is_positive_definite_but_globally_infeasible():
+    """F(-)_ij = -0.4: PD with spectrum {0.2,1.4,1.4}, yet b^T F b = 0.6 < 1."""
+    inst = control_minus()
+    c = classify_target(inst.F)
+    assert c["psd"] is True
+    assert np.allclose(sorted(c["eigenvalues"]), [0.2, 1.4, 1.4], atol=1e-9)
+    assert c["global_feasible"] is False         # no width realises it
+    assert c["global_certificate"]["verified"] is True
+    b = np.ones(3)
+    assert float(b @ inst.F @ b) == pytest.approx(0.6)
+    assert c["min_width"]["k"] is None
+
+
+def test_the_two_controls_separate_the_three_failure_modes():
+    """Neither control alone distinguishes PSD, global feasibility and pair width."""
+    cp = classify_target(control_plus().F)
+    cm = classify_target(control_minus().F)
+    # both are PSD, so PSD cannot be doing the work
+    assert cp["psd"] and cm["psd"]
+    # both are pair-infeasible, so pair width cannot distinguish them either
+    assert not cp["pair_feasible"] and not cm["pair_feasible"]
+    # only global feasibility separates them -- which is the point
+    assert cp["global_feasible"] != cm["global_feasible"]
+
+
+@pytest.mark.parametrize("name", sorted(FROZEN_CONTROLS))
+def test_frozen_controls_match_their_recorded_expectations(name):
+    inst = FROZEN_CONTROLS[name]()
+    c = classify_target(inst.F)
+    for key in ("psd", "global_feasible", "pair_feasible"):
+        assert c[key] == inst.ground_truth[key], (name, key)
+
+
+def test_edge_and_branch_shot_scaled_agree_where_both_converge():
+    """Two formulations of Problem 8.1 must agree; the edge one stalls when entangled.
+
+    Documented limitation, not a silent one: the compact edge SDP is solved here
+    by eigenvector cutting planes, which converge only while the entangled edges
+    stay inactive.  Where it does converge it matches the branch formulation to
+    machine precision, which is the cross-check that matters.
+    """
+    from covq.floor import shot_scaled_edge_compile
+
+    rng = np.random.default_rng(2026)
+    agreed = 0
+    for m in (4, 5, 6):
+        for topo in ("all_to_all", "line"):
+            B = rng.standard_normal((m, m))
+            G = B @ B.T / m * 0.8
+            edges = _topo(topo, m)
+            costs = {tuple(sorted(e)): 1.0 for e in edges}
+            rb = shot_scaled_floor_compile(G, m, edges, c0=1.0, costs=costs)
+            re_ = shot_scaled_edge_compile(G, m, edges, c0=1.0, costs=costs)
+            assert rb["status"] == "solved"
+            if re_["status"] != "solved":
+                continue
+            assert rb["cost"] == pytest.approx(re_["cost"], abs=1e-6)
+            agreed += 1
+    assert agreed >= 4, "the unentangled regime should converge in both formulations"

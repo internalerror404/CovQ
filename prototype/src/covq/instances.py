@@ -319,3 +319,89 @@ def task0_suite(m_values=(3, 4, 5, 6), seed: int = PROTOCOL_SEEDS[0]) -> list[In
             out.extend(near_facet_family(m, 3, (0.02, 0.2), rng))
             out.append(hypermetric_violator(m, 5, 0.3, rng))
     return out
+
+
+# ----------------------------------------------------------------------
+# Frozen canonical controls (manuscript v0.2)
+# ----------------------------------------------------------------------
+
+def classify_target(F: np.ndarray, edges=None) -> dict:
+    """Three-way status of a unit-diagonal target, kept deliberately separate.
+
+    The whole point of the frozen controls below is that these three questions
+    have different answers, and an implementation that conflates any two of them
+    is broken in a way no single instance would reveal:
+
+    ``psd``
+        ordinary positive semidefiniteness -- necessary, and nothing more;
+    ``global_feasible``
+        membership in the sign-correlation polytope ``Q_m``, i.e. realisable at
+        *any* entanglement width;
+    ``pair_feasible``
+        membership in ``Q^lab_{H,2}``, i.e. realisable by a labelled schedule of
+        native Bell pairs.
+    """
+    from . import polytope as _pol
+    from . import width as _wid
+
+    F = np.asarray(F, dtype=float)
+    m = F.shape[0]
+    psd_ok, psd_why = _pol.is_unit_diagonal_psd(F)
+    dec = _pol.exact_decompose(F)
+    if edges is None:
+        d2 = _wid.decompose_width2(F)
+    else:
+        d2 = _wid.decompose_width2_hardware(F, edges)
+    cert = dec.certificate
+    return {
+        "psd": bool(psd_ok),
+        "psd_detail": psd_why,
+        "eigenvalues": np.linalg.eigvalsh(F).tolist(),
+        "global_feasible": bool(dec.feasible),
+        "global_certificate": None if cert is None else {
+            "kind": cert.kind, "data": cert.data, "margin": cert.margin,
+            "verified": bool(cert.verify(F))},
+        "pair_feasible": bool(d2.feasible),
+        "pair_violation": None if d2.violation is None else {
+            "kind": d2.violation.kind, "subset": list(d2.violation.subset),
+            "lhs": d2.violation.lhs, "rhs": d2.violation.rhs},
+        "min_width": _wid.min_width(F, max_m_exact=6) if m <= 6 else None,
+    }
+
+
+def _uniform_offdiag(m: int, value: float) -> np.ndarray:
+    F = np.full((m, m), float(value))
+    np.fill_diagonal(F, 1.0)
+    return F
+
+
+def control_plus() -> Instance:
+    """``F(+)_ij = 0.4`` on three generators: globally feasible, pair-width infeasible.
+
+    Positive definite, inside ``Q_3``, but the blossom inequality on the odd set
+    ``{0,1,2}`` reads ``1.2 > 1``. This is the control that stops
+    *pair-resource* infeasibility being reported as physical infeasibility.
+    """
+    return Instance("control_plus_0.4", "frozen_control", 3, _uniform_offdiag(3, 0.4),
+                    {"psd": True, "global_feasible": True, "pair_feasible": False,
+                     "expected_pair_violation": "odd_set"},
+                    {"frozen": True, "role": "pair-resource infeasibility only"})
+
+
+def control_minus() -> Instance:
+    """``F(-)_ij = -0.4`` on three generators: positive definite, globally infeasible.
+
+    Spectrum ``{0.2, 1.4, 1.4}``, so positive definite and unit-diagonal, yet
+    ``b = (1,1,1)`` gives ``b^T F b = 0.6 < 1``: no commuting-Pauli probe at any
+    width realises it. This is the control that stops *global* infeasibility
+    being reported as a mere width limitation, and stops positive
+    semidefiniteness being mistaken for feasibility.
+    """
+    return Instance("control_minus_0.4", "frozen_control", 3, _uniform_offdiag(3, -0.4),
+                    {"psd": True, "global_feasible": False, "pair_feasible": False,
+                     "certificate": {"kind": "hypermetric", "b": [1, 1, 1]},
+                     "b_F_b": 0.6, "certified_margin": 0.4},
+                    {"frozen": True, "role": "global physical infeasibility"})
+
+
+FROZEN_CONTROLS = {"control_plus": control_plus, "control_minus": control_minus}

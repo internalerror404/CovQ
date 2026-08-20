@@ -517,3 +517,109 @@ def shot_scaled_floor_compile(G_star: np.ndarray, m: int, edges, c0: float = 1.0
             ti > 1e-10 and len(M) > 0 for ti, ((M, _), _) in zip(t, cols))),
         "history": history,
     }
+
+
+def shot_scaled_edge_compile(G_star: np.ndarray, m: int, edges, c0: float = 1.0,
+                             costs=None, tol: float = 1e-9,
+                             max_cuts: int = 400) -> dict:
+    """Shot-scaled mode in *homogenised edge* variables.
+
+        min  c0 t + sum_e c_e a_e
+        s.t. t I + A_H(y) >= G_star
+             -a_e <= y_e <= a_e
+             a in t * MATCH(H)      (homogenised matching cone)
+
+    The matching cone homogenises to linear constraints -- ``sum_{e ni i} a_e <= t``
+    and ``sum_{e subset S} a_e <= t (|S|-1)/2`` for odd ``S`` -- so this is a
+    semidefinite program with polynomially many rows given odd-set separation,
+    rather than the exponentially many branch columns of
+    :func:`shot_scaled_floor_compile`.  The two are formulations of the same
+    problem and agree to 1e-15 wherever both converge.
+
+    .. warning::
+
+       **This route needs a real SDP solver, and the one here is not.** The
+       eigenvector cutting-plane scheme converges only while the optimum leaves
+       the entangled edges inactive; as soon as ``y`` becomes non-zero the PSD
+       constraint is active on a face with a non-trivial null space, and single
+       eigendirection cuts stall.  Measured: converges in every case with
+       ``c_e = c0``, hits ``cut_limit`` in every case with ``c_e = 0.1`` or
+       ``0.02``, at ``m = 4, 5, 6`` on both ``all_to_all`` and ``line``. Adding
+       every violated eigendirection per round did not help, nor did bounding
+       all variables by the valid Eq. (63) bound.
+
+       Use :func:`shot_scaled_floor_compile` instead. That the branch
+       column-generation formulation solves exactly where the compact one stalls
+       is a point in favour of the manuscript's Theorem 8.2 route: the matching
+       separation oracle keeps the master low-dimensional. Closing this properly
+       means an interior-point SDP backend (cvxpy/SCS), which is deliberately not
+       a dependency here.
+    """
+    G_star = np.atleast_2d(np.asarray(G_star, dtype=float))
+    E = sorted({tuple(sorted((int(a), int(b)))) for a, b in edges})
+    ne = len(E)
+    ce = np.ones(ne) if costs is None else np.array(
+        [float(costs[e] if isinstance(costs, dict) else costs[k]) for k, e in enumerate(E)])
+    # variables x = [t, y (ne), a (ne)]
+    obj = np.concatenate([[c0], np.zeros(ne), ce])
+    rows, rhs = [], []
+    for k in range(ne):                                   # |y| <= a
+        r = np.zeros(1 + 2 * ne); r[1 + k] = 1.0; r[1 + ne + k] = -1.0
+        rows.append(r); rhs.append(0.0)
+        r = np.zeros(1 + 2 * ne); r[1 + k] = -1.0; r[1 + ne + k] = -1.0
+        rows.append(r); rhs.append(0.0)
+    for i in range(m):                                    # degree, homogenised
+        r = np.zeros(1 + 2 * ne); r[0] = -1.0
+        for k, e in enumerate(E):
+            if i in e:
+                r[1 + ne + k] = 1.0
+        rows.append(r); rhs.append(0.0)
+    for size in range(3, m + 1, 2):                       # blossom, homogenised
+        for S in itertools.combinations(range(m), size):
+            r = np.zeros(1 + 2 * ne); r[0] = -(size - 1) / 2.0
+            hit = False
+            for k, e in enumerate(E):
+                if e[0] in S and e[1] in S:
+                    r[1 + ne + k] = 1.0; hit = True
+            if hit:
+                rows.append(r); rhs.append(0.0)
+    # Valid bounds from Eq. (63): the product probe costs c0 * lambda_max(G*), so at
+    # any optimum c0 t <= c0 lambda_max, hence t <= lambda_max; the degree constraints
+    # then give a_e <= t and |y_e| <= a_e.  Bounding the LP keeps the cutting-plane
+    # iterates from running far outside the PSD cone, where eigenvector cuts are
+    # nearly useless.
+    tmax = float(np.linalg.eigvalsh(G_star).max())
+    tmax = max(tmax, 1e-12) * (1.0 + 1e-9)
+    bounds = ([(0.0, tmax)] + [(-tmax, tmax)] * ne + [(0.0, tmax)] * ne)
+
+    cuts: list[tuple[np.ndarray, float]] = []
+    for it in range(max_cuts):
+        A_ub = np.array(rows + [r for r, _ in cuts])
+        b_ub = np.array(rhs + [b for _, b in cuts])
+        res = linprog(obj, A_ub=A_ub, b_ub=b_ub, bounds=bounds, method="highs")
+        if not res.success:
+            return {"status": "infeasible", "iterations": it}
+        x = np.asarray(res.x, dtype=float)
+        t = float(x[0])
+        F = t * np.eye(m)
+        for k, (i, j) in enumerate(E):
+            F[i, j] = F[j, i] = x[1 + k]
+        w, V = np.linalg.eigh(F - G_star)
+        if w[0] >= -tol:
+            return {"status": "solved", "cost": float(res.fun), "t": t,
+                    "y": x[1:1 + ne], "a": x[1 + ne:], "edges": E,
+                    "total_information": F,
+                    "floor_slack_min_eig": float(w[0]),
+                    "product_probe_bound": float(c0 * np.linalg.eigvalsh(G_star).max()),
+                    "uses_entanglement": bool(np.max(np.abs(x[1:1 + ne])) > 1e-9),
+                    "n_cuts": len(cuts), "iterations": it}
+        # Add every violated eigendirection, not just the worst one: a single cut
+        # per round makes the scheme stall badly once entangled edges activate.
+        for col in np.flatnonzero(w < -tol):
+            v = V[:, col]
+            coef = np.zeros(1 + 2 * ne)
+            coef[0] = -float(v @ v)
+            for k, (i, j) in enumerate(E):
+                coef[1 + k] = -2.0 * float(v[i] * v[j])
+            cuts.append((coef, -float(v @ G_star @ v)))
+    return {"status": "cut_limit", "n_cuts": len(cuts)}
