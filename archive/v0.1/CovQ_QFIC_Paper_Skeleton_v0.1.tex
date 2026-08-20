@@ -1,0 +1,98 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm,booktabs,hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+\newtheorem{lemma}{Lemma}
+\title{CovQ: Quantum Fisher-Information Compilation for Commuting Pauli Programs\\\large Feasibility Certificates, Minimum-Entanglement Program Synthesis, and Hardware-Aware Backends}
+\author{Hina Chauhan Dixit\\Decompute Inc.}
+\date{Working draft v0.1}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Quantum compilers traditionally receive a target unitary, statevector, or circuit and optimize a fixed semantic object. We study a weaker and more flexible specification: a target quantum Fisher information matrix for a commuting Pauli parameter program. The compiler may choose any quantum state or flagged circuit schedule whose information geometry matches the target, enabling optimization over an equivalence class of states rather than one prescribed wavefunction. For the zero-mean unit-diagonal sector, we connect exact feasibility to a sign-correlation polytope and give signed-cat program semantics for its extreme points. We formulate minimum branch-entanglement-width and minimum-setting synthesis, develop exact and approximate compilation algorithms, and map the resulting programs to restricted hardware graphs under gate, depth, routing, and noise costs. The evaluation compares structure-aware QFIM compilation with generic expectation-value targeting, variational moment matching, and full-state preparation across feasible, infeasible, structured, Clifford-transformed, and application-derived targets. The central question is whether observable-level information geometry can be compiled more cheaply than a complete quantum state while retaining certified downstream performance.
+\end{abstract}
+
+\section{Introduction}
+\paragraph{Compiler abstraction.}
+Define the map $(\mathcal G,F_\star,H,\epsilon,\mathcal C)\mapsto\Pi$ and explain why the target is an information geometry rather than a state.
+
+\paragraph{Novelty boundary.}
+Explicitly distinguish CovQ from generic expectation targeting, partial-state compilation, general state preparation, cat/stabilizer synthesis, and classical correlation-polytope theory.
+
+\paragraph{Contributions.}
+List only contributions that survive the novelty and theorem audits.
+
+\section{Related Work}
+\subsection{Expectation-value targeting}
+\subsection{Partial and don't-care state preparation}
+\subsection{Correlation and cut polytopes}
+\subsection{QFIM and entanglement structure}
+\subsection{Cat, graph, and stabilizer compilation}
+
+\section{Commuting Pauli Programs and QFIM-IR}
+Let $\mathcal G=(P_1,\ldots,P_m)$ be independent commuting Paulis and
+\[
+U_{\bm\theta}=\exp\!\left[-\frac{i}{2}\sum_i\theta_iP_i\right].
+\]
+For a pure state $|\psi\rangle$,
+\[
+F_{ij}=\operatorname{Cov}_\psi(P_i,P_j).
+\]
+Define the target sector, program semantics, branch labels, and resource model.
+
+\section{Exact Feasibility and Program Normal Forms}
+\begin{theorem}[Candidate: zero-mean feasibility]
+After simultaneous Clifford normalization to independent $Z_i$, a zero-mean unit-diagonal target QFIM is realizable if and only if it belongs to the sign-correlation polytope $\operatorname{conv}\{ss^{\mathsf T}\}$.
+\end{theorem}
+
+\begin{proposition}[Candidate: signed-cat primitive]
+For $|C_s\rangle=(|s\rangle+|-s\rangle)/\sqrt2$, the QFIM for generators $Z_i/2$ is $ss^{\mathsf T}$.
+\end{proposition}
+
+\begin{theorem}[Candidate: flagged program normal form]
+State the exact labeled and coherent-flag semantics and hypotheses.
+\end{theorem}
+
+\section{Minimum Branch-Entanglement-Width Compilation}
+Define $\mathcal Q_{m,k}^{\mathrm{prog}}$ and $k_\epsilon(F_\star)$. Separate this program resource from standard mixed-state entanglement depth.
+
+\section{Exact and Approximate Algorithms}
+\subsection{Small-$m$ exact enumeration and LP}
+\subsection{Minimum-support and minimum-width formulations}
+\subsection{Column generation}
+\subsection{Sparse approximate compilation}
+\subsection{Infeasibility and approximation certificates}
+
+\section{Generator-Aware Clifford Normalization}
+Handle independent commuting Pauli strings and outline the extension to dependent generator codes.
+
+\section{Hardware-Aware Backends}
+Compile selected primitives to all-to-all, line, grid, heavy-hex, modular, and neutral-atom graphs. Report emitted-circuit resources rather than formula-only estimates.
+
+\section{Noise-Aware Compilation}
+Distinguish ideal pure-state QFIM from mixed-state covariance. Optimize realized or bounded information quality under declared noise.
+
+\section{Experimental Methodology}
+\subsection{Benchmark families}
+\subsection{Baselines}
+\subsection{Correctness gates}
+\subsection{Scientific hypotheses}
+\subsection{Reproducibility and registration}
+
+\section{Results}
+Placeholder until novelty audit, exact prototype, pilot, and forward registration are complete.
+
+\section{Application Benchmark}
+Use one target derived from Lorentzian light-ray tomography, while keeping all main claims application-independent.
+
+\section{Limitations}
+Noncommuting generators, mixed-state QFI, large-scale polytope complexity, hardware noise, and compiler optimality.
+
+\section{Conclusion}
+Target statement: observable-level quantum information geometry may admit substantially cheaper programs than full-state preparation, but only within rigorously characterized feasibility and resource regimes.
+
+\end{document}

@@ -1,0 +1,166 @@
+project: CovQ_QFIC
+version: 0.1
+status: pre_pilot_research_protocol
+paper_identity: quantum_compilation
+
+working_title: "CovQ: Quantum Fisher-Information Compilation for Commuting Pauli Programs"
+subtitle: "Feasibility Certificates, Minimum-Entanglement Program Synthesis, and Hardware-Aware Backends"
+
+primary_input:
+  generators: independent_commuting_Pauli_strings
+  target: zero_mean_unit_diagonal_QFIM
+  hardware_graph: specified
+  tolerance: specified
+  cost_model:
+    - branch_count
+    - maximum_branch_entanglement_width
+    - two_qubit_gate_count
+    - two_qubit_depth
+    - SWAP_count
+    - ancilla_count
+    - predicted_noisy_QFIM_error
+
+program_semantics:
+  allowed_backends:
+    - labeled_randomized_schedule
+    - coherent_accessible_flag
+  forbidden_shortcut: unlabeled_mixed_state_QFI_equals_average_branch_QFI
+
+scope_v1:
+  qubits_m: [3, 4, 5, 6, 8, 10, 12]
+  exact_enumeration_max_m: 12
+  generator_classes:
+    - physical_Z_generators
+    - random_independent_commuting_Pauli_generators_via_Clifford
+  target_sector: zero_mean_unit_diagonal
+  noise_stages:
+    - ideal_statevector
+    - local_dephasing
+    - two_qubit_depolarizing
+    - readout_error
+    - topology_routing_cost
+
+benchmark_families:
+  feasible_hidden_decomposition:
+    support_sizes: [2, 4, 8, 16]
+    structures:
+      - random_signed_cat_mixtures
+      - block_diagonal
+      - banded
+      - Toeplitz_like
+      - hierarchical
+      - signed_community
+      - low_effective_rank
+  infeasible:
+    - PSD_unit_diagonal_outside_sign_correlation_polytope
+    - perturbed_near_facet_targets
+  generator_transformed:
+    - random_Clifford_conjugated_commuting_Paulis
+  application:
+    - one_spacetime_derived_target_from_Paper1
+
+compiler_arms:
+  - exact_global_cat_LP
+  - exact_minimum_support_MILP_small_m
+  - bounded_width_exact_small_m
+  - column_generation
+  - Frank_Wolfe_sparse_approximation
+  - hardware_cost_aware_rounding
+  - noise_aware_block_cat_compiler
+
+baselines:
+  - QUEST_expectation_targeting
+  - hardware_efficient_VQA_moment_matching
+  - ADAPT_style_Pauli_rotation_targeting
+  - generic_full_state_preparation_then_transpile
+  - random_signed_cat_schedule
+  - Hadamard_sign_schedule
+  - global_GHZ
+  - product_probe
+  - standard_cat_or_stabilizer_backend_on_fixed_state
+
+hardware_topologies:
+  - all_to_all
+  - line
+  - square_grid
+  - heavy_hex_subgraphs
+  - modular_two_cluster
+  - programmable_neutral_atom_geometries
+
+metrics:
+  semantic:
+    - operator_norm_QFIM_error
+    - Frobenius_QFIM_error
+    - feasibility_certificate_status
+    - downstream_error_bound_tightness
+  compiler_resources:
+    - branch_count_q
+    - maximum_branch_entanglement_width
+    - two_qubit_gate_count
+    - two_qubit_depth
+    - SWAP_count
+    - ancilla_count
+    - compile_time
+  noisy_execution:
+    - realized_observable_covariance_error
+    - noisy_QFIM_or_bound
+    - attainable_classical_Fisher_information
+    - success_probability_if_postselected
+
+correctness_gates:
+  C1_signed_cat_semantics:
+    criterion: "relative_Frobenius_error(F_statevector, s s^T) < 1e-12"
+  C2_flagged_composition:
+    criterion: "relative_Frobenius_error(F_program, sum_r p_r F_r) < 1e-12"
+  C3_exact_feasibility_small_m:
+    criterion: exact_solver_agrees_with_exhaustive_vertex_enumeration
+  C4_infeasible_rejection:
+    criterion: known_infeasible_targets_not_silently_accepted
+  C5_exact_reconstruction:
+    criterion: "Frobenius_error < 1e-10 for feasible exact small instances"
+  C6_width_integrity:
+    criterion: every_emitted_branch_respects_reported_width
+  C7_Clifford_mapping:
+    criterion: QFIM_preserved_under_generator_basis_mapping
+  C8_hardware_legality:
+    criterion: every_two_qubit_gate_uses_legal_edge_after_routing
+  C9_resource_accounting:
+    criterion: metrics_derived_from_emitted_circuits
+  C10_downstream_stability:
+    criterion: "||A^T DeltaF A|| <= ||A||^2 ||DeltaF|| + numerical_tolerance"
+  stop_rule: write_report_then_abort_without_tolerance_changes
+
+pilot_questions:
+  - Does exact structure-aware synthesis beat QUEST on depth/gates/compile time?
+  - Is minimum branch width nontrivial across structured target families?
+  - How sparse are near-optimal decompositions relative to generic bounds?
+  - Does hardware-aware state freedom beat compiling a fixed target state?
+  - At what noise level do block cats dominate global cats?
+
+performance_thresholds:
+  status: freeze_after_pilot
+  rule: no_directional_success_thresholds_before_effect_size_measurement
+
+novelty_kill_gates:
+  K1: identical_prior_compiler_found
+  K2: no_theorem_beyond_known_polytope_translation
+  K3: no_material_advantage_over_QUEST
+  K4: no_useful_bounded_width_tradeoff
+  K5: no_state_equivalence_class_advantage
+  K6: only_existing_backend_improvements
+  K7: only_application_targets_succeed
+  K8: only_variational_result_survives
+
+reproducibility:
+  seeds: [2026, 3407, 9181, 17041, 27183]
+  exact_small_instances: fully_enumerated
+  task_manifests: persisted_and_hashed
+  branch_artifacts:
+    - target_matrix
+    - generator_set
+    - decomposition
+    - emitted_circuits
+    - transpiled_circuits
+    - metrics
+    - environment
+  claims_policy: separate_correctness_gates_from_scientific_hypotheses
