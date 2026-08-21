@@ -1473,3 +1473,36 @@ def test_n9_greedy_support_selection_is_not_exact():
     dear_e = fixed_setting_cost_compile(G, m, edges, np.zeros(m), noise, 1.0,
                                         method="exhaustive", max_support=2, **kw)
     assert dear_g["total_cost"] == pytest.approx(dear_e["total_cost"], abs=1e-7)
+
+
+def test_j2_frozen_pilot_policy_is_never_better_than_the_oracle_ceiling():
+    """The deployable N10 column must cost more than the oracle-angle diagnostic.
+
+    A deployable number that beat the oracle would mean the pilot was being
+    given information it has not paid for.  The registered policy is
+    ``f = 0.02`` at phases ``{0, pi/2}``, pilot retained in the likelihood,
+    globally fixed -- no per-instance tuning.
+    """
+    from covq.noise import (FROZEN_PILOT_POLICY, BlockLocalNoise, deployable_exposure,
+                            noise_aware_floor_compile)
+
+    assert FROZEN_PILOT_POLICY["pilot_fraction"] == 0.02
+    assert FROZEN_PILOT_POLICY["selection_type"] == "globally_fixed"
+    assert FROZEN_PILOT_POLICY["pilot_in_final_likelihood"] is True
+
+    m = 4
+    edges = [(i, j) for i in range(m) for j in range(i + 1, m)]
+    G = np.full((m, m), 0.6)
+    np.fill_diagonal(G, 1.2)
+    for q_edge in (0.0, 0.05, 0.20):
+        noise = BlockLocalNoise(dephasing={q: 0.02 for q in range(m)},
+                                edge_depolarizing={e: q_edge for e in edges},
+                                idle_dephasing=0.01)
+        oracle = noise_aware_floor_compile(G, m, edges, np.zeros(m), noise,
+                                           costs={e: 0.0 for e in edges}, c0=1.0)
+        deploy = deployable_exposure(G, m, edges, np.zeros(m), noise, oracle["branches"],
+                                     costs={e: 0.0 for e in edges}, c0=1.0)
+        assert deploy["status"] == "solved"
+        assert deploy["cost"] >= oracle["cost"] - 1e-9
+        assert deploy["cost"] / oracle["cost"] < 1.10
+        assert deploy["floor_slack_min_eig"] > -1e-6

@@ -518,3 +518,52 @@ def noise_chain_report(rho: np.ndarray, ps: PauliSet, alphas) -> dict:
         "trace_qfim": float(np.trace(fq)),
         "trace_surrogate": float(np.trace(cov)),
     }
+
+
+def sld_operators(rho: np.ndarray, ps: PauliSet, ridge: float = 0.0):
+    """Symmetric logarithmic derivatives by solving the Lyapunov equation directly.
+
+    ``L_i rho + rho L_i = 2 d_i rho``  with  ``d_i rho = -i [G_i, rho]``,
+    ``G_i = P_i / 2``.
+
+    This is deliberately an *independent* implementation path: it calls a
+    general Sylvester solver and never touches the spectral decomposition that
+    :func:`mixed_state_qfim` is built from, so agreement between the two is
+    evidence rather than tautology.
+
+    The equation is singular exactly when ``rho`` is rank deficient (any pair of
+    kernel directions gives ``lambda_a + lambda_b = 0``).  ``ridge`` replaces
+    ``rho`` by ``rho + ridge*I`` renormalised, which restores uniqueness; the
+    physical value is the ``ridge -> 0`` limit and the regression below checks
+    that it converges to the spectral formula rather than assuming it does.
+    """
+    from scipy.linalg import solve_sylvester
+
+    rho = np.asarray(rho, dtype=complex)
+    dim = rho.shape[0]
+    if ridge > 0:
+        rho = rho + ridge * np.eye(dim, dtype=complex)
+        rho = rho / np.trace(rho).real
+    basis = np.eye(dim, dtype=complex)
+    out = []
+    for i in range(ps.m):
+        g = 0.5 * np.column_stack([apply_pauli(basis[:, k], ps, i) for k in range(dim)])
+        drho = -1j * (g @ rho - rho @ g)
+        out.append(solve_sylvester(rho, rho, 2.0 * drho))
+    return out
+
+
+def sld_qfim(rho: np.ndarray, ps: PauliSet, ridge: float = 0.0) -> np.ndarray:
+    """``F_ij = (1/2) Tr[rho (L_i L_j + L_j L_i)]`` from the solved SLDs."""
+    rho_eff = np.asarray(rho, dtype=complex)
+    if ridge > 0:
+        rho_eff = rho_eff + ridge * np.eye(rho_eff.shape[0], dtype=complex)
+        rho_eff = rho_eff / np.trace(rho_eff).real
+    ls = sld_operators(rho, ps, ridge=ridge)
+    m = ps.m
+    out = np.empty((m, m))
+    for i in range(m):
+        for j in range(i, m):
+            val = 0.5 * np.trace(rho_eff @ (ls[i] @ ls[j] + ls[j] @ ls[i]))
+            out[i, j] = out[j, i] = float(np.real(val))
+    return out

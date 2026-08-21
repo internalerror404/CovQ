@@ -740,3 +740,142 @@ def simulate_circuit_noisy(circ, noise: BlockLocalNoise, n_data: int | None = No
         return rho
     blk = rho.reshape(1 << (n - nd), 1 << nd, 1 << (n - nd), 1 << nd)
     return np.einsum("aibi->ab", blk.transpose(1, 0, 3, 2), optimize=True)
+
+
+# ----------------------------------------------------------------------
+# J2: the frozen deployable pilot policy, as a template the compiler prices
+# ----------------------------------------------------------------------
+
+FROZEN_PILOT_POLICY = {
+    "pilot_fraction": 0.02,
+    "pilot_phases": (0.0, math.pi / 2.0),
+    "pilot_in_final_likelihood": True,
+    "selection_type": "globally_fixed",
+    "registered_campaign_shots": 20_000,
+}
+
+
+def _deployable_block_cfi(rho, qubits, noise: BlockLocalNoise,
+                          rng: np.random.Generator, n_reps: int = 200) -> np.ndarray:
+    """Per-shot CFI of one block under the frozen pilot policy.
+
+        F = f/2 (F(0) + F(pi/2)) + (1 - f) E_pilot[ F(A_hat) ]
+
+    Pilot shots are *kept*, which is why this sits well above the naive
+    ``(1 - f) F(A*)``.  The pilot is sized from the registered campaign budget
+    rather than from the exposure being solved for, so the template does not
+    depend circularly on the compiler's own answer.
+    """
+    nq = int(np.log2(rho.shape[0]))
+    f = FROZEN_PILOT_POLICY["pilot_fraction"]
+    a0, a1 = FROZEN_PILOT_POLICY["pilot_phases"]
+    half = max(1, int(f * FROZEN_PILOT_POLICY["registered_campaign_shots"]) // 2)
+
+    f0 = _block_cfi_at(rho, qubits, a0, noise)
+    f1 = _block_cfi_at(rho, qubits, a1, noise)
+
+    c = block_parity_expectation_mixed(rho, _pivot_angles(a0, nq), list(range(nq)))
+    d = block_parity_expectation_mixed(rho, _pivot_angles(a1, nq), list(range(nq)))
+    if math.hypot(c, d) <= 1e-9:
+        return 0.5 * f * (f0 + f1)          # no fringe: nothing to recentre onto
+
+    # The analyzer angle can only *scale* a cat block's CFI, never rotate it:
+    # every angle yields the same rank-one ``s s^T`` structure with a different
+    # coefficient.  So the deployable template is the matched-quadrature
+    # template times a scalar efficiency, and estimating that one scalar is far
+    # better conditioned than Monte-Carlo estimating the whole matrix -- a
+    # matrix estimate injects noise that breaks the exact rank-one structure and
+    # leaves the downstream cutting plane crawling along a rounded face.
+    matched = block_quadrature(rho, list(range(nq)), nq,
+                               three_point=not noise.is_symmetric_readout)
+    f_star = _block_cfi_at(rho, qubits, matched["alpha"], noise)
+    star = float(np.trace(f_star))
+    if star <= 1e-15:
+        return 0.5 * f * (f0 + f1)
+    acc = 0.0
+    for _ in range(n_reps):
+        c_hat = 2.0 * rng.binomial(half, (1 + c) / 2) / half - 1.0
+        d_hat = 2.0 * rng.binomial(half, (1 + d) / 2) / half - 1.0
+        acc += float(np.trace(_block_cfi_at(rho, qubits,
+                                            math.atan2(-c_hat, d_hat), noise)))
+    kappa = (0.5 * f * (np.trace(f0) + np.trace(f1)) + (1.0 - f) * acc / n_reps) / star
+    return float(kappa) * f_star
+
+
+def deployable_branch_template(matching, signs, m: int, theta, noise: BlockLocalNoise,
+                               rng: np.random.Generator) -> np.ndarray:
+    """Branch template under the frozen pilot policy instead of oracle angles."""
+    F = np.zeros((m, m))
+    matched = set()
+    for e, s in zip(matching, signs):
+        i, j = int(e[0]), int(e[1])
+        rho = pair_channel((theta[i], theta[j]), (i, j), int(s), noise)
+        F[np.ix_([i, j], [i, j])] += _deployable_block_cfi(rho, (i, j), noise, rng)
+        matched.update((i, j))
+    for q in range(m):
+        if q not in matched:
+            rho = singleton_channel(theta[q], q, noise, bool(matching))
+            F[q, q] += float(_deployable_block_cfi(rho, (q,), noise, rng)[0, 0])
+    return F
+
+
+def deployable_product_template(m: int, theta, noise: BlockLocalNoise,
+                                rng: np.random.Generator, idle: bool = False):
+    F = np.zeros((m, m))
+    for q in range(m):
+        rho = singleton_channel(theta[q], q, noise, idle)
+        F[q, q] = float(_deployable_block_cfi(rho, (q,), noise, rng)[0, 0])
+    return F
+
+
+def deployable_exposure(G_req, m: int, edges, theta, noise: BlockLocalNoise,
+                        branches, A=None, c0: float = 1.0, costs=None,
+                        seed: int = 20260821, tol: float = 1e-7) -> dict:
+    """Re-price a *fixed* set of branches under the frozen deployable policy.
+
+    The schedule itself is not re-optimised: the branch set is the compiler's
+    output and the question is only what it costs once the analyzer angles come
+    from a real pilot rather than from an oracle.  Re-optimising here would
+    conflate two effects and would also breach the scope freeze.
+    """
+    from scipy.optimize import linprog
+
+    rng = np.random.default_rng(seed)
+    A = np.eye(m) if A is None else np.asarray(A, dtype=float)
+    G_req = np.atleast_2d(np.asarray(G_req, dtype=float))
+    E = sorted({tuple(sorted((int(a), int(b)))) for a, b in edges})
+    ce = {e: 1.0 for e in E} if costs is None else {
+        e: float(costs[e] if isinstance(costs, dict) else costs[k]) for k, e in enumerate(E)}
+
+    Bs, cvec = [], []
+    for M, s in branches:
+        F = (deployable_product_template(m, theta, noise, rng) if not M
+             else deployable_branch_template(list(M), list(s), m, theta, noise, rng))
+        Bs.append(A.T @ F @ A)
+        cvec.append(c0 + sum(ce[tuple(sorted(e))] for e in M))
+    cvec = np.array(cvec)
+
+    cuts: list[np.ndarray] = []
+    for _ in range(300):
+        if cuts:
+            rows = np.array([[-float(v @ B @ v) for B in Bs] for v in cuts])
+            rhs = np.array([-float(v @ G_req @ v) for v in cuts])
+        else:
+            rows, rhs = np.zeros((1, len(Bs))), np.array([0.0])
+        res = linprog(cvec, A_ub=rows, b_ub=rhs, bounds=(0.0, None), method="highs")
+        if not res.success:
+            return {"status": "infeasible_under_deployable_policy"}
+        n = np.asarray(res.x, dtype=float)
+        w, V = np.linalg.eigh(sum(ni * B for ni, B in zip(n, Bs)) - G_req)
+        # The acceptance tolerance must not be tighter than the LP solver's own
+        # feasibility tolerance.  At 1e-8 this loop converges in ~40 cuts and
+        # then stalls forever at a residual of -5e-8 -- HiGHS's floor, not a
+        # violated constraint -- so the achieved slack is returned for audit
+        # rather than chased.
+        if w[0] >= -tol:
+            return {"status": "solved", "cost": float(cvec @ n), "exposures": n,
+                    "floor_slack_min_eig": float(w[0]),
+                    "policy": dict(FROZEN_PILOT_POLICY)}
+        cuts.append(V[:, 0].copy())
+    return {"status": "cut_limit", "floor_slack_min_eig": float(w[0]),
+            "cost": float(cvec @ n)}

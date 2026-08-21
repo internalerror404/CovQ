@@ -12,10 +12,10 @@ from emit_measurement_records import _hash, _write  # noqa: E402
 
 from covq.measurement import mixed_state_qfim
 from covq.circuits import lower_to_cx, resources
-from covq.noise import (BlockLocalNoise, branch_template, fixed_setting_cost_compile,
-                        floor_margin, noise_aware_floor_compile, pair_channel,
-                        pilot_recentered_block, product_template, simulate_circuit_noisy,
-                        simulate_noisy_state)
+from covq.noise import (FROZEN_PILOT_POLICY, BlockLocalNoise, branch_template,
+                        deployable_exposure, fixed_setting_cost_compile, floor_margin,
+                        noise_aware_floor_compile, pair_channel, pilot_recentered_block,
+                        product_template, simulate_circuit_noisy, simulate_noisy_state)
 from covq.paulis import z_generators
 from covq.polytope import exact_decompose
 from covq.programs import single_pure_state_program
@@ -131,8 +131,16 @@ def quest_operational_comparison() -> dict:
 
         q_shots = shots_from(simulate_noisy_state(qr.rotations, m, noise))
         s_shots = shots_from(simulate_circuit_noisy(sparse_prog.circuit, noise))
+        deploy = deployable_exposure(G, m, edges, theta, noise, covq["branches"],
+                                     costs={e: 0.0 for e in edges}, c0=1.0)
         rows.append({
             "edge_depolarizing": qe,
+            "covq_deployable_fixed_pilot_exposure": deploy.get("cost"),
+            "covq_oracle_angle_exposure": covq["cost"],
+            "deployable_over_oracle": (deploy["cost"] / covq["cost"]
+                                       if deploy.get("cost") else None),
+            "deployable_floor_slack_min_eig": deploy.get("floor_slack_min_eig"),
+            "deployable_status": deploy["status"],
             "covq_shots_emitted_readout_cfi": covq["cost"],
             "covq_entangled_settings": covq["n_entangled_settings_used"],
             "covq_expected_two_qubit_gates": float(sum(
@@ -144,8 +152,13 @@ def quest_operational_comparison() -> dict:
             "sparse_caratheodory_shots_noisy_qfi_upper_bound": s_shots,
         })
     return {"gate": "N10",
+            "frozen_deployable_policy": dict(FROZEN_PILOT_POLICY),
+            "primary_covq_field": "covq_deployable_fixed_pilot_exposure",
+            "diagnostic_covq_field": "covq_oracle_angle_exposure",
             "accounting": {
-                "covq_metric": "classical Fisher matrix of the emitted, matched readout",
+                "covq_metric": "classical Fisher matrix of the emitted readout under the "
+                               "frozen f=0.02 two-quadrature pilot policy; the "
+                               "matched-analyzer value is retained only as a ceiling",
                 "quest_metric": "mixed-state SLD QFIM (optimistic upper bound, no readout "
                                 "compiled)",
                 "sparse_metric": "mixed-state SLD QFIM (optimistic upper bound)",

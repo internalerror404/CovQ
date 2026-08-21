@@ -1,5 +1,7 @@
 # CovQ — STATUS
 
+**`SCIENTIFIC_SCOPE = FROZEN`** (2026-08-21). `NEW_EXPERIMENTS = PROHIBITED_UNLESS_RELEASE_RERUN_FAILS`. Registration: `REGISTRATION.md`. Submission identity: theory and certified prototype — **not** a hardware demonstration.
+
 Last updated: 2026-08-21. Decision of record: `docs/decisions/DECISION_001_PIVOT_TO_BOUNDED_WIDTH.md`.
 Current documents: `charter/*_v0.3.*`. Proof of record:
 `docs/proofs/THEOREM_PAIR_WIDTH_AND_INFORMATION_FLOOR_v0.1.md`.
