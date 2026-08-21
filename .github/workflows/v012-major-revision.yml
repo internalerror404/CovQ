@@ -1,0 +1,60 @@
+name: CovQ v0.12 major-revision evidence
+
+on:
+  pull_request:
+    branches: [claude/experiment-review-mac-rthiz1]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Archive source tree
+        run: |
+          tar --exclude=.git -C .. -czf "$RUNNER_TEMP/covq-source-${GITHUB_SHA}.tar.gz" CovQ
+      - uses: actions/upload-artifact@v4
+        with:
+          name: covq-source-${{ github.sha }}
+          path: ${{ runner.temp }}/covq-source-${{ github.sha }}.tar.gz
+          if-no-files-found: error
+          retention-days: 7
+
+  deep-be:
+    if: github.event_name == 'workflow_dispatch'
+    strategy:
+      fail-fast: false
+      matrix:
+        instance: [path_m4, path_m5, banded_m5]
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      OMP_NUM_THREADS: 2
+      OPENBLAS_NUM_THREADS: 2
+      MKL_NUM_THREADS: 2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: prototype/requirements.txt
+      - name: Install dependencies
+        working-directory: prototype
+        run: pip install -r requirements.txt
+      - name: Run registered bE case
+        working-directory: prototype
+        env:
+          PYTHONPATH: src
+        run: python scripts/run_deep_be.py ${{ matrix.instance }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: quest-be-${{ matrix.instance }}-${{ github.sha }}
+          path: results/quest_be_deep/${{ matrix.instance }}.json
+          if-no-files-found: warn
+          retention-days: 14
