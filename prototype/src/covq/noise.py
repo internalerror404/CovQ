@@ -47,7 +47,8 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
-from .measurement import (block_quadrature, classical_fisher_matrix, equatorial_basis_change,
+from .measurement import (block_parity_expectation_mixed, block_quadrature,
+                          classical_fisher_matrix, equatorial_basis_change,
                           mixed_state_qfim)
 from .paulis import PauliSet, apply_pauli, z_generators
 from .width import max_weight_matching
@@ -458,3 +459,284 @@ def setting_cost_crossover(cost_covq: float, q_covq: int,
             "setup_penalty": float((q_covq - q_quest) * c_setup),
             "verdict": ("schedule cheaper for every N" if n_star <= 0
                         else f"schedule cheaper once N > {n_star:.1f}")}
+
+
+# ----------------------------------------------------------------------
+# N7: the deployable arm.  Oracle analyzer angles are an upper bound.
+# ----------------------------------------------------------------------
+
+def _block_cfi_at(rho, qubits, alpha_pivot: float, noise: BlockLocalNoise) -> np.ndarray:
+    nq = int(np.log2(rho.shape[0]))
+    ps = z_generators(nq)
+    alphas = [alpha_pivot] + [0.0] * (nq - 1)
+    return _block_cfi(rho, ps, alphas, list(qubits), noise)
+
+
+def pilot_recentered_block(rho, qubits, noise: BlockLocalNoise, n_pilot: int,
+                           n_prod: int, rng: np.random.Generator,
+                           n_reps: int = 400) -> dict:
+    """Finite-shot pilot, then production at the estimated quadrature angle.
+
+    The analyzer angle used everywhere above is solved on the *true* noisy
+    state, which no experiment can do -- it is an oracle and therefore an upper
+    bound.  Here the pilot is actually sampled: ``n_pilot`` shots split between
+    ``A = 0`` and ``A = pi/2`` give binomial estimates of the fringe, hence
+    ``alpha_hat = atan2(-c_hat, d_hat)`` with real error, and production runs
+    there.
+
+    Total information follows the accounting the review specified,
+
+        F_total = F_pilot + E_pilot[ F_production(A_hat) ],
+
+    rather than ``(1 - f) F_production``: the pilot shots are informative in
+    their own right and are not discarded.
+    """
+    nq = int(np.log2(rho.shape[0]))
+    half = max(1, n_pilot // 2)
+    exact = block_quadrature(rho, list(range(nq)), nq,
+                             three_point=not noise.is_symmetric_readout)
+    if exact["analyzer_status"] != "matched":
+        zero = np.zeros((nq, nq))
+        return {"oracle": zero, "deployable": zero, "ratio": None,
+                "analyzer_status": exact["analyzer_status"]}
+
+    oracle_rate = _block_cfi_at(rho, qubits, exact["alpha"], noise)
+    f0 = _block_cfi_at(rho, qubits, 0.0, noise)
+    f1 = _block_cfi_at(rho, qubits, math.pi / 2.0, noise)
+
+    # True fringe, from which the pilot's binomial draws are generated.
+    c = block_parity_expectation_mixed(rho, _pivot_angles(0.0, nq), list(range(nq)))
+    d = block_parity_expectation_mixed(rho, _pivot_angles(math.pi / 2, nq),
+                                       list(range(nq)))
+    acc = np.zeros((nq, nq))
+    for _ in range(n_reps):
+        c_hat = 2.0 * rng.binomial(half, (1 + c) / 2) / half - 1.0
+        d_hat = 2.0 * rng.binomial(half, (1 + d) / 2) / half - 1.0
+        acc += _block_cfi_at(rho, qubits, math.atan2(-c_hat, d_hat), noise)
+    prod_rate = acc / n_reps
+
+    oracle = (n_pilot + n_prod) * oracle_rate
+    deployable = half * f0 + half * f1 + n_prod * prod_rate
+    denom = float(np.trace(oracle))
+    return {"oracle": oracle, "deployable": deployable,
+            "oracle_rate": oracle_rate, "production_rate": prod_rate,
+            "ratio": (float(np.trace(deployable)) / denom) if denom > 1e-15 else None,
+            "analyzer_status": "matched"}
+
+
+def _pivot_angles(alpha: float, nq: int):
+    a = np.zeros(nq)
+    a[0] = alpha
+    return a
+
+
+# ----------------------------------------------------------------------
+# N9: fixed setting cost.  This is where convexity ends.
+# ----------------------------------------------------------------------
+
+def signed_matching_pool(m: int, edges, max_pairs: int | None = None):
+    """Every signed matching on ``H``, as ``(matching, signs)`` columns."""
+    E = sorted({tuple(sorted((int(a), int(b)))) for a, b in edges})
+    out = [([], [])]
+    cap = (m // 2) if max_pairs is None else max_pairs
+    for r in range(1, cap + 1):
+        for sub in itertools.combinations(E, r):
+            seen: set[int] = set()
+            if any(q in seen or seen.add(q) for e in sub for q in e):
+                continue
+            for sgn in itertools.product((1, -1), repeat=r):
+                out.append((list(sub), list(sgn)))
+    return out
+
+
+def _solve_support(G_req, A, Bs, c_use, tol=1e-8, max_cuts=60):
+    """Convex exposure problem restricted to a fixed support of pulled-back templates."""
+    from scipy.optimize import linprog
+
+    if not Bs:
+        return None
+    cvec = np.array(c_use, dtype=float)
+    cuts: list[np.ndarray] = []
+    for _ in range(max_cuts):
+        if cuts:
+            rows = np.array([[-float(v @ B @ v) for B in Bs] for v in cuts])
+            rhs = np.array([-float(v @ G_req @ v) for v in cuts])
+        else:
+            rows, rhs = np.zeros((1, len(Bs))), np.array([0.0])
+        res = linprog(cvec, A_ub=rows, b_ub=rhs, bounds=(0.0, None), method="highs")
+        if not res.success:
+            return None
+        n = np.asarray(res.x, dtype=float)
+        w, V = np.linalg.eigh(sum(ni * B for ni, B in zip(n, Bs)) - G_req)
+        if w[0] >= -tol:
+            return {"exposures": n, "use_cost": float(cvec @ n)}
+        cuts.append(V[:, 0].copy())
+    return None
+
+
+def fixed_setting_cost_compile(G_req, m: int, edges, theta, noise: BlockLocalNoise,
+                               lambda_q: float, A=None, c0: float = 1.0, costs=None,
+                               method: str = "greedy", max_support: int = 3) -> dict:
+    """Minimise ``sum_b n_b c_b + lambda_q |{b : n_b > 0}|``.
+
+    The cardinality term is a fixed charge, so this is **not** the convex conic
+    program above and no oracle-polynomial claim is made for it.  Two solvers
+    are provided so the cheap one can be checked rather than trusted:
+    ``exhaustive`` enumerates supports up to ``max_support`` columns, and
+    ``greedy`` does forward selection.  Gate N9 is the comparison, and it does
+    **not** pass: forward selection commits to the best single column, which is
+    not in general part of the best pair, so it returns a strictly worse support
+    at small ``lambda_q``.  Greedy is therefore labelled heuristic and its
+    measured suboptimality is reported rather than assumed away.
+    """
+    A = np.eye(m) if A is None else np.asarray(A, dtype=float)
+    G_req = np.atleast_2d(np.asarray(G_req, dtype=float))
+    E = sorted({tuple(sorted((int(a), int(b)))) for a, b in edges})
+    ce = {e: 1.0 for e in E} if costs is None else {
+        e: float(costs[e] if isinstance(costs, dict) else costs[k]) for k, e in enumerate(E)}
+    pool = signed_matching_pool(m, E)
+    use = [c0 + sum(ce[tuple(sorted(e))] for e in M) for M, _ in pool]
+
+    # Templates are density-matrix simulations; the support search revisits the
+    # same columns many times, so build each one once.
+    cache = [A.T @ ((product_template(m, theta, noise, idle=False) if not M
+                     else branch_template(list(M), list(s), m, theta, noise))) @ A
+             for M, s in pool]
+
+    def total(idx):
+        sol = _solve_support(G_req, A, [cache[i] for i in idx], [use[i] for i in idx])
+        if sol is None:
+            return None
+        active = int((sol["exposures"] > 1e-10).sum())
+        return sol["use_cost"] + lambda_q * active, sol
+
+    if method == "exhaustive":
+        best, best_idx, best_sol = np.inf, None, None
+        for r in range(1, max_support + 1):
+            for idx in itertools.combinations(range(len(pool)), r):
+                got = total(idx)
+                if got and got[0] < best - 1e-12:
+                    best, best_idx, best_sol = got[0], idx, got[1]
+        chosen = list(best_idx) if best_idx else []
+    else:
+        chosen, best, best_sol = [], np.inf, None
+        while True:
+            candidate = None
+            for i in range(len(pool)):
+                if i in chosen:
+                    continue
+                got = total(chosen + [i])
+                if got is None or got[0] >= best - 1e-12:
+                    continue
+                if candidate is None or got[0] < candidate[0]:
+                    candidate = (got[0], i, got[1])
+            if candidate is None:
+                break
+            best, pick, best_sol = candidate
+            chosen.append(pick)
+    if best_sol is None:
+        return {"status": "infeasible", "method": method}
+    keep = [(pool[i], float(n)) for i, n in zip(chosen, best_sol["exposures"]) if n > 1e-10]
+    return {"status": "solved", "method": method, "total_cost": float(best),
+            "lambda_q": lambda_q, "n_settings": len(keep),
+            "branches": [b for b, _ in keep], "exposures": [n for _, n in keep],
+            "use_cost": best_sol["use_cost"]}
+
+
+# ----------------------------------------------------------------------
+# N10: equal-accounting campaign across arms
+# ----------------------------------------------------------------------
+
+def simulate_noisy_state(circuit_rotations, m: int, noise: BlockLocalNoise,
+                         psi0=None) -> np.ndarray:
+    """Density-matrix evolution of a Pauli-rotation sequence under the same noise map.
+
+    Two-qubit depolarization is charged **per emitted two-qubit gate**, exactly
+    as a CovQ branch is charged per activated pair, and per-qubit dephasing and
+    depolarization are applied once at the end on both sides.  Without that
+    matching an arm can look better only because it was billed differently.
+    """
+    from .quest import _apply_rotation, _dense
+
+    dim = 1 << m
+    if psi0 is None:
+        psi = np.ones(dim, dtype=complex) / math.sqrt(dim)
+    else:
+        psi = psi0.astype(complex)
+    rho = np.outer(psi, psi.conj())
+    for rot, t in circuit_rotations:
+        dense = _dense(rot.axes, m)
+        u = np.cos(t / 2.0) * np.eye(dim, dtype=complex) - 1j * np.sin(t / 2.0) * dense
+        rho = u @ rho @ u.conj().T
+        if rot.weight == 2:
+            qs = tuple(sorted(q for q, _ in rot.axes))
+            rho = _depolarize_pair_in_place(rho, qs, m, noise.e_depol(qs))
+    for q in range(m):
+        rho = _apply_1q_channel(rho, q, m, noise.q_dephase(q), noise.q_depol(q))
+    return rho
+
+
+def _depolarize_pair_in_place(rho, qs, m: int, p: float) -> np.ndarray:
+    """Two-qubit depolarization on ``qs``: 1/16 sum over the 16 two-qubit Paulis."""
+    if p <= 0:
+        return rho
+    acc = (1 - p) * rho
+    ops = []
+    for a in ("I", "X", "Y", "Z"):
+        for b in ("I", "X", "Y", "Z"):
+            if a == "I" and b == "I":
+                continue
+            ops.append(_kron(*[_PAULIS[a] if i == qs[0] else
+                               _PAULIS[b] if i == qs[1] else _I2 for i in range(m)]))
+    for u in ops:
+        acc = acc + (p / 15.0) * (u @ rho @ u.conj().T)
+    return acc
+
+
+def floor_margin(F: np.ndarray, G_req: np.ndarray, A=None, tol: float = 1e-12) -> float:
+    """Largest ``gamma`` with ``A^T F A >= gamma G_req``; shots needed are ``1/gamma``."""
+    m = F.shape[0]
+    A = np.eye(m) if A is None else np.asarray(A, dtype=float)
+    M = A.T @ np.asarray(F, dtype=float) @ A
+    w, V = np.linalg.eigh(np.atleast_2d(np.asarray(G_req, dtype=float)))
+    if w.min() <= tol:
+        raise ValueError("G_req must be positive definite for a margin to be defined")
+    half = V @ np.diag(1.0 / np.sqrt(w)) @ V.T
+    return float(np.linalg.eigvalsh(half @ M @ half).min())
+
+
+def simulate_circuit_noisy(circ, noise: BlockLocalNoise, n_data: int | None = None):
+    """Density-matrix evolution of an emitted circuit, charged per two-qubit gate.
+
+    Any arm whose state needs a preparation circuit must pay for that circuit's
+    two-qubit gates on the same terms as a CovQ pair activation.  Simulating an
+    arm's state noiselessly and then applying only terminal single-qubit noise
+    hands it a preparation the other arms are billed for -- the same asymmetry
+    the handoff warns about, pointed the other way.
+
+    Ancillas are the highest-index wires and are traced out at the end.
+    """
+    from .circuits import lower_to_cx
+    from .sim import _SQ, apply_gate
+
+    low = lower_to_cx(circ)
+    n = low.n_qubits
+    nd = low.n_data if n_data is None else n_data
+    dim = 1 << n
+    rho = np.zeros((dim, dim), dtype=complex)
+    rho[0, 0] = 1.0
+    basis = np.eye(dim, dtype=complex)
+
+    for g in low.gates:
+        u = np.column_stack([apply_gate(basis[:, k], g, n) for k in range(dim)])
+        rho = u @ rho @ u.conj().T
+        if len(g.qubits) == 2:
+            qs = tuple(sorted(int(q) for q in g.qubits))
+            rho = _depolarize_pair_in_place(rho, qs, n, noise.e_depol(qs))
+    for q in range(n):
+        rho = _apply_1q_channel(rho, q, n, noise.q_dephase(q), noise.q_depol(q))
+
+    if n == nd:
+        return rho
+    blk = rho.reshape(1 << (n - nd), 1 << nd, 1 << (n - nd), 1 << nd)
+    return np.einsum("aibi->ab", blk.transpose(1, 0, 3, 2), optimize=True)

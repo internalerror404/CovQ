@@ -1,0 +1,93 @@
+{
+  "schema_version": "covq.measurement.record/0.1",
+  "source_commit": "517e73f8d488af19a40c777155b5d0db48027bcb",
+  "dirty": true,
+  "tolerances": {
+    "attainment_abs": 1e-09,
+    "closed_form_abs": 1e-09,
+    "pinching_abs": 1e-10
+  },
+  "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
+  "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
+  "gate": "N10",
+  "accounting": {
+    "covq_metric": "classical Fisher matrix of the emitted, matched readout",
+    "quest_metric": "mixed-state SLD QFIM (optimistic upper bound, no readout compiled)",
+    "sparse_metric": "mixed-state SLD QFIM (optimistic upper bound)",
+    "two_qubit_noise": "charged per emitted two-qubit gate on every arm",
+    "shot_metric": "shots to satisfy A^T F A >= G_req, i.e. 1 / floor margin"
+  },
+  "sparse_caratheodory_preparation": {
+    "cx_count": 232,
+    "caveat": "this prototype's sparse-amplitude preparation is a dense upper bound, not a competitive routine; the arm's degradation reflects that circuit, not an intrinsic property of single-state realisation"
+  },
+  "quest_preparation": {
+    "stop_reason": "converged",
+    "rotations": 50,
+    "two_qubit_rotations": 44
+  },
+  "rows": [
+    {
+      "edge_depolarizing": 0.0,
+      "covq_shots_emitted_readout_cfi": 1.766063548900464,
+      "covq_entangled_settings": 3,
+      "covq_expected_two_qubit_gates": 3.532127097800928,
+      "product_only_shots": 3.255208333333339,
+      "quest_shots_noisy_qfi_upper_bound": 1.6260855073181055,
+      "quest_two_qubit_gates_total": 71.54776232199664,
+      "sparse_caratheodory_shots_noisy_qfi_upper_bound": 1.6274161414459365
+    },
+    {
+      "edge_depolarizing": 0.01,
+      "covq_shots_emitted_readout_cfi": 1.801921792572661,
+      "covq_entangled_settings": 3,
+      "covq_expected_two_qubit_gates": 3.603843585145322,
+      "product_only_shots": 3.255208333333339,
+      "quest_shots_noisy_qfi_upper_bound": 2.876466464138612,
+      "quest_two_qubit_gates_total": 126.56452442209894,
+      "sparse_caratheodory_shots_noisy_qfi_upper_bound": 7.802496119814292
+    },
+    {
+      "edge_depolarizing": 0.02,
+      "covq_shots_emitted_readout_cfi": 1.8388833287176847,
+      "covq_entangled_settings": 3,
+      "covq_expected_two_qubit_gates": 3.6777666574353693,
+      "product_only_shots": 3.255208333333339,
+      "quest_shots_noisy_qfi_upper_bound": 5.122027213506929,
+      "quest_two_qubit_gates_total": 225.36919739430488,
+      "sparse_caratheodory_shots_noisy_qfi_upper_bound": 46.889907384613664
+    },
+    {
+      "edge_depolarizing": 0.05,
+      "covq_shots_emitted_readout_cfi": 1.956857117895252,
+      "covq_entangled_settings": 3,
+      "covq_expected_two_qubit_gates": 3.913714235790504,
+      "product_only_shots": 3.255208333333339,
+      "quest_shots_noisy_qfi_upper_bound": 32.80407844639222,
+      "quest_two_qubit_gates_total": 1443.3794516412577,
+      "sparse_caratheodory_shots_noisy_qfi_upper_bound": 31102.751890456668
+    },
+    {
+      "edge_depolarizing": 0.1,
+      "covq_shots_emitted_readout_cfi": 2.180325369012919,
+      "covq_entangled_settings": 3,
+      "covq_expected_two_qubit_gates": 4.360650738025838,
+      "product_only_shots": 3.255208333333339,
+      "quest_shots_noisy_qfi_upper_bound": 835.7640289074677,
+      "quest_two_qubit_gates_total": 36773.61727192858,
+      "sparse_caratheodory_shots_noisy_qfi_upper_bound": 5200690140.044578
+    },
+    {
+      "edge_depolarizing": 0.2,
+      "covq_shots_emitted_readout_cfi": 2.759474295156976,
+      "covq_entangled_settings": 3,
+      "covq_expected_two_qubit_gates": 5.518948590313952,
+      "product_only_shots": 3.255208333333339,
+      "quest_shots_noisy_qfi_upper_bound": 351088.950852985,
+      "quest_two_qubit_gates_total": 15447913.837531341,
+      "sparse_caratheodory_shots_noisy_qfi_upper_bound": null
+    }
+  ],
+  "status": "DONE",
+  "record_hash": "1ca1d63d32276c3e2fc7066bbcfb856949597478dd01aa5acc794f8f654a4dcd"
+}

@@ -833,19 +833,47 @@ def test_m2_fixed_readout_collapses_on_a_hyperplane_that_contains_theta_zero():
 
 
 def test_m3_equation_110_reduces_to_the_covariance_formula_on_pure_states():
-    """Eq (110) and Eq (109) must coincide exactly where the paper says they do."""
+    """Eq (110) and Eq (109) must coincide exactly where the paper says they do.
+
+    Signed cat states alone are *not* a sufficient fixture: their generator
+    matrix elements are real, which hides a transpose-versus-conjugate-transpose
+    error in the Eq (110) contraction.  Random complex states are included
+    because that is the case which exposes it -- the buggy form was not even
+    PSD there, while agreeing perfectly on every real fixture.
+    """
     from covq.measurement import covariance_surrogate, mixed_state_qfim
 
     rng = np.random.default_rng(29)
     for m in (1, 2, 3, 4):
         ps = z_generators(m)
         for _ in range(4):
-            psi = prg.signed_cat_circuit(rng.choice([-1, 1], size=m), n_qubits=m)
-            psi = data_statevector(psi)
+            psi = data_statevector(prg.signed_cat_circuit(rng.choice([-1, 1], size=m),
+                                                          n_qubits=m))
             rho = np.outer(psi, psi.conj())
             ref = qfim_from_statevector(psi, ps)
             assert mixed_state_qfim(rho, ps) == pytest.approx(ref, abs=1e-12)
             assert covariance_surrogate(rho, ps) == pytest.approx(ref, abs=1e-12)
+
+            v = rng.normal(size=1 << m) + 1j * rng.normal(size=1 << m)
+            v /= np.linalg.norm(v)
+            rho_c = np.outer(v, v.conj())
+            assert mixed_state_qfim(rho_c, ps) == pytest.approx(
+                qfim_from_statevector(v, ps), abs=1e-10)
+
+
+def test_m3_mixed_state_qfim_is_positive_semidefinite_on_complex_mixed_states():
+    """Eq (110) is a Fisher matrix; a negative eigenvalue is a bug, not noise."""
+    from covq.measurement import mixed_state_qfim
+
+    rng = np.random.default_rng(77)
+    for m in (2, 3):
+        ps = z_generators(m)
+        dim = 1 << m
+        for _ in range(15):
+            a = rng.normal(size=(dim, dim)) + 1j * rng.normal(size=(dim, dim))
+            rho = a @ a.conj().T
+            rho /= np.trace(rho).real
+            assert np.linalg.eigvalsh(mixed_state_qfim(rho, ps)).min() >= -1e-10
 
 
 def test_m3_covariance_surrogate_is_not_the_qfim_off_pure_states():
@@ -1382,3 +1410,66 @@ def test_zero_contrast_is_reported_not_papered_over():
     assert rec["analyzer_status"] == "arbitrary_zero_information"
     assert rec["regularity_margin"] is None
     assert rec["visibility"] == pytest.approx(0.0, abs=1e-12)
+
+
+def test_n7_deployable_pilot_arm_is_bounded_by_the_oracle_angle():
+    """Oracle analyzer angles are an upper bound; the deployable arm pays for the pilot.
+
+    Two distinct losses, and they pull in opposite directions.  Pilot-angle
+    estimation error falls as the pilot grows; pilot shots run off quadrature,
+    which costs in proportion to the pilot fraction.  At unit visibility both
+    vanish, because every non-degenerate angle already attains.
+    """
+    from covq.noise import BlockLocalNoise, pair_channel, pilot_recentered_block
+
+    rng = np.random.default_rng(5)
+    total = 20_000
+
+    clean = pair_channel((0.4, 0.0), (0, 1), 1, BlockLocalNoise())
+    for fraction in (0.01, 0.2):
+        n_pilot = int(fraction * total)
+        rep = pilot_recentered_block(clean, (0, 1), BlockLocalNoise(), n_pilot,
+                                     total - n_pilot, rng, n_reps=60)
+        assert rep["ratio"] == pytest.approx(1.0, abs=1e-9)
+
+    noise = BlockLocalNoise(dephasing={0: 0.12, 1: 0.12}, edge_depolarizing={(0, 1): 0.15})
+    rho = pair_channel((0.4, 0.0), (0, 1), 1, noise)
+    tiny = pilot_recentered_block(rho, (0, 1), noise, 40, total - 40, rng, n_reps=200)
+    sized = pilot_recentered_block(rho, (0, 1), noise, 400, total - 400, rng, n_reps=200)
+    for rep in (tiny, sized):
+        assert rep["ratio"] <= 1.0 + 1e-9, "deployable can never beat the oracle"
+    assert sized["ratio"] > tiny["ratio"], "a too-small pilot is the dominant loss"
+    assert sized["ratio"] > 0.9
+
+
+def test_n9_greedy_support_selection_is_not_exact():
+    """Recorded as a failure, because it is one.
+
+    Forward selection commits to the best single column, which need not belong
+    to the best pair.  It is exact only once the cardinality penalty is large
+    enough that one setting is genuinely optimal -- that is, outside the
+    multi-setting regime the schedule exists to exploit.
+    """
+    from covq.noise import BlockLocalNoise, fixed_setting_cost_compile
+
+    m = 3
+    edges = [(0, 1), (0, 2), (1, 2)]
+    G = np.full((m, m), 0.5)
+    np.fill_diagonal(G, 1.1)
+    noise = BlockLocalNoise(dephasing={q: 0.02 for q in range(m)},
+                            edge_depolarizing={e: 0.04 for e in edges},
+                            idle_dephasing=0.01)
+    kw = dict(costs={e: 0.1 for e in edges})
+
+    cheap_g = fixed_setting_cost_compile(G, m, edges, np.zeros(m), noise, 0.0,
+                                         method="greedy", **kw)
+    cheap_e = fixed_setting_cost_compile(G, m, edges, np.zeros(m), noise, 0.0,
+                                         method="exhaustive", max_support=2, **kw)
+    assert cheap_e["total_cost"] < cheap_g["total_cost"] - 1e-9
+    assert cheap_e["n_settings"] > cheap_g["n_settings"]
+
+    dear_g = fixed_setting_cost_compile(G, m, edges, np.zeros(m), noise, 1.0,
+                                        method="greedy", **kw)
+    dear_e = fixed_setting_cost_compile(G, m, edges, np.zeros(m), noise, 1.0,
+                                        method="exhaustive", max_support=2, **kw)
+    assert dear_g["total_cost"] == pytest.approx(dear_e["total_cost"], abs=1e-7)

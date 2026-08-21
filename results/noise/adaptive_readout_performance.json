@@ -1,0 +1,159 @@
+{
+  "schema_version": "covq.measurement.record/0.1",
+  "source_commit": "517e73f8d488af19a40c777155b5d0db48027bcb",
+  "dirty": true,
+  "tolerances": {
+    "attainment_abs": 1e-09,
+    "closed_form_abs": 1e-09,
+    "pinching_abs": 1e-10
+  },
+  "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
+  "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
+  "gate": "N7",
+  "claim": "oracle analyzer angles are an upper bound; the deployable arm pays pilot-estimation error (vanishing in pilot size) plus off-quadrature pilot shots (proportional to pilot fraction)",
+  "arms": [
+    {
+      "noise_level": "clean",
+      "sweep": [
+        {
+          "pilot_fraction": 0.002,
+          "total_shots": 20000,
+          "deployable_over_oracle": 1.0000000000000002
+        },
+        {
+          "pilot_fraction": 0.005,
+          "total_shots": 20000,
+          "deployable_over_oracle": 1.0000000000000002
+        },
+        {
+          "pilot_fraction": 0.01,
+          "total_shots": 20000,
+          "deployable_over_oracle": 1.0000000000000002
+        },
+        {
+          "pilot_fraction": 0.02,
+          "total_shots": 20000,
+          "deployable_over_oracle": 1.0000000000000002
+        },
+        {
+          "pilot_fraction": 0.05,
+          "total_shots": 20000,
+          "deployable_over_oracle": 1.0000000000000002
+        },
+        {
+          "pilot_fraction": 0.1,
+          "total_shots": 20000,
+          "deployable_over_oracle": 1.0000000000000002
+        },
+        {
+          "pilot_fraction": 0.2,
+          "total_shots": 20000,
+          "deployable_over_oracle": 1.0
+        },
+        {
+          "pilot_fraction": 0.4,
+          "total_shots": 20000,
+          "deployable_over_oracle": 1.0
+        }
+      ],
+      "optimal_pilot_fraction": 0.002,
+      "best_ratio": 1.0000000000000002
+    },
+    {
+      "noise_level": "light",
+      "sweep": [
+        {
+          "pilot_fraction": 0.002,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.9824827907683145
+        },
+        {
+          "pilot_fraction": 0.005,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.9916989870065603
+        },
+        {
+          "pilot_fraction": 0.01,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.9932979204328614
+        },
+        {
+          "pilot_fraction": 0.02,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.9916744924657173
+        },
+        {
+          "pilot_fraction": 0.05,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.982971198685106
+        },
+        {
+          "pilot_fraction": 0.1,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.9667680340005901
+        },
+        {
+          "pilot_fraction": 0.2,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.9340186206720466
+        },
+        {
+          "pilot_fraction": 0.4,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.8682562037542111
+        }
+      ],
+      "optimal_pilot_fraction": 0.01,
+      "best_ratio": 0.9932979204328614
+    },
+    {
+      "noise_level": "heavy",
+      "sweep": [
+        {
+          "pilot_fraction": 0.002,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.8433275537626955
+        },
+        {
+          "pilot_fraction": 0.005,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.9328652498454919
+        },
+        {
+          "pilot_fraction": 0.01,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.9669740160939203
+        },
+        {
+          "pilot_fraction": 0.02,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.9766612320619459
+        },
+        {
+          "pilot_fraction": 0.05,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.9712259737825283
+        },
+        {
+          "pilot_fraction": 0.1,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.9507688724086326
+        },
+        {
+          "pilot_fraction": 0.2,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.9058535925529448
+        },
+        {
+          "pilot_fraction": 0.4,
+          "total_shots": 20000,
+          "deployable_over_oracle": 0.8137721879328228
+        }
+      ],
+      "optimal_pilot_fraction": 0.02,
+      "best_ratio": 0.9766612320619459
+    }
+  ],
+  "status": "DONE",
+  "record_hash": "954c6dd35f10eed06c7cb4b058321c5b6345c8c6712211e9b658070d50a81e9a"
+}

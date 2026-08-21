@@ -113,15 +113,103 @@ oracle-polynomial claim. The convex per-use compiler above and this amortization
 are therefore reported as two distinct objects; no `λ_q q` term was added to the conic
 program.
 
+## N7 — the deployable arm, and what the oracle assumption was worth
+
+Every analyzer angle above is solved on the *true* noisy state, which no experiment can
+do. The deployable arm samples the pilot: `n_pilot` shots split between `A = 0` and
+`A = π/2`, binomial estimates of the fringe, `α̂ = atan2(−ĉ, d̂)`, production there. Total
+information uses the specified accounting `F_total = F_pilot + E_pilot[F_prod(Â)]`, not
+`(1−f)F_prod`.
+
+Two losses that pull in opposite directions, and they separate cleanly:
+
+| pilot fraction | clean (`v = 1`) | light | heavy |
+|---|---|---|---|
+| 0.002 | 1.0000 | 0.9811 | 0.8437 |
+| 0.01 | 1.0000 | **0.9932** | 0.9605 |
+| 0.02 | 1.0000 | 0.9918 | **0.9751** |
+| 0.10 | 1.0000 | 0.9668 | 0.9508 |
+| 0.40 | 1.0000 | 0.8683 | 0.8138 |
+
+Pilot-angle error dominates at small `f` and vanishes as the pilot grows; off-quadrature
+pilot shots dominate at large `f` and cost in proportion to `f`. The interior optimum
+moves right as visibility falls. **At unit visibility the ratio is exactly 1 at every
+pilot fraction** — every non-degenerate angle already attains, so phase matching is free.
+Worst case, heavy noise with a correctly sized pilot: the oracle assumption was worth
+**2.5%**.
+
+## N9 — greedy support selection is not exact, and fails where it matters
+
+Recorded as a failure because it is one.
+
+| `λ_q` | greedy | settings | exhaustive | settings | greedy excess |
+|---|---|---|---|---|---|
+| 0.0 | 2.27865 | 1 | **2.12480** | 2 | **7.24 %** |
+| 0.1 | 2.37865 | 1 | 2.32480 | 2 | 2.32 % |
+| 0.2 | 2.47865 | 1 | 2.47865 | 1 | 0 |
+| ≥ 0.3 | — | 1 | — | 1 | 0 |
+
+Forward selection commits to the best single column, which need not belong to the best
+pair. It becomes exact only once the cardinality penalty makes one setting genuinely
+optimal — that is, *outside* the multi-setting regime the schedule exists to exploit. Use
+exhaustive enumeration on small instances; greedy is labelled heuristic with this measured
+suboptimality attached.
+
+## N10 — equal accounting, and a bug it caught
+
+CovQ reports the CFI of its **actual emitted readout**. QUEST is given its **noisy QFI as
+an optimistic upper bound** with no readout compiled — deliberately unkind to CovQ, and
+the only honest form. Two-qubit depolarization is charged per emitted two-qubit gate on
+every arm. Metric: shots to satisfy `AᵀFA ⪰ G_req`.
+
+QUEST's preparation for this target converges in 50 rotations, **44 of them two-qubit**;
+a CovQ branch activates at most two pairs. That ratio is the whole mechanism.
+
+| edge depol | CovQ shots | product only | QUEST (upper bound) | sparse Carathéodory (upper bound) |
+|---|---|---|---|---|
+| 0.00 | 1.766 | 3.255 | **1.626** | 1.63 |
+| 0.01 | 1.802 | 3.255 | 2.876 | 7.8 |
+| 0.02 | 1.839 | 3.255 | 5.122 | 46.9 |
+| 0.05 | 1.957 | 3.255 | 32.80 | 3.11e4 |
+| 0.10 | 2.180 | 3.255 | 835.8 | 5.2e9 |
+| 0.20 | 2.759 | 3.255 | 351 089 | ∞ |
+
+Preparation two-qubit gate counts, which are the mechanism: CovQ ≤ 2 per branch, QUEST 44,
+this prototype's sparse-Carathéodory routine **232**.
+
+**The sparse arm's collapse is this prototype's fault, not the method's.** Its
+sparse-amplitude preparation is a generic dense routine and an upper bound, exactly as
+`baselines.py` has always warned; a competitive preparation would change that column
+entirely. It is reported because leaving the arm out would be worse, and because an
+earlier version of this campaign silently gave it *no* two-qubit noise at all — it was
+simulated with an empty gate list, so it sat flat at 1.63 across every noise level. That
+is the same asymmetry the handoff warns about, pointed the other way, and it is now fixed:
+every arm pays edge depolarization per emitted two-qubit gate.
+
+**At zero noise QUEST wins on shots** (1.626 vs 1.766): a single global state is more
+shot-efficient than a schedule, and it costs 71.5 two-qubit gates to be so. From
+`q_edge ≥ 0.01` CovQ wins on shots as well, and the gap runs to five orders of magnitude
+— even though QUEST is being scored on an upper bound it has no readout to attain. The
+noiseless row is the reason to believe the rest: the campaign is not rigged to win.
+
+CovQ beats the product-only arm at every noise level tested, so the floor compiler does
+not degenerate to `F = I`.
+
+### A bug this campaign caught
+
+The QUEST arm is the first state in the project with genuinely **complex** generator
+matrix elements, and it immediately produced a *non-PSD* `mixed_state_qfim` and a
+non-monotone margin. Cause: the Eq (110) contraction used `gs[j].conj().T`, which
+Hermiticity collapses back to `gs[j][a,b]`, so the sum computed `Σ w·z²` instead of
+`Σ w·|z|²`. Correct only when the matrix elements are real — which every earlier fixture
+was, signed cat states included. Fixed to `gs[j].T`; all previously reported Eq (110)
+numbers are unchanged, and the test now includes random complex pure states and a PSD
+check on random complex mixed states.
+
 ## What is still open
 
-- **N7** deployable pilot-recentered arm inside the *noisy* compiler (the ideal-case
-  version is closed as C10e).
-- **N9** fixed-setting-cost solver against exhaustive support enumeration.
-- **N10** a single campaign giving CovQ, QUEST, sparse-Carathéodory and product arms the
-  same shots, noise map and accounting.
-- QUEST under noise. Giving it an unpriced optimal POVM and calling the result operational
-  would be exactly the asymmetry the handoff warns against; the fair conservative
-  comparison hands QUEST its noisy QFI as an optimistic bound while CovQ reports emitted
-  readout CFI. Not yet run.
-- Crosstalk, coherent drift, Clifford-frame noise, coherent flags — all outside scope.
+- Crosstalk, correlated branch noise, route collisions, coherent inter-block errors —
+  outside the block-local scope by construction.
+- Clifford-frame readout cost and coherent-flag joint readout — explicit extensions.
+- A compiled readout for QUEST, which would replace its upper bound with an attainable
+  number. Until someone writes one, its column is a bound and is labelled as one.

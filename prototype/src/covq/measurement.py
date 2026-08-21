@@ -381,7 +381,13 @@ def mixed_state_qfim(rho: np.ndarray, ps: PauliSet, tol: float = 1e-12) -> np.nd
     out = np.empty((m, m))
     for i in range(m):
         for j in range(i, m):
-            val = 2.0 * float(np.real(np.sum(w * gs[i] * gs[j].conj().T)))
+            # Sum_ab w[a,b] <a|G_i|b><b|G_j|a>.  The second factor must be
+            # gs[j][b,a], i.e. gs[j].T -- NOT gs[j].conj().T, which Hermiticity
+            # collapses back to gs[j][a,b] and yields sum w * gs[i]*gs[j]
+            # elementwise.  For i = j that is sum w * z^2 instead of
+            # sum w * |z|^2, so the result is only correct when the generator
+            # matrix elements are real, and is not even PSD otherwise.
+            val = 2.0 * float(np.real(np.sum(w * gs[i] * gs[j].T)))
             out[i, j] = out[j, i] = val
     return out
 

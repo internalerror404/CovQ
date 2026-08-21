@@ -1,0 +1,60 @@
+{
+  "schema_version": "covq.measurement.record/0.1",
+  "source_commit": "517e73f8d488af19a40c777155b5d0db48027bcb",
+  "dirty": true,
+  "tolerances": {
+    "attainment_abs": 1e-09,
+    "closed_form_abs": 1e-09,
+    "pinching_abs": 1e-10
+  },
+  "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
+  "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
+  "gate": "N9",
+  "verdict": "FAILS as an exactness claim, by design of the check: forward selection commits to the best single column, which need not belong to the best pair.  It is exact only once the cardinality penalty makes one setting genuinely optimal -- outside the multi-setting regime the schedule exists to exploit.",
+  "note": "cardinality cost makes this mixed-integer conic; no oracle-polynomial claim is made for it, and it is kept out of the convex compiler",
+  "rows": [
+    {
+      "lambda_q": 0.0,
+      "greedy_cost": 2.2786458333333357,
+      "greedy_settings": 1,
+      "exhaustive_cost": 2.124798483443966,
+      "exhaustive_settings": 2,
+      "greedy_excess_percent": 7.240561920959548
+    },
+    {
+      "lambda_q": 0.1,
+      "greedy_cost": 2.378645833333336,
+      "greedy_settings": 1,
+      "exhaustive_cost": 2.324798483443966,
+      "exhaustive_settings": 2,
+      "greedy_excess_percent": 2.316215804201661
+    },
+    {
+      "lambda_q": 0.2,
+      "greedy_cost": 2.478645833333336,
+      "greedy_settings": 1,
+      "exhaustive_cost": 2.478645833333336,
+      "exhaustive_settings": 1,
+      "greedy_excess_percent": 0.0
+    },
+    {
+      "lambda_q": 0.3,
+      "greedy_cost": 2.5786458333333355,
+      "greedy_settings": 1,
+      "exhaustive_cost": 2.5786458333333355,
+      "exhaustive_settings": 1,
+      "greedy_excess_percent": 0.0
+    },
+    {
+      "lambda_q": 1.0,
+      "greedy_cost": 3.2786458333333357,
+      "greedy_settings": 1,
+      "exhaustive_cost": 3.2786458333333357,
+      "exhaustive_settings": 1,
+      "greedy_excess_percent": 0.0
+    }
+  ],
+  "worst_greedy_excess_percent": 7.240561920959548,
+  "status": "FAILS",
+  "record_hash": "de96f034252afcb24dac3388b3ff1d83f5f01f80c727f74ed882f00f1757741f"
+}
