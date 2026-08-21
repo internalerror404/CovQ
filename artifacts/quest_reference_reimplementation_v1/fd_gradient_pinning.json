@@ -1,0 +1,25 @@
+{
+  "schema_version": "covq.quest.fd_pin/1.0",
+  "artifact_name": "CovQ-QUEST Reference Reimplementation v1",
+  "status": "PASS_IN_RELEASE_SUITE",
+  "source_commit": "8cca6ef106b16a37a891077da88adbe8666d4c30",
+  "implementation_path": "prototype/src/covq/quest.py",
+  "test_path": "prototype/tests/test_covq.py",
+  "test_name": "test_quest_published_gradient_matches_finite_differences",
+  "gradient": "exact adjoint forward/backward sweep for joint-angle reoptimization",
+  "reference": "centered finite differences of the same cost function",
+  "fixture": {
+    "rng_seed": 3,
+    "n_qubits": 3,
+    "start_state": "uniform |+>^3 statevector",
+    "rotations": ["X0Y1", "Z2", "X1X2"],
+    "angles": "rng.uniform(-2, 2, 3)",
+    "targets": "deterministic first/second-moment constraints"
+  },
+  "finite_difference_step": 1e-6,
+  "componentwise_absolute_tolerance": 1e-6,
+  "assertion": "grad[k] == pytest.approx(fd, abs=1e-6) for every component",
+  "maximum_observed_error": null,
+  "maximum_observed_error_note": "The release test stores the pass/fail pin but did not emit a separate maximum-error scalar; this record does not invent one.",
+  "quest_correction_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194"
+}
