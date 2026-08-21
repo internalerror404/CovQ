@@ -1,10 +1,10 @@
 {
   "schema_version": "covq.release_manifest/0.5",
   "evidence_source_commit": [
-    "daa5587ee9e6a9d4791ea0855b8f38a68ccff336"
+    "9b7f970153443263c16617788ae79784b9fe233c"
   ],
-  "release_packaging_commit": "c92034691662b9bf40e63c017f8f14c688ef4aa7",
-  "release_commit": "c92034691662b9bf40e63c017f8f14c688ef4aa7",
+  "release_packaging_commit": "0ec8971b448a0bb08f3161d076487080a3ddc436",
+  "release_commit": "0ec8971b448a0bb08f3161d076487080a3ddc436",
   "source_dirty": false,
   "environment": {
     "python": "3.11.15",
@@ -26,8 +26,8 @@
     },
     {
       "path": "STATUS.md",
-      "bytes": 23569,
-      "sha256": "9ba4e9e8657df1f282c8bf0dde1f2f56b671219ff8c158845957a955ca1bc315"
+      "bytes": 23922,
+      "sha256": "cf8c710e6477523a32d577a94b811c5d8d43e61966dcfd443149f574992e8e54"
     },
     {
       "path": "charter/CovQ_Experiment_Protocol_v0.3.yaml",
@@ -56,8 +56,8 @@
     },
     {
       "path": "docs/audits/JOURNAL_RELEASE_REPRODUCTION_v0.4.md",
-      "bytes": 2628,
-      "sha256": "36bcba4a262c7459e86dd037f4899e645d878cd966990c7d83cd1e421052fda6"
+      "bytes": 2635,
+      "sha256": "241dd6fc561727f827ef39dd1c3f281bff774192c9c6c752b4dfeca9e0a0255d"
     },
     {
       "path": "docs/audits/K3_QUEST_BASELINE_AND_ADAPTIVE_READOUT_v0.1.md",
@@ -66,8 +66,8 @@
     },
     {
       "path": "docs/audits/K3_QUEST_BASELINE_v0.2.md",
-      "bytes": 8727,
-      "sha256": "c937ebf5395beef96dfaffc0fa939517808754ea3c5001e23596cce7aee00d72"
+      "bytes": 10566,
+      "sha256": "6d1d685cf7f138e989c29b5cd212d7e90af3b7cf3c639c05b9bd59a2b5109dd7"
     },
     {
       "path": "docs/audits/MANUSCRIPT_V0_2_NUMERICAL_AUDIT.md",
@@ -136,8 +136,8 @@
     },
     {
       "path": "prototype/scripts/emit_campaign_records.py",
-      "bytes": 11519,
-      "sha256": "01d9d031e67ba22d34dd7a4bce75c26ad40078bb8739d04304ea0835249b00f0"
+      "bytes": 13652,
+      "sha256": "fd9b4c7aa3291e27e65b656482172be5bb452ae25db8327ffebde2aa90c934ad"
     },
     {
       "path": "prototype/scripts/emit_k3_baseline.py",
@@ -176,8 +176,8 @@
     },
     {
       "path": "prototype/scripts/reproduction_diff.py",
-      "bytes": 6364,
-      "sha256": "f693dc1eeb38e111f69257045aaa618fff531f2b0799b2c2117db6eb02aef430"
+      "bytes": 6518,
+      "sha256": "960bf7757237aac01f56be48b57a3dc52a57ff9ba5ee0bcb236d3823ac747c37"
     },
     {
       "path": "prototype/scripts/run_evidence.py",
@@ -231,8 +231,8 @@
     },
     {
       "path": "prototype/src/covq/noise.py",
-      "bytes": 39668,
-      "sha256": "d0d13313433b749dc6abd4a1eec55d2bdaa686ca9d290a4a91e48f9843427f27"
+      "bytes": 42630,
+      "sha256": "11f3dcde8f49e95bbe3a455b90e97de4f626da69ffb2d2209668aed6101c86f2"
     },
     {
       "path": "prototype/src/covq/paulis.py",
@@ -276,8 +276,8 @@
     },
     {
       "path": "prototype/tests/test_covq.py",
-      "bytes": 72531,
-      "sha256": "92d6e0fd74f25fbb17dbdfac4054101ce6f1f9545434c294d6577d9f591775f5"
+      "bytes": 74608,
+      "sha256": "b765310de9a0dfdc6f7ef2c9828c357e2db971cc9f72f6b1695f760158f2fb95"
     },
     {
       "path": "prototype/tests/test_mixed_qfim_sld_regression.py",
@@ -287,77 +287,77 @@
     {
       "path": "results/baselines_k3_quest.json",
       "bytes": 15440,
-      "sha256": "003182b8ca6f146daee3670bd58b8b4ce380fc63fa812738f5ae5fa463072674"
+      "sha256": "a4a7430403f007de0af9cfe85849e29261a9c51f3fe5bcba98b5ae4ff3b89ad7"
     },
     {
       "path": "results/measurements/adaptive_recentering.json",
       "bytes": 5061,
-      "sha256": "213ea7c72bb0e59fd06cd21b141aee86b51c528dcc76006f5e21339d5baa3712"
+      "sha256": "91a6fc58ba01c08ae0b4964b6620272b28ff37f12d6e478bf0550e1f7a64fb78"
     },
     {
       "path": "results/measurements/estimator_efficiency.json",
       "bytes": 4463,
-      "sha256": "d06e372a5d7b44e771e794da473a5fe15674274bdd7dd9bdcfef91c1ecd770ac"
+      "sha256": "c3bfeecf08a700759339d3d77603b00371b9023e24123631ed17d0796de56db4"
     },
     {
       "path": "results/measurements/ideal_block_readout.json",
       "bytes": 14141,
-      "sha256": "9b9b47d6e36fa69ef0ab2e11ccd392c22a5f663cb63441b6c2f1274b242f0375"
+      "sha256": "9075d35d96057e0407c6e27f7165eb429f39afb50bc5fb75f390d52749d64c01"
     },
     {
       "path": "results/measurements/readout_singularities.json",
       "bytes": 2095,
-      "sha256": "44972a095566f1e71046fcd4d600789d3a8f0922327daceb414653947f283f3d"
+      "sha256": "214e1cb762ee355ecfc607c1dd588972956efd17dea20b373f03e8ba8ca1ac17"
     },
     {
       "path": "results/measurements/schedule_attainability.json",
       "bytes": 16188,
-      "sha256": "3a4304a3520a9280505b0e38bee798f255d0bb83e1b4ee7695c7e9c64bd83897"
+      "sha256": "926578d641bd0d5293e0526dfe638b460189095fdd01ab58655816bddddaf668"
     },
     {
       "path": "results/noise/adaptive_readout_performance.json",
       "bytes": 4697,
-      "sha256": "541b7db7c2e0e471587e13cd4cb3ef6b53e67cc85686b693e3a541d8ed84a667"
+      "sha256": "2e5145dd6d3eab67758cb457480b4a837b48cf7ea52c0bfeb480ae386f5fc639"
     },
     {
       "path": "results/noise/fixed_setting_cost_solver.json",
       "bytes": 2313,
-      "sha256": "ceb0f2307cc19364c67b1a8ada0eed7c09b8b682001b98c1b4a2c42077295f46"
+      "sha256": "63ea6f60464cc3ecdfd374da89f1a772f75611ae9ba01c2d8999fc3707e33dbe"
     },
     {
       "path": "results/noise/noise_aware_floor_compiler.json",
       "bytes": 12747,
-      "sha256": "8d8ed6413754f352a7cab1a6dd32c5c22f0499563b9139b0ca4af6c19fb50c88"
+      "sha256": "2a69adf522396a09520255ad1f92dbcc164b08eca05fb8b00e04d7517f08fb7e"
     },
     {
       "path": "results/noise/noisy_branch_templates.json",
       "bytes": 6802,
-      "sha256": "a3bcf7ba982238571a223d2b079650ba742d6df863c57c93361e4c288de6fd85"
+      "sha256": "e6cdac16336db63ea172d6dcce2fc79bb441f58e6da163c95e693432f2737d6f"
     },
     {
       "path": "results/noise/noisy_pricing_oracle.json",
       "bytes": 20103,
-      "sha256": "903592b37c91a6b695bfd2f876896ffe757864a7043a66f3a02dc029c7d78fdd"
+      "sha256": "6ace6f082ef46efe47ece0bf2c33aef837104149495637f776b4b5aba615ad55"
     },
     {
       "path": "results/noise/qfi_covariance_separation.json",
       "bytes": 14332,
-      "sha256": "228d0252d1bc83188ceb202c49db1d7df379968b5626a09fd5f7a8b28a22402c"
+      "sha256": "218c238711380d4a1fa7bda0b11d7f9cb6a5ca4fe73a2de1bc057687bca6c336"
     },
     {
       "path": "results/noise/quest_operational_comparison.json",
-      "bytes": 7074,
-      "sha256": "ad3f59748d648e025ba52103e2e0b76790e5bbd101b3687e4ad816574bbcc04b"
+      "bytes": 8889,
+      "sha256": "2506d874079c965fed7e04c22cf554bac172f963a6181cfa71b08037cd941e76"
     },
     {
       "path": "results/noise/setting_cost_phase_diagram.json",
       "bytes": 4572,
-      "sha256": "262cfc3335ea2001c545c788427fe1d46ef2e019bc3f76e311914919a68c9c46"
+      "sha256": "5650f25bfeea492f8e25249cbf7354d324fcf2ad7f7faed18f924f3c2d3841e2"
     },
     {
       "path": "results/paper_cell_audit.json",
       "bytes": 9600,
-      "sha256": "5e3e5f70837858414e336dc8a48808e432a3b17f42f2724374ef38df399bd80a"
+      "sha256": "1f8070eceabd4281feb6568289f6dc1b563ee26ca8895be2f675ff931aaea81d"
     },
     {
       "path": "results/prototype_evidence.json",
@@ -366,13 +366,13 @@
     },
     {
       "path": "results/reproduction_diff.json",
-      "bytes": 9524,
-      "sha256": "8b77ec61fab68f4da546517983e14509769fe367403c27512d1ea4e77f794ea1"
+      "bytes": 9991,
+      "sha256": "45758c85734cf6a1c3c79c3b2ed9779f712ddb2ce5a14953fe8cb50886743df1"
     },
     {
       "path": "results/table_manifest.json",
       "bytes": 12893,
-      "sha256": "9b34872e9564bd938383f770bef867707119473759608afb3e455d1a59614a23"
+      "sha256": "4136a54396620cd539d8c06971c05e763326473102afa8d7f38c5c6d4d911a65"
     }
   ],
   "release_tag": {
@@ -382,5 +382,5 @@
     "reason": "this environment's git proxy refuses refs/tags; branch refs push normally, so the commit SHA is the durable identifier",
     "recreate": "git tag -a covq-journal-v0.5 <commit containing this file>"
   },
-  "manifest_sha256": "f7bd0ef3a4b6d7ff3e8b1e2aefb75326df4c2cf04bbdcfe010b34a4e5b4abea9"
+  "manifest_sha256": "9ef6123d9083d2707be0eed0aff9734b46724fa617647b3efa772b1bbe524315"
 }
