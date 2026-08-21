@@ -64,6 +64,17 @@ def main() -> int:
         "n_files": len(entries),
         "files": entries,
     }
+    # Record the tag here rather than patching it in afterwards: this generator
+    # rebuilds the manifest from scratch, so anything added to the JSON by hand
+    # is silently dropped on the next run.
+    tag = git("describe", "--tags", "--exact-match", default="")
+    manifest["release_tag"] = {
+        "name": tag or None,
+        "target_commit": git("rev-list", "-n", "1", tag) if tag else None,
+        "pushed": False,
+        "reason": "this environment's git proxy refuses refs/tags; branch refs "
+                  "push normally, so the commit SHA is the durable identifier",
+    }
     manifest["manifest_sha256"] = hashlib.sha256(
         json.dumps(entries, sort_keys=True).encode()).hexdigest()
     out = ROOT / "results/RELEASE_MANIFEST.json"
