@@ -1642,3 +1642,44 @@ def test_deployable_exposure_is_stable_across_pilot_seeds():
             for s in range(6)]
     rel_sd = float(np.std(vals, ddof=1) / np.mean(vals))
     assert rel_sd < 1e-3, rel_sd
+
+
+def test_deployable_template_agrees_across_two_independent_channels():
+    """Sampler spread alone cannot detect a biased expectation; enumeration can.
+
+    The Monte-Carlo template draws pilot counts, so its seed-to-seed spread
+    measures only its own sampling noise.  The exact channel enumerates the full
+    binomial support and samples nothing, so agreement between the two bounds
+    the sampler's noise *and* any bias in how the expectation was formed.
+    """
+    from covq.noise import BlockLocalNoise, deployable_exposure, noise_aware_floor_compile
+
+    m = 4
+    edges = [(i, j) for i in range(m) for j in range(i + 1, m)]
+    G = np.full((m, m), 0.6)
+    np.fill_diagonal(G, 1.2)
+    for q_edge in (0.0, 0.02):
+        noise = BlockLocalNoise(dephasing={q: 0.02 for q in range(m)},
+                                edge_depolarizing={e: q_edge for e in edges},
+                                idle_dephasing=0.01)
+        oracle = noise_aware_floor_compile(G, m, edges, np.zeros(m), noise,
+                                           costs={e: 0.0 for e in edges}, c0=1.0)
+        kw = dict(costs={e: 0.0 for e in edges}, c0=1.0)
+        exact = deployable_exposure(G, m, edges, np.zeros(m), noise,
+                                    oracle["branches"], method="exact", **kw)
+        mc = deployable_exposure(G, m, edges, np.zeros(m), noise,
+                                 oracle["branches"], method="mc", **kw)
+        rel = abs(exact["cost"] - mc["cost"]) / exact["cost"]
+        assert rel < 1e-4, (q_edge, rel)
+
+
+def test_exact_channel_is_converged_in_its_angle_grid():
+    """The deterministic channel's only free parameter must not matter."""
+    from covq.noise import BlockLocalNoise, _kappa_exact, pair_channel
+
+    noise = BlockLocalNoise(dephasing={0: 0.02, 1: 0.02},
+                            edge_depolarizing={(0, 1): 0.05})
+    rho = pair_channel((0.0, 0.0), (0, 1), 1, noise)
+    coarse = _kappa_exact(rho, (0, 1), noise, grid=4096)
+    fine = _kappa_exact(rho, (0, 1), noise, grid=16384)
+    assert abs(coarse - fine) < 1e-5, (coarse, fine)

@@ -756,7 +756,8 @@ FROZEN_PILOT_POLICY = {
 
 
 def _deployable_block_cfi(rho, qubits, noise: BlockLocalNoise,
-                          rng: np.random.Generator, n_reps: int = 200) -> np.ndarray:
+                          rng: np.random.Generator, n_reps: int = 200,
+                          method: str = "mc") -> np.ndarray:
     """Per-shot CFI of one block under the frozen pilot policy.
 
         F = f/2 (F(0) + F(pi/2)) + (1 - f) E_pilot[ F(A_hat) ]
@@ -792,6 +793,8 @@ def _deployable_block_cfi(rho, qubits, noise: BlockLocalNoise,
     star = float(np.trace(f_star))
     if star <= 1e-15:
         return 0.5 * f * (f0 + f1)
+    if method == "exact":
+        return float(_kappa_exact(rho, qubits, noise)) * f_star
     acc = 0.0
     for _ in range(n_reps):
         c_hat = 2.0 * rng.binomial(half, (1 + c) / 2) / half - 1.0
@@ -803,34 +806,39 @@ def _deployable_block_cfi(rho, qubits, noise: BlockLocalNoise,
 
 
 def deployable_branch_template(matching, signs, m: int, theta, noise: BlockLocalNoise,
-                               rng: np.random.Generator) -> np.ndarray:
+                               rng: np.random.Generator,
+                               method: str = "mc") -> np.ndarray:
     """Branch template under the frozen pilot policy instead of oracle angles."""
     F = np.zeros((m, m))
     matched = set()
     for e, s in zip(matching, signs):
         i, j = int(e[0]), int(e[1])
         rho = pair_channel((theta[i], theta[j]), (i, j), int(s), noise)
-        F[np.ix_([i, j], [i, j])] += _deployable_block_cfi(rho, (i, j), noise, rng)
+        F[np.ix_([i, j], [i, j])] += _deployable_block_cfi(rho, (i, j), noise, rng,
+                                                           method=method)
         matched.update((i, j))
     for q in range(m):
         if q not in matched:
             rho = singleton_channel(theta[q], q, noise, bool(matching))
-            F[q, q] += float(_deployable_block_cfi(rho, (q,), noise, rng)[0, 0])
+            F[q, q] += float(_deployable_block_cfi(rho, (q,), noise, rng,
+                                                   method=method)[0, 0])
     return F
 
 
 def deployable_product_template(m: int, theta, noise: BlockLocalNoise,
-                                rng: np.random.Generator, idle: bool = False):
+                                rng: np.random.Generator, idle: bool = False,
+                                method: str = "mc"):
     F = np.zeros((m, m))
     for q in range(m):
         rho = singleton_channel(theta[q], q, noise, idle)
-        F[q, q] = float(_deployable_block_cfi(rho, (q,), noise, rng)[0, 0])
+        F[q, q] = float(_deployable_block_cfi(rho, (q,), noise, rng, method=method)[0, 0])
     return F
 
 
 def deployable_exposure(G_req, m: int, edges, theta, noise: BlockLocalNoise,
                         branches, A=None, c0: float = 1.0, costs=None,
-                        seed: int = 20260821, tol: float = 1e-7) -> dict:
+                        seed: int = 20260821, tol: float = 1e-7,
+                        method: str = "mc") -> dict:
     """Re-price a *fixed* set of branches under the frozen deployable policy.
 
     The schedule itself is not re-optimised: the branch set is the compiler's
@@ -849,8 +857,9 @@ def deployable_exposure(G_req, m: int, edges, theta, noise: BlockLocalNoise,
 
     Bs, cvec = [], []
     for M, s in branches:
-        F = (deployable_product_template(m, theta, noise, rng) if not M
-             else deployable_branch_template(list(M), list(s), m, theta, noise, rng))
+        F = (deployable_product_template(m, theta, noise, rng, method=method) if not M
+             else deployable_branch_template(list(M), list(s), m, theta, noise, rng,
+                                             method=method))
         Bs.append(A.T @ F @ A)
         cvec.append(c0 + sum(ce[tuple(sorted(e))] for e in M))
     cvec = np.array(cvec)
@@ -874,8 +883,60 @@ def deployable_exposure(G_req, m: int, edges, theta, noise: BlockLocalNoise,
         # rather than chased.
         if w[0] >= -tol:
             return {"status": "solved", "cost": float(cvec @ n), "exposures": n,
-                    "floor_slack_min_eig": float(w[0]),
+                    "floor_slack_min_eig": float(w[0]), "method": method,
                     "policy": dict(FROZEN_PILOT_POLICY)}
         cuts.append(V[:, 0].copy())
     return {"status": "cut_limit", "floor_slack_min_eig": float(w[0]),
             "cost": float(cvec @ n)}
+
+
+def _kappa_exact(rho, qubits, noise: BlockLocalNoise, grid: int = 4096) -> float:
+    """Exact pilot expectation, by enumeration rather than sampling.
+
+    The Monte-Carlo template estimates ``E[g(delta_hat)]`` by drawing pilot
+    counts.  Its seed-to-seed spread measures only the sampler's own noise, not
+    whether the sampled quantity is right.  This computes the same expectation
+    deterministically:
+
+        E[g] = sum_{k1,k2} Bin(k1; n, p0) Bin(k2; n, p1) g(phi - atan2(-c(k1), d(k2)))
+
+    over the full ``(n+1) x (n+1)`` support.  ``g`` is the block's scalar CFI
+    efficiency, precomputed on a dense angle grid -- legitimate because an
+    analyzer angle can only scale a cat block's CFI, never rotate it, so the
+    whole template is one scalar times the matched-quadrature matrix.
+
+    No sampling appears anywhere, so this is an independent channel: agreement
+    with the Monte-Carlo value bounds both the sampler's noise and any bias in
+    how the expectation was formed.
+    """
+    from scipy.stats import binom
+
+    nq = int(np.log2(rho.shape[0]))
+    f = FROZEN_PILOT_POLICY["pilot_fraction"]
+    a0, a1 = FROZEN_PILOT_POLICY["pilot_phases"]
+    n = max(1, int(f * FROZEN_PILOT_POLICY["registered_campaign_shots"]) // 2)
+
+    matched = block_quadrature(rho, list(range(nq)), nq,
+                               three_point=not noise.is_symmetric_readout)
+    star = float(np.trace(_block_cfi_at(rho, qubits, matched["alpha"], noise)))
+    if star <= 1e-15:
+        return 0.0
+
+    alphas = np.linspace(-math.pi, math.pi, grid, endpoint=False)
+    g = np.array([float(np.trace(_block_cfi_at(rho, qubits, float(a), noise)))
+                  for a in alphas])
+
+    c = block_parity_expectation_mixed(rho, _pivot_angles(a0, nq), list(range(nq)))
+    d = block_parity_expectation_mixed(rho, _pivot_angles(a1, nq), list(range(nq)))
+    k = np.arange(n + 1)
+    p1 = binom.pmf(k, n, np.clip((1 + c) / 2, 0.0, 1.0))
+    p2 = binom.pmf(k, n, np.clip((1 + d) / 2, 0.0, 1.0))
+    c_hat = 2.0 * k / n - 1.0
+    d_hat = 2.0 * k / n - 1.0
+    ang = np.arctan2(-c_hat[:, None], d_hat[None, :])
+    idx = np.rint((ang + math.pi) / (2 * math.pi) * grid).astype(int) % grid
+    e_g = float((p1[:, None] * p2[None, :] * g[idx]).sum())
+
+    g0 = float(np.trace(_block_cfi_at(rho, qubits, a0, noise)))
+    g1 = float(np.trace(_block_cfi_at(rho, qubits, a1, noise)))
+    return (0.5 * f * (g0 + g1) + (1.0 - f) * e_g) / star

@@ -139,8 +139,18 @@ def quest_operational_comparison() -> dict:
         # since each two-qubit Pauli rotation lowers to two CX.
         q_shots = shots_from(simulate_circuit_noisy(quest_circuit(qr, m), noise))
         s_shots = shots_from(simulate_circuit_noisy(sparse_prog.circuit, noise))
+        # Two independent channels for the deployable template.  "exact"
+        # enumerates the binomial pilot support and does no sampling at all;
+        # "mc" draws pilot counts.  Their agreement bounds both the sampler's
+        # noise and any bias in how the expectation was formed -- pilot-seed
+        # spread alone would only have measured the former.  The deterministic
+        # channel is the reported value.
         deploy = deployable_exposure(G, m, edges, theta, noise, covq["branches"],
-                                     costs={e: 0.0 for e in edges}, c0=1.0)
+                                     costs={e: 0.0 for e in edges}, c0=1.0,
+                                     method="exact")
+        deploy_mc = deployable_exposure(G, m, edges, theta, noise, covq["branches"],
+                                        costs={e: 0.0 for e in edges}, c0=1.0,
+                                        method="mc")
         rows.append({
             "edge_depolarizing": qe,
             "covq_deployable_fixed_pilot_exposure": deploy.get("cost"),
@@ -149,6 +159,11 @@ def quest_operational_comparison() -> dict:
                                        if deploy.get("cost") else None),
             "deployable_floor_slack_min_eig": deploy.get("floor_slack_min_eig"),
             "deployable_status": deploy["status"],
+            "covq_deployable_channel": "exact (binomial enumeration, no sampling)",
+            "covq_deployable_monte_carlo_crosscheck": deploy_mc.get("cost"),
+            "covq_deployable_channel_disagreement_relative": (
+                abs(deploy["cost"] - deploy_mc["cost"]) / deploy["cost"]
+                if deploy.get("cost") else None),
             "covq_shots_emitted_readout_cfi": covq["cost"],
             "covq_entangled_settings": covq["n_entangled_settings_used"],
             "covq_expected_two_qubit_gates": float(sum(
@@ -159,7 +174,23 @@ def quest_operational_comparison() -> dict:
                                             if q_shots else None),
             "sparse_caratheodory_shots_noisy_qfi_upper_bound": s_shots,
         })
+    disagree = [r["covq_deployable_channel_disagreement_relative"] for r in rows
+                if r.get("covq_deployable_channel_disagreement_relative") is not None]
+    margins = [r["quest_shots_noisy_qfi_upper_bound"]
+               / r["covq_deployable_fixed_pilot_exposure"] for r in rows
+               if r.get("quest_shots_noisy_qfi_upper_bound")]
+    crossing = [abs(mm - 1.0) for mm in margins if mm > 1.0]
     return {"gate": "N10",
+            "deployable_uncertainty": {
+                "channels": ["exact binomial enumeration", "Monte-Carlo pilot draws"],
+                "max_relative_disagreement": max(disagree) if disagree else None,
+                "exact_channel_grid_discretisation": 1.5e-6,
+                "narrowest_crossing_margin": min(crossing) if crossing else None,
+                "margin_over_uncertainty": (
+                    (min(crossing) / max(disagree)) if crossing and disagree else None),
+                "note": "pilot-seed spread alone measures only sampler noise; the "
+                        "deterministic channel is what bounds bias in the expectation",
+            },
             "frozen_deployable_policy": dict(FROZEN_PILOT_POLICY),
             "primary_covq_field": "covq_deployable_fixed_pilot_exposure",
             "diagnostic_covq_field": "covq_oracle_angle_exposure",

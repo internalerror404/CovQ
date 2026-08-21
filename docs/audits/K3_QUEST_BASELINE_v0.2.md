@@ -102,11 +102,36 @@ such. QUEST is credited with its noisy SLD QFI and has no compiled attaining rea
 statement: a real QUEST measurement cannot exceed its own QFI ceiling, so
 `F_C,CovQ > F_Q,QUEST` at 2 %, 5 %, 10 % and 20 % is a genuine CovQ win.
 
-**Monte Carlo adequacy.** The deployable template is sampled, so the narrow crossing needs
-a stated uncertainty. Across 12 independent pilot seeds the deployable exposure has
-relative standard deviation `4.2e-5` (at `q_edge = 0`) to `2.0e-4` (at `0.20`). The 2 %
-margin of 3.1 % exceeds that by roughly two to three orders of magnitude, so the crossover
-is not a Monte Carlo artefact.
+**Two independent channels, because seed spread is not enough.** Pilot-seed variance
+measures the sampler's own noise and nothing else — it cannot detect a biased expectation,
+because every seed would share the bias. The deployable template is therefore computed a
+second way, deterministically: the exact channel enumerates the full binomial pilot support
+
+  `E[g] = Σ_{k₁,k₂} Bin(k₁; n, p₀) Bin(k₂; n, p₁) · g(φ − atan2(−ĉ(k₁), d̂(k₂)))`
+
+over all `201 × 201` outcomes at `n = 200` pilot shots per phase, and samples nothing. This
+is legitimate for exactly the reason the scalar template is: an analyzer angle can only
+scale a cat block's CFI, never rotate it, so the whole object is one scalar times the
+matched-quadrature matrix.
+
+| `q_edge` | Monte Carlo | exact enumeration | relative disagreement |
+|---|---|---|---|
+| 0.00 | 1.785484 | 1.785471 | `7.8e-6` |
+| 0.01 | 1.821954 | 1.821938 | `8.8e-6` |
+| 0.02 | 1.859557 | 1.859537 | `1.1e-5` |
+| 0.05 | 1.979638 | 1.979607 | `1.6e-5` |
+
+The exact channel's only free parameter is its angle grid, and it is converged: `4096`
+versus `16384` points shift `κ` by at most `1.5e-6`, an order below the channel
+disagreement. Sampling noise therefore dominates the residual, which is what one wants —
+the deterministic channel is the reported value and the sampled one is the cross-check.
+
+**Total uncertainty on the deployable exposure is `1.6e-5` relative.** The narrowest
+crossing margin, `3.1 %` at `q_edge = 0.02`, exceeds it by roughly `1900×`. The QUEST arm
+is a density-matrix simulation with no sampling at all, so it contributes none. The
+crossover is a measured feature of the registered instance, not a numerical artefact, and
+"CovQ requires less exposure at every tested point from 2 % onward" is a claim the numbers
+support.
 
 ## bE coverage — a real limitation on the upper ratio
 
