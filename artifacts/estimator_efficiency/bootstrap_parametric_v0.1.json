@@ -1,0 +1,101 @@
+{
+  "schema_version": "covq.bootstrap.efficiency/0.1",
+  "method": "Gaussian parametric bootstrap of the 3x3 whitened empirical covariance, using a Bartlett Wishart draw with nu=n_reps-1 and fitted eigenvalues from the canonical estimator-efficiency record.",
+  "scope_note": "This replaces the Marchenko-Pastur reference with finite-Monte-Carlo uncertainty intervals. It is parametric because raw estimator replicates were not retained in the canonical record; a future emitter should retain them for a nonparametric bootstrap.",
+  "seed": 20260821,
+  "draws": 100000,
+  "n_reps": 4000,
+  "dimension": 3,
+  "cases": {
+    "origin_N500": {
+      "observed_efficiency_eigenvalues": [
+        0.9706676206533665,
+        1.032290062810438,
+        1.048829415785365
+      ],
+      "ordered_eigenvalue_percentile_95_ci": [
+        [0.9229857020870486, 1.0015347497086375],
+        [0.9869808944677372, 1.0599332564638724],
+        [1.0279514113472257, 1.1064593760356578]
+      ],
+      "simultaneous_abs_deviation_q95": 0.05482228160080463,
+      "simultaneous_envelope": [0.9158453390525619, 1.1036516973861696]
+    },
+    "origin_N5000": {
+      "observed_efficiency_eigenvalues": [
+        0.9534100867038556,
+        0.9939765158885108,
+        1.055351599122909
+      ],
+      "ordered_eigenvalue_percentile_95_ci": [
+        [0.9060738133387715, 0.9809427423653478],
+        [0.9585494025781618, 1.0343517793014458],
+        [1.0205555506667885, 1.1071509901417091]
+      ],
+      "simultaneous_abs_deviation_q95": 0.05155797068178477,
+      "simultaneous_envelope": [0.9018521160220708, 1.1069095698046938]
+    },
+    "origin_N50000": {
+      "observed_efficiency_eigenvalues": [
+        0.952476215179567,
+        1.0039594716500813,
+        1.0301857586167245
+      ],
+      "ordered_eigenvalue_percentile_95_ci": [
+        [0.9053798663842377, 0.9812100233310356],
+        [0.963036360447435, 1.0351472101875416],
+        [1.0061565790627467, 1.0847598871825694]
+      ],
+      "simultaneous_abs_deviation_q95": 0.05220257531174486,
+      "simultaneous_envelope": [0.9002736398678222, 1.0823883339284692]
+    },
+    "generic_N500": {
+      "observed_efficiency_eigenvalues": [
+        0.9846055118567056,
+        0.9949819125456796,
+        1.0361644815548343
+      ],
+      "ordered_eigenvalue_percentile_95_ci": [
+        [0.9289703776134263, 0.9992645829973247],
+        [0.9688737905785487, 1.0360124521614935],
+        [1.0107220901523641, 1.0902230910131823]
+      ],
+      "simultaneous_abs_deviation_q95": 0.05527702036365389,
+      "simultaneous_envelope": [0.9293284914930517, 1.0914415019184882]
+    },
+    "generic_N5000": {
+      "observed_efficiency_eigenvalues": [
+        0.9683237805262287,
+        0.9829939084316417,
+        1.0567300593293296
+      ],
+      "ordered_eigenvalue_percentile_95_ci": [
+        [0.9161258221845355, 0.9871781736874286],
+        [0.9571657292534133, 1.028579542008397],
+        [1.02073657817827, 1.1088364245704516]
+      ],
+      "simultaneous_abs_deviation_q95": 0.05412396460598776,
+      "simultaneous_envelope": [0.9141998159202409, 1.1108540239353173]
+    },
+    "generic_N50000": {
+      "observed_efficiency_eigenvalues": [
+        0.9972849751728975,
+        1.026771188415713,
+        1.0578675164123703
+      ],
+      "ordered_eigenvalue_percentile_95_ci": [
+        [0.9455097721824346, 1.0195011977267296],
+        [0.9918731700526926, 1.0620655452096879],
+        [1.0335414078185856, 1.1136369375514457]
+      ],
+      "simultaneous_abs_deviation_q95": 0.05412837497059846,
+      "simultaneous_envelope": [0.9431566002022991, 1.1119958913829688]
+    }
+  },
+  "joint_N50000_two_operating_points": {
+    "simultaneous_abs_deviation_q95": 0.05904476853879646,
+    "simultaneous_95_envelope": [0.8934314466407706, 1.1169122849511668],
+    "observed_min": 0.952476215179567,
+    "observed_max": 1.0578675164123703
+  }
+}

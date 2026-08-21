@@ -1,0 +1,264 @@
+\documentclass[11pt]{article}
+\usepackage[letterpaper,margin=0.88in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,array,tabularx}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{xcolor}
+\usepackage[most]{tcolorbox}
+\usepackage{enumitem}
+\usepackage{siunitx}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.32em}
+\renewcommand{\arraystretch}{1.10}
+\definecolor{covqteal}{HTML}{0C7489}
+\pagestyle{plain}
+\newcommand{\Sect}[1]{\vspace{0.35em}{\large\bfseries #1}\par\vspace{0.25em}}
+\newcommand{\SubSect}[1]{\vspace{0.22em}{\large\bfseries #1}\par\vspace{0.18em}}
+\newcommand{\Prop}[1]{\vspace{0.35em}{\bfseries #1}\par\vspace{0.12em}}
+\newtcolorbox{scopebox}[1]{colback=black!3,colframe=covqteal,boxrule=0.7pt,arc=0mm,title=#1,colbacktitle=covqteal,coltitle=white,fonttitle=\normalsize,left=7pt,right=7pt,top=6pt,bottom=6pt}
+\begin{document}
+\setcounter{page}{24}
+\thispagestyle{plain}
+\fontsize{9.5}{11.5}\selectfont
+The analyzer is solved rather than grid searched. If the measured parity fringe is
+\begin{equation}
+  \langle P_B\rangle(\alpha)=c\cos\alpha+d\sin\alpha,
+  \tag{74}
+\end{equation}
+two evaluations recover $c,d$ and
+\begin{equation}
+  \alpha^\star=\operatorname{atan2}(-c,d)
+  \tag{75}
+\end{equation}
+sets the fringe to zero. Under asymmetric readout confusion the response can contain an offset
+$b+c\cos\alpha+d\sin\alpha$; three settings at $0,2\pi/3,4\pi/3$ separate the offset from the harmonic.
+
+\SubSect{6.5\quad Adaptive recentering and periodic identifiability}
+The operating point is unknown. A deployable policy splits a pilot between $A_B=0$ and $A_B=\pi/2$, estimates both quadratures including sign, and uses the result to phase the production analyzer and seed the periodic maximum-likelihood problem. One setting is insufficient because cosine is even.
+
+\Prop{Lemma 6.3 (exact adaptive Fisher decomposition).}
+\emph{Let $X$ be the pilot record and $Y$ the production record generated conditionally on $X$ by any pilot-chosen analyzer. Under the usual score regularity conditions,}
+\begin{equation}
+  F_{\mathrm{total}}
+  =F_{\mathrm{pilot}}
+  +\mathbb E_{\mathrm{pilot}}\!\left[
+      F_{\mathrm{production}}(\widehat A_{\mathrm{pilot}})
+    \right].
+  \tag{76}
+\end{equation}
+\emph{Proof.} The joint score is $s_X+s_{Y\mid X}$. Its cross term vanishes because
+$\mathbb E[s_{Y\mid X}\mid X]=0$. Equation~(76) is therefore exact, not the heuristic replacement
+$(1-f)F_{\mathrm{production}}$. The pilot also selects the correct local chart of a genuinely multimodal periodic likelihood; arbitrary initialization inflated variance by factors $10$--$2400$ in the registered negative control.
+
+\SubSect{6.6\quad Estimator efficiency on the identifiable quotient}
+Let $F_{\mathrm{supp}}$ be the schedule Fisher matrix restricted to its positive-eigenvalue support. The appropriate efficiency diagnostic is the symmetric whitening
+\begin{equation}
+  \mathcal E=F_{\mathrm{supp}}^{1/2}
+  N\widehat{\operatorname{Cov}}(\widehat{\boldsymbol\theta})
+  F_{\mathrm{supp}}^{1/2},
+  \tag{77}
+\end{equation}
+not an eigendecomposition of a nonsymmetric matrix product. Across $4{,}000$ replicates at
+$N\in\{500,5{,}000,50{,}000\}$ and two operating points, every bias lay within four estimated standard errors. At $N=50{,}000$, the six observed efficiency eigenvalues span $0.9525$--$1.0579$. A $100{,}000$-draw Gaussian parametric bootstrap of the whitened Monte Carlo covariance gives a simultaneous $95\%$ envelope $[0.893,1.117]$ across the two operating points; all six observed eigenvalues lie inside. This supersedes the earlier asymptotic reference-band comparison with uncertainty tied to the actual finite-replication diagnostic.
+
+\SubSect{6.7\quad Mixed-state QFI and covariance-preserving information death}
+For $\rho=\sum_a\lambda_a\lvert a\rangle\!\langle a\rvert$ and unitary generators $G_i=P_i/2$, the SLD QFIM is
+\begin{equation}
+  (F_Q)_{ij}=2\!\sum_{a,b:\lambda_a+\lambda_b>0}
+  \frac{(\lambda_a-\lambda_b)^2}{\lambda_a+\lambda_b}
+  \operatorname{Re}\!\left[(G_i)_{ab}(G_j)_{ab}^{\ast}\right].
+  \tag{78}
+\end{equation}
+The complex conjugation is load bearing; replacing $zz^\ast$ by $z^2$ can produce a non-PSD matrix and survived earlier real-only fixtures. Let $\mathcal D_{\mathcal G}$ be pinching in the joint eigenbasis of the commuting generators. Then
+\begin{equation}
+  \operatorname{Cov}_{\mathcal D_{\mathcal G}(\rho)}(P)=\operatorname{Cov}_{\rho}(P),
+  \qquad F_Q(\mathcal D_{\mathcal G}(\rho))=0.
+  \tag{79}
+\end{equation}
+Thus a generator covariance table can remain numerically unchanged while the program becomes statistically dead. No noisy compiler may substitute covariance for QFI or emitted-readout CFI.
+
+\clearpage
+\setcounter{page}{33}
+\thispagestyle{plain}
+\fontsize{9.7}{11.7}\selectfont
+\Sect{12.4\quad Finite randomized campaigns}
+The conic compiler returns real branch exposures, while a finite campaign executes integer branch counts. The contract margin from Proposition~12.1 converts randomized branch allocation into a quantitative high-probability guarantee.
+
+\Prop{Proposition 12.3 (finite-shot contract guarantee).}
+Let branches $B_t$ be drawn independently from the compiled schedule and set
+\[
+  X_b=A^{\mathsf T}F_{C,b}A.
+\]
+Assume $0\preceq F_{C,b}\preceq2I$ and
+\begin{equation*}
+  \mathbb E[X_B]\succeq G_{\mathrm{req}}+\delta I,
+  \qquad L:=2\lVert A\rVert_{\mathrm{op}}^2.
+\end{equation*}
+Then, for
+\[
+  \overline X_N=\frac1N\sum_{t=1}^{N}X_{B_t},
+\]
+\begin{equation*}
+  \Pr\!\left[\overline X_N\not\succeq G_{\mathrm{req}}\right]
+  \le d\exp\!\left(
+    -\frac{N\delta^2}{2L^2+\tfrac23L\delta}
+  \right).
+\end{equation*}
+Consequently, failure probability at most $\eta$ is guaranteed whenever
+\begin{equation*}
+  N\ge
+  \left[
+    \frac{8\lVert A\rVert_{\mathrm{op}}^4}{\delta^2}
+    +\frac{4\lVert A\rVert_{\mathrm{op}}^2}{3\delta}
+  \right]\log\!\frac d\eta .
+\end{equation*}
+
+\emph{Proof.} Each centered matrix $X_{B_t}-\mathbb E[X_B]$ is self-adjoint, has operator norm at most $L$, and has variance proxy at most $NL^2$. The one-sided matrix Bernstein inequality~[38], followed by Weyl's inequality, yields the displayed tail bound. The leading sample complexity is
+$O((\lVert A\rVert_{\mathrm{op}}^2/\delta)^2\log(d/\eta))$.
+
+\begin{scopebox}{Scope of the finite-campaign guarantee}
+The proposition certifies randomness in branch allocation and finite integer counts. It does not replace the measurement-outcome likelihood or prove a uniform finite-sample theorem for the nonlinear estimator; those remain separate statistical questions.
+\end{scopebox}
+
+\vspace{0.7em}
+\Sect{13\quad Experimental methodology}
+\SubSect{13.1\quad Evidence classes and repository chronology}
+The evaluation separates four evidence classes:
+\begin{enumerate}[label=(\roman*),leftmargin=2.2em,itemsep=0pt,topsep=0.15em]
+\item analytic proofs in this manuscript;
+\item exhaustive or independent numerical verification of those proofs;
+\item compiler correctness and primal--dual certificates; and
+\item comparative resource experiments against one-state baselines.
+\end{enumerate}
+The next page records the repository chronology and the implementation corrections applied before the result freeze.
+
+\clearpage
+\setcounter{page}{41}
+\thispagestyle{plain}
+\fontsize{9.2}{11.2}\selectfont
+\Sect{14.9\quad Compiler-only scale on grid and heavy-hex graphs}
+The exact branch master was exercised without statevector or density-matrix simulation. Each instance used $d=8$ disjoint normalized group modes, the floor $G_{\mathrm{req}}=1.4I_8$, base-shot cost $c_0=1$, and edge-activation cost $c_e=0.002$. The solver alternated Loewner eigenvector cuts with an LP restricted master and exact maximum-weight-matching pricing. Grid graphs are rectangular nearest-neighbor prefixes; the heavy-hex family is an edge-subdivided hexagonal lattice, truncated by a connected breadth-first prefix. Three registered timing repeats were run with single-threaded BLAS.
+
+\begin{table}[h]
+\centering
+\caption*{\textbf{Table 7:} Compiler-only scaling. Time is the median wall clock over three repeats; parentheses give the observed range. Columns and oracle calls were identical across repeats.}
+\scriptsize
+\begin{tabular}{lrrrr}
+\toprule
+Topology & $m$ & time (s) & columns & matching-oracle calls\\
+\midrule
+Grid & 50  & 0.017 $(0.017$--$0.018)$ & 9  & 9\\
+Grid & 100 & 0.135 $(0.134$--$0.156)$ & 31 & 31\\
+Grid & 200 & 0.834 $(0.795$--$0.862)$ & 52 & 52\\
+Grid & 300 & 0.456 $(0.440$--$0.461)$ & 22 & 22\\
+Grid & 500 & 2.393 $(2.333$--$2.582)$ & 40 & 40\\
+\addlinespace
+Heavy-hex & 50  & 0.021 $(0.014$--$0.033)$ & 7  & 7\\
+Heavy-hex & 100 & 0.094 $(0.063$--$0.111)$ & 20 & 20\\
+Heavy-hex & 200 & 0.203 $(0.173$--$0.242)$ & 22 & 22\\
+Heavy-hex & 300 & 0.248 $(0.238$--$0.286)$ & 18 & 18\\
+Heavy-hex & 500 & 1.665 $(1.630$--$1.734)$ & 35 & 35\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{center}
+  \includegraphics[width=0.78\textwidth]{covq_scale_runtime.png}
+\end{center}
+\vspace{-0.7em}
+\textbf{Result.} All $30$ registered runs terminated with a feasible primal, a globally valid matching-pricing certificate, relative primal--dual gap at most $3.3\times10^{-14}$ in magnitude, and contract slack within $5.6\times10^{-14}$ of zero. At $m=500$, median times were $2.39$ s on the grid and $1.67$ s on the heavy-hex family, using $40$ and $35$ generated columns, respectively. The nonmonotone column counts reflect commensurability between the eight group modes and the finite graph boundaries; no asymptotic exponent is inferred from five sizes.
+
+This campaign changes the implementation evidence from small state-simulation canaries to a working certified compiler on sparse hardware graphs; it does not claim hardware execution, state-simulation scale, or topology-independent timing.
+
+\clearpage
+\setcounter{page}{48}
+\thispagestyle{plain}
+\fontsize{9.7}{11.7}\selectfont
+\Sect{G\quad Full unit-diagonal feasibility as background}
+This appendix fixes notation and prevents a weak baseline. Its core polyhedral statement is prior art.
+
+\SubSect{G.1\quad The symmetric-Bernoulli correlation sector}
+After normalization to $P_i=Z_i$, identify a computational-basis string with a sign vector $s\in\{\pm1\}^m$, where $Z_i\lvert s\rangle=s_i\lvert s\rangle$. If
+\begin{equation}
+  \lvert\psi\rangle=\sum_s c_s\lvert s\rangle,
+  \qquad p_s=\lvert c_s\rvert^2,
+  \tag{83}
+\end{equation}
+then $\boldsymbol\mu=\mathbb E_p[s]$ and
+\begin{equation}
+  F=\mathbb E_p[ss^{\mathsf T}]-\mathbb E_p[s]\mathbb E_p[s]^{\mathsf T}.
+  \tag{84}
+\end{equation}
+By Lemma~3.1, unit diagonal is equivalent to $\mathbb E_p[s]=0$.
+
+\Prop{Proposition G.1 (full-sector normal form; classical geometry plus pure-state realization).}
+A matrix $F\in\mathbb R^{m\times m}$ is a pure-state QFIM with unit diagonal for independent $Z_i/2$ generators if and only if
+\begin{equation}
+  F\in\mathcal C_m:=\operatorname{conv}\{ss^{\mathsf T}:s\in\{\pm1\}^m\}.
+  \tag{85}
+\end{equation}
+Every feasible $F$ has a pure-state realization supported on at most
+\begin{equation}
+  1+m+\binom m2=1+\frac{m(m+1)}2
+  \tag{86}
+\end{equation}
+computational-basis states.
+
+\emph{Proof.} Necessity follows from Eq.~(84) and zero mean. Conversely, let
+$F=\sum_a q_as_as_a^{\mathsf T}$. Symmetrizing the distribution by replacing each mass $q_a$ with equal mass on $s_a$ and $-s_a$ preserves $F$ and makes the mean zero. The state with amplitudes $\sqrt{p_s}$ realizes the resulting distribution and hence QFIM $F$.
+
+For the support bound, consider the augmented vectors
+\begin{equation}
+  y_s=(s,\operatorname{off}(ss^{\mathsf T}))\in
+  \mathbb R^{m+\binom m2}.
+  \tag{87}
+\end{equation}
+The target $(0,\operatorname{off}(F))$ lies in their convex hull. Carath\'eodory's theorem gives a representation using at most one plus the ambient dimension, which yields Eq.~(86).
+
+The polytope identity and its cut-polytope relation are classical. The pure-state amplitude realization is immediate once the diagonal generator basis is fixed. Thus Proposition~G.1 is background, not the headline theorem.
+
+\clearpage
+\setcounter{page}{49}
+\thispagestyle{plain}
+\fontsize{9.8}{11.8}\selectfont
+\SubSect{G.2\quad Signed cats and the baseline they do not defeat}
+For $s\in\{\pm1\}^m$, define
+\begin{equation}
+  \lvert C_s\rangle=\frac{\lvert s\rangle+\lvert-s\rangle}{\sqrt2}.
+  \tag{88}
+\end{equation}
+Then $\langle Z_i\rangle=0$ and $\langle Z_iZ_j\rangle=s_is_j$, so $F(C_s)=ss^{\mathsf T}$. A convex decomposition of $F$ therefore yields a labeled signed-cat schedule.
+
+However, Proposition~G.1 also yields a single sparse pure state. At $m=12$, the direct bound is $79$ nonzero basis amplitudes, not $2^{12}$. A baseline that prepares a dense generic state would be a strawman. The evaluation must compare:
+\begin{enumerate}[label=(\roman*),leftmargin=2.2em,itemsep=0pt,topsep=0.2em]
+\item the sparse pure state from the same moment decomposition;
+\item the same decomposition as a labeled signed-cat or Bell schedule;
+\item a coherent sparse data-state realization;
+\item an explicit flag--data purification; and
+\item generic expectation targeting and variational moment matching.
+\end{enumerate}
+
+\SubSect{G.3\quad A positive-semidefinite matrix outside the full sector}
+Positive semidefiniteness and unit diagonal are not sufficient. The matrix
+\begin{equation}
+  F_{\mathrm{out}}=
+  \begin{pmatrix}
+    1&-0.4&-0.4\\
+    -0.4&1&-0.4\\
+    -0.4&-0.4&1
+  \end{pmatrix}
+  \tag{89}
+\end{equation}
+provides the smallest useful compiler rejection test. Its eigenvalues are $0.2,1.4,1.4$, but the valid three-variable sign inequality
+\begin{equation}
+  F_{12}+F_{13}+F_{23}\ge-1
+  \tag{90}
+\end{equation}
+would require $-1.2\ge-1$. The target is therefore PSD yet infeasible in $\mathcal C_3$.
+
+\end{document}

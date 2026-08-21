@@ -1,0 +1,20 @@
+{
+  "schema_version": "covq.artifact_manifest/1.0",
+  "artifact_name": "CovQ-QUEST Reference Reimplementation v1",
+  "anchor_commit": "8cca6ef106b16a37a891077da88adbe8666d4c30",
+  "implementation_path": "prototype/src/covq/quest.py",
+  "canonical_result_path": "results/baselines_k3_quest.json",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "d2d90fa392c62d70bafac09f9adcada21803cefb510a3ef2d8c81031aa934e59",
+      "bytes": 1889
+    },
+    {
+      "path": "fd_gradient_pinning.json",
+      "sha256": "845a0e885040ffff77e0755f9a843b9c9dda7f6fc8a230a7ab8af4b30da01c75",
+      "bytes": 1218
+    }
+  ],
+  "manifest_sha256": "552d13fa9dfeab790b7f822b52df2bad7666e191209792bbc1200bde5a4b1f93"
+}
