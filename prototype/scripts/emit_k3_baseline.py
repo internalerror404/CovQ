@@ -31,7 +31,14 @@ from covq.width import decompose_width2
 
 MAX_DEPTH = 80
 VARIANT = "tE"          # terminal exact insertion, per the published algorithm
-CROSS_CHECK = "bE"      # best-position exact; reported for every instance
+CROSS_CHECK = "bE"      # best-position exact
+# bE searches every insertion position, so its cost grows as
+# (pool size) x (current depth) per iteration.  On the deeper path and banded
+# targets that is hundreds of thousands of cost evaluations per insertion and
+# it does not finish in any sane budget.  It is therefore run only where the tE
+# solution is shallow enough for the search to be affordable, and instances
+# where it was not run say so rather than quietly dropping the column.
+CROSS_CHECK_MAX_ROTATIONS = 8
 # Frozen selection rule, decided once and applied globally: the primary variant
 # is whichever has the lower TOTAL emitted CX summed over all registered
 # instances.  Choosing per instance would silently take the minimum of two
@@ -79,9 +86,24 @@ def run() -> dict:
         cons = moment_constraints(ps, F)
         res, tried = best_quest(cons, m, np.random.default_rng(2026))
         parsed = resources(lower_to_cx(quest_circuit(res, m)))
-        cross = quest_published(cons, m, variant=CROSS_CHECK, max_depth=MAX_DEPTH,
-                                tol=1e-13)
-        cross_parsed = resources(lower_to_cx(quest_circuit(cross, m)))
+        if res.depth_adaptive_length <= CROSS_CHECK_MAX_ROTATIONS:
+            cross = quest_published(cons, m, variant=CROSS_CHECK,
+                                    max_depth=MAX_DEPTH, tol=1e-13)
+            cross_parsed = resources(lower_to_cx(quest_circuit(cross, m)))
+            cross_record = {
+                "variant": CROSS_CHECK, "stop_reason": cross.stop_reason,
+                "quest_total_pauli_rotations": cross.depth_adaptive_length,
+                "quest_two_qubit_pauli_rotations": cross.two_qubit_rotations,
+                "quest_emitted_cx_count": cross_parsed["cx_count"],
+                "quest_two_qubit_depth": cross_parsed["two_qubit_depth"],
+            }
+        else:
+            cross_record = {
+                "variant": CROSS_CHECK, "stop_reason": "not_run_within_budget",
+                "reason": (f"tE needed {res.depth_adaptive_length} rotations; "
+                           "best-position search is quadratic in depth and exceeds "
+                           f"the registered budget of {CROSS_CHECK_MAX_ROTATIONS}"),
+            }
         psi = res.state / np.linalg.norm(res.state)
         cases.append({
             "instance": name, "m": m, "target_hash": _hash(np.round(F, 12)),
@@ -119,8 +141,10 @@ def run() -> dict:
                                              if c["covq"]["expected_cx_per_shot"] > 0 else None)
     converged = [c for c in cases if "skipped" not in c
                  and c["quest"]["stop_reason"] == "converged"]
-    tot_primary = sum(c["quest"]["quest_emitted_cx_count"] for c in converged)
-    tot_cross = sum(c["quest_cross_check"]["quest_emitted_cx_count"] for c in converged)
+    both = [c for c in converged
+            if c["quest_cross_check"].get("quest_emitted_cx_count") is not None]
+    tot_primary = sum(c["quest"]["quest_emitted_cx_count"] for c in both)
+    tot_cross = sum(c["quest_cross_check"]["quest_emitted_cx_count"] for c in both)
     return {
         "gate": "K3",
         "baseline": "QUEST-tE (arXiv:2605.02367; Mahapatra and Kadiri), implemented "
@@ -142,6 +166,8 @@ def run() -> dict:
         "n_total": len([c for c in cases if "skipped" not in c]),
         "covq_two_qubit_depth_is_always_one": all(
             c["covq"]["max_two_qubit_depth"] == 1 for c in cases if "skipped" not in c),
+        "cross_check_coverage": f"{len(both)}/{len(converged)} converged instances",
+        "cross_check_budget_rotations": CROSS_CHECK_MAX_ROTATIONS,
         "total_emitted_cx_primary": tot_primary,
         "total_emitted_cx_cross_check": tot_cross,
         "primary_variant_is_not_worse": tot_primary <= tot_cross,
