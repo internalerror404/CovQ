@@ -3,9 +3,9 @@
   "evidence_source_commit": [
     "daa5587ee9e6a9d4791ea0855b8f38a68ccff336"
   ],
-  "release_packaging_commit": "fd2e81eb2e1e0fc9e82ed25b09f1f635592531e9",
-  "release_commit": "fd2e81eb2e1e0fc9e82ed25b09f1f635592531e9",
-  "source_dirty": true,
+  "release_packaging_commit": "c92034691662b9bf40e63c017f8f14c688ef4aa7",
+  "release_commit": "c92034691662b9bf40e63c017f8f14c688ef4aa7",
+  "source_dirty": false,
   "environment": {
     "python": "3.11.15",
     "numpy": "2.4.6",
