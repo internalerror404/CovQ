@@ -31,6 +31,12 @@ from covq.width import decompose_width2
 
 MAX_DEPTH = 80
 VARIANT = "tE"          # terminal exact insertion, per the published algorithm
+CROSS_CHECK = "bE"      # best-position exact; reported for every instance
+# Frozen selection rule, decided once and applied globally: the primary variant
+# is whichever has the lower TOTAL emitted CX summed over all registered
+# instances.  Choosing per instance would silently take the minimum of two
+# baselines and understate QUEST.
+PRIMARY_RULE = "lower total emitted CX across all registered instances, fixed globally"
 
 
 def best_quest(cons, m, rng):
@@ -70,8 +76,12 @@ def run() -> dict:
         expected_cx = float(sum(w * sum(1 for b in blocks if len(b) == 2)
                                 for w, blocks, _ in dec.branches))
         ps = z_generators(m)
-        res, tried = best_quest(moment_constraints(ps, F), m, np.random.default_rng(2026))
+        cons = moment_constraints(ps, F)
+        res, tried = best_quest(cons, m, np.random.default_rng(2026))
         parsed = resources(lower_to_cx(quest_circuit(res, m)))
+        cross = quest_published(cons, m, variant=CROSS_CHECK, max_depth=MAX_DEPTH,
+                                tol=1e-13)
+        cross_parsed = resources(lower_to_cx(quest_circuit(cross, m)))
         psi = res.state / np.linalg.norm(res.state)
         cases.append({
             "instance": name, "m": m, "target_hash": _hash(np.round(F, 12)),
@@ -85,6 +95,11 @@ def run() -> dict:
             },
             "quest": {
                 "settings": 1,
+                "variant": VARIANT,
+                "quest_total_pauli_rotations": res.depth_adaptive_length,
+                "quest_two_qubit_pauli_rotations": res.two_qubit_rotations,
+                "quest_emitted_cx_count": parsed["cx_count"],
+                "quest_two_qubit_depth": parsed["two_qubit_depth"],
                 "rotations": res.depth_adaptive_length,
                 "two_qubit_rotations": res.two_qubit_rotations,
                 "cx_per_shot": parsed["cx_count"],
@@ -104,6 +119,8 @@ def run() -> dict:
                                              if c["covq"]["expected_cx_per_shot"] > 0 else None)
     converged = [c for c in cases if "skipped" not in c
                  and c["quest"]["stop_reason"] == "converged"]
+    tot_primary = sum(c["quest"]["quest_emitted_cx_count"] for c in converged)
+    tot_cross = sum(c["quest_cross_check"]["quest_emitted_cx_count"] for c in converged)
     return {
         "gate": "K3",
         "baseline": "QUEST-tE (arXiv:2605.02367; Mahapatra and Kadiri), implemented "
@@ -116,12 +133,19 @@ def run() -> dict:
                       "understated the baseline by roughly an order of magnitude",
         "scope": "exact first/second-moment targeting only; NOT an information-floor "
                  "optimizer and not run as one",
-        "resource_provenance": "both sides parsed from emitted circuits",
+        "resource_provenance": "both sides parsed from emitted circuits after the same "
+                               "lowering; a two-qubit Pauli rotation emits two CX and "
+                               "rotations are never reported as gates",
+        "primary_variant_rule": PRIMARY_RULE,
         "cases": cases,
         "n_converged": len(converged),
         "n_total": len([c for c in cases if "skipped" not in c]),
         "covq_two_qubit_depth_is_always_one": all(
             c["covq"]["max_two_qubit_depth"] == 1 for c in cases if "skipped" not in c),
+        "total_emitted_cx_primary": tot_primary,
+        "total_emitted_cx_cross_check": tot_cross,
+        "primary_variant_is_not_worse": tot_primary <= tot_cross,
+        "variants_agree": tot_primary == tot_cross,
         "min_cx_ratio_over_converged": min(
             (c["cx_ratio_quest_over_covq"] for c in converged), default=None),
         "max_cx_ratio_over_converged": max(

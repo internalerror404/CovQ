@@ -181,6 +181,25 @@ def audit_prose(tex: str) -> list[dict]:
     return out
 
 
+# Claims withdrawn by the QUEST fidelity correction.  They must not survive in
+# the active manuscript.  Archived retraction documents are exempt -- the record
+# of what was withdrawn has to keep quoting the withdrawn numbers.
+RETRACTED_LITERALS = [
+    "135.6", "197.8", "80--198", "80-198", "ten converged",
+    "44 two-qubit rotations", "five orders of magnitude",
+    r"3.51\times10^5", "1.27\times10^5", "351088", "351{,}088",
+]
+
+
+def audit_retracted(tex: str) -> list[dict]:
+    out = []
+    for literal in RETRACTED_LITERALS:
+        hits = tex.count(literal)
+        out.append({"literal": literal, "occurrences": hits,
+                    "verdict": "CLEAR" if hits == 0 else "PRESENT_MUST_REMOVE"})
+    return out
+
+
 def main() -> int:
     GEN.mkdir(parents=True, exist_ok=True)
     # The N10 table intentionally gains a column: the frozen f=0.02 deployable
@@ -202,6 +221,7 @@ def main() -> int:
 
     tex = TEX.read_text() if TEX.exists() else ""
     prose = audit_prose(tex) if tex else []
+    retracted = audit_retracted(tex) if tex else []
     audits = []
     if tex:
         for n, r in tables.items():
@@ -220,6 +240,10 @@ def main() -> int:
         "n_mismatched_tables": sum(a["verdict"] not in ("MATCH", "EXPECTED_CHANGE")
                                    for a in audits),
         "prose_claims": prose,
+        "retracted_literals": retracted,
+        "n_retracted_present": sum(r["verdict"] != "CLEAR" for r in retracted),
+        "retracted_scope": "active manuscript only; archived retraction documents "
+                           "must keep quoting the withdrawn numbers",
         "n_prose_mismatch": sum(p["verdict"] != "MATCH" for p in prose),
         "n_prose_absent_from_source": sum(not p.get("present_in_source", True)
                                           for p in prose),
@@ -230,10 +254,15 @@ def main() -> int:
         "status": "DONE",
     }
     payload["status"] = ("DONE" if payload["n_mismatched_tables"] == 0
-                         and payload["n_prose_mismatch"] == 0 else "FAILS")
+                         and payload["n_prose_mismatch"] == 0
+                         and payload["n_retracted_present"] == 0 else "FAILS")
     _write("results/paper_cell_audit.json", payload)
     for a in audits:
         print(f"  {a['verdict']:<20} {a['table']:<18} diffs={a.get('n_diffs', '-')}")
+    for rc in retracted:
+        if rc["verdict"] != "CLEAR":
+            print(f"  {rc['verdict']:<20} retracted:{rc['literal']!r} "
+                  f"x{rc['occurrences']}")
     for pc in prose:
         flag = "" if pc.get("present_in_source", True) else "  (not found in source)"
         print(f"  {pc['verdict']:<20} prose:{pc['claim']:<13} "

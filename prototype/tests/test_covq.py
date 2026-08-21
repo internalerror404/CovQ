@@ -1573,3 +1573,72 @@ def test_j2_frozen_pilot_policy_is_never_better_than_the_oracle_ceiling():
         assert deploy["cost"] >= oracle["cost"] - 1e-9
         assert deploy["cost"] / oracle["cost"] < 1.10
         assert deploy["floor_slack_min_eig"] > -1e-6
+
+
+def test_quest_emitted_circuit_prepares_its_own_input_state():
+    """A circuit that does not prepare its own input is not an emitted program.
+
+    ``quest_circuit`` originally emitted only the rotations, so simulating it
+    started from ``|0..0>`` and produced a different state from the one the
+    result object claims.  The count was usable; the artifact was not.
+    """
+    from covq.noise import BlockLocalNoise, simulate_circuit_noisy, simulate_noisy_state
+    from covq.quest import moment_constraints, quest_circuit, quest_published
+
+    m = 3
+    ps = z_generators(m)
+    F = np.full((m, m), 0.4)
+    np.fill_diagonal(F, 1.0)
+    res = quest_published(moment_constraints(ps, F), m, variant="tE",
+                          max_depth=40, tol=1e-13)
+    clean = BlockLocalNoise()
+    from_circuit = simulate_circuit_noisy(quest_circuit(res, m), clean)
+    from_rotations = simulate_noisy_state(res.rotations, m, clean)
+    assert from_circuit == pytest.approx(from_rotations, abs=1e-10)
+
+
+def test_quest_two_qubit_rotations_are_not_reported_as_gates():
+    """One two-qubit Pauli rotation lowers to two CX; the units must not be conflated."""
+    from covq.quest import moment_constraints, quest_circuit, quest_published
+
+    m = 4
+    ps = z_generators(m)
+    F = np.full((m, m), 0.4)
+    np.fill_diagonal(F, 1.0)
+    res = quest_published(moment_constraints(ps, F), m, variant="tE",
+                          max_depth=60, tol=1e-13)
+    parsed = resources(lower_to_cx(quest_circuit(res, m)))
+    assert parsed["cx_count"] == 2 * res.two_qubit_rotations
+    assert parsed["cx_count"] != res.two_qubit_rotations
+
+
+def test_lowering_rules_are_available_to_both_arms():
+    """Near-zero removal and adjacent combination, applied identically."""
+    from covq.quest import PauliRotation, canonicalise_rotations
+
+    a = PauliRotation(((0, "X"), (1, "Y")))
+    b = PauliRotation(((2, "Z"),))
+    assert canonicalise_rotations([(a, 1e-12), (b, 0.5)]) == [(b, 0.5)]
+    merged = canonicalise_rotations([(a, 0.3), (a, 0.4), (b, 0.5)])
+    assert len(merged) == 2 and merged[0][1] == pytest.approx(0.7)
+    assert canonicalise_rotations([(a, 0.3), (a, -0.3)]) == []
+
+
+def test_deployable_exposure_is_stable_across_pilot_seeds():
+    """The crossover claim rests on this template; its MC noise must be negligible."""
+    from covq.noise import BlockLocalNoise, deployable_exposure, noise_aware_floor_compile
+
+    m = 4
+    edges = [(i, j) for i in range(m) for j in range(i + 1, m)]
+    G = np.full((m, m), 0.6)
+    np.fill_diagonal(G, 1.2)
+    noise = BlockLocalNoise(dephasing={q: 0.02 for q in range(m)},
+                            edge_depolarizing={e: 0.05 for e in edges},
+                            idle_dephasing=0.01)
+    oracle = noise_aware_floor_compile(G, m, edges, np.zeros(m), noise,
+                                       costs={e: 0.0 for e in edges}, c0=1.0)
+    vals = [deployable_exposure(G, m, edges, np.zeros(m), noise, oracle["branches"],
+                                costs={e: 0.0 for e in edges}, c0=1.0, seed=s)["cost"]
+            for s in range(6)]
+    rel_sd = float(np.std(vals, ddof=1) / np.mean(vals))
+    assert rel_sd < 1e-3, rel_sd

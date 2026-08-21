@@ -45,8 +45,20 @@ def main() -> int:
 
     import numpy
     import scipy
+    # Evidence and packaging are different commits by construction: the records
+    # are produced by one tree, and the commit that carries them plus the
+    # regenerated tables, figures and manuscript is necessarily later.  Naming
+    # them separately stops a reader inferring that a record was written by the
+    # commit that happens to contain it.
+    evidence_commits = sorted({
+        json.loads(p.read_text()).get("source_commit")
+        for p in (ROOT / "results").rglob("*.json")
+        if "source_commit" in p.read_text(errors="ignore")[:4000]
+    } - {None})
     manifest = {
-        "schema_version": "covq.release_manifest/0.4",
+        "schema_version": "covq.release_manifest/0.5",
+        "evidence_source_commit": evidence_commits,
+        "release_packaging_commit": git("rev-parse", "HEAD"),
         "release_commit": git("rev-parse", "HEAD"),
         # Scoped to source, for the same reason the records are: this script
         # writes into results/, so a whole-tree check would always report dirty

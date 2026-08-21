@@ -118,7 +118,7 @@ def make_operational(
 ) -> tuple[list[Path], dict[str, Any]]:
     n7, n10, n6, k3 = records["n7"], records["n10"], records["n6"], records["k3"]
 
-    fig, axes = plt.subplots(2, 2, figsize=(12.8, 10.6), constrained_layout=True)
+    fig, axes = plt.subplots(2, 3, figsize=(19.2, 10.6), constrained_layout=True)
 
     # (a) Pilot-recentered readout.
     ax = axes[0, 0]
@@ -162,16 +162,29 @@ def make_operational(
     x = np.array([float(r["edge_depolarizing"]) for r in sweep])
     cost = np.array([float(r["primal_cost"]) for r in sweep])
     settings = np.array([int(r["entangled_settings"]) for r in sweep])
-    line1 = ax.plot(x, cost, marker="o", label="certified cost")[0]
+    line1 = ax.plot(x, cost, marker="o", color="C0", label="certified cost")[0]
     ax.set_xlabel("edge depolarizing probability")
     ax.set_ylabel("certified cost", color=line1.get_color())
     ax.tick_params(axis="y", labelcolor=line1.get_color())
     ax.grid(True, alpha=0.25)
     ax2 = ax.twinx()
-    line2 = ax2.step(x, settings, where="post", label="entangled settings")[0]
+    line2 = ax2.step(x, settings, where="post", color="C1",
+                     label="entangled settings")[0]
     ax2.set_ylabel("entangled settings", color=line2.get_color())
     ax2.tick_params(axis="y", labelcolor=line2.get_color())
     ax.set_title("(c) Noise-driven compiler transition")
+
+    # (e) Exposure ratio.  Essential: on the log-scale absolute plot the
+    # crossover is invisible, and the crossover is the result.
+    ax = axes[0, 2]
+    with np.errstate(divide="ignore", invalid="ignore"):
+        ratio = quest / covq
+    ax.plot(qe, ratio, marker="o", color="C3")
+    ax.axhline(1.0, linewidth=1.2, color="0.35")
+    ax.set_xlabel("two-qubit depolarizing probability")
+    ax.set_ylabel("QUEST QFI ceiling / CovQ deployable CFI")
+    ax.set_title("(e) Exposure ratio")
+    ax.grid(True, alpha=0.25)
 
     # (d) Exact-target realization cost.
     ax = axes[1, 1]
@@ -186,7 +199,8 @@ def make_operational(
         family = name.split("_", 1)[0]
         ratio = float(case["cx_ratio_quest_over_covq"])
         kept.append((name, ratio, family, idx))
-    labels = [name.replace("matching_", "match").replace("toeplitz_", "toepl").replace("banded_", "band") for name, _, _, _ in kept]
+    labels = [name.replace("matching_", "match_").replace("toeplitz_", "toepl_")
+              .replace("banded_", "band_") for name, _, _, _ in kept]
     ratios = [ratio for _, ratio, _, _ in kept]
     families = [family for _, _, family, _ in kept]
     family_order = {family: i for i, family in enumerate(dict.fromkeys(families))}
@@ -200,11 +214,19 @@ def make_operational(
     ax.set_title("(d) Exact-target realization cost")
     ax.grid(True, axis="y", alpha=0.25)
 
+    axes[1, 2].axis("off")
     outputs = _save(fig, out_dir / "operational_results")
     manifest = {
         "figure": "operational_results",
         "panels": {
             "a": {"artifact": INPUTS["n7"].as_posix(), "json_pointers": n7_ptrs},
+            "e": {"artifact": INPUTS["n10"].as_posix(),
+                  "series": "quest_shots_noisy_qfi_upper_bound / "
+                            "covq_deployable_fixed_pilot_exposure",
+                  "reading": "points below one favour the optimistic QUEST QFI ceiling; "
+                             "points above one establish that CovQ's emitted-readout CFI "
+                             "beats that ceiling",
+                  "json_pointers": [f"/rows/{i}" for i in range(len(rows))]},
             "b": {
                 "artifact": INPUTS["n10"].as_posix(),
                 "json_pointers": [f"/rows/{i}" for i in range(len(rows))],

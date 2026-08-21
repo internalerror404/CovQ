@@ -19,7 +19,7 @@ from covq.noise import (FROZEN_PILOT_POLICY, BlockLocalNoise, branch_template,
 from covq.paulis import z_generators
 from covq.polytope import exact_decompose
 from covq.programs import single_pure_state_program
-from covq.quest import moment_constraints, quest_published
+from covq.quest import canonicalise_rotations, moment_constraints, quest_circuit, quest_published
 from covq.sim import simulate
 from covq.width import decompose_width2
 
@@ -114,6 +114,9 @@ def quest_operational_comparison() -> dict:
     np.fill_diagonal(F_target, 1.0)
     qr = quest_published(moment_constraints(ps, F_target), m, variant='tE',
                          max_depth=80, tol=1e-13)
+    _qres = resources(lower_to_cx(quest_circuit(qr, m)))
+    quest_cx = _qres["cx_count"]
+    quest_depth = _qres["two_qubit_depth"]
 
     dec = exact_decompose(F_target)
     sparse_prog = single_pure_state_program(dec.signs, dec.weights)
@@ -130,7 +133,11 @@ def quest_operational_comparison() -> dict:
             g = floor_margin(mixed_state_qfim(rho / np.trace(rho).real, ps), G)
             return (1.0 / g) if g > 1e-15 else None
 
-        q_shots = shots_from(simulate_noisy_state(qr.rotations, m, noise))
+        # Route QUEST through the *same* lowering and per-emitted-gate noise
+        # path as every other circuit arm.  Charging noise per two-qubit
+        # rotation instead of per emitted CX under-billed QUEST by exactly 2x,
+        # since each two-qubit Pauli rotation lowers to two CX.
+        q_shots = shots_from(simulate_circuit_noisy(quest_circuit(qr, m), noise))
         s_shots = shots_from(simulate_circuit_noisy(sparse_prog.circuit, noise))
         deploy = deployable_exposure(G, m, edges, theta, noise, covq["branches"],
                                      costs={e: 0.0 for e in edges}, c0=1.0)
@@ -174,9 +181,25 @@ def quest_operational_comparison() -> dict:
                           "single-state realisation",
             },
             "quest_variant": "tE (published: insert, then joint L-BFGS reoptimisation)",
-            "quest_preparation": {"stop_reason": qr.stop_reason,
-                                  "rotations": qr.depth_adaptive_length,
-                                  "two_qubit_rotations": qr.two_qubit_rotations},
+            "quest_preparation": {
+                "stop_reason": qr.stop_reason,
+                "quest_total_pauli_rotations": qr.depth_adaptive_length,
+                "quest_two_qubit_pauli_rotations": qr.two_qubit_rotations,
+                "quest_emitted_cx_count": quest_cx,
+                "quest_two_qubit_depth": quest_depth,
+                "note": "a two-qubit Pauli rotation lowers to two CX; rotations and "
+                        "emitted gates are reported separately and never conflated",
+            },
+            "lowering_symmetry": {
+                "native_gate_set": "{1q, CX} after covq.circuits.lower_to_cx, both arms",
+                "near_zero_angle_removal": "applied to both (no-op for CovQ, which has "
+                                           "no parameterised preparation rotations)",
+                "adjacent_rotation_combination": "applied to both (no-op on the "
+                                                 "registered solutions)",
+                "routing": "all-to-all assumed for both; no SWAP inserted on either arm",
+                "noise_placement": "one two-qubit depolarizing event per emitted CX on "
+                                   "every arm, via the same simulate_circuit_noisy path",
+            },
             "rows": rows, "status": "DONE"}
 
 

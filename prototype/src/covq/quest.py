@@ -227,7 +227,36 @@ def _refine(ts, cost, k, dense_obs, psi, dense, iters: int = 40):
     return float(t), float(min(fc, fd))
 
 
-def quest_circuit(result: QuestResult, n: int) -> Circuit:
+def canonicalise_rotations(rotations, angle_tol: float = 1e-8):
+    """Apply the two lowering rules that both backends must share.
+
+    *Near-zero-angle removal*: a rotation with ``|theta| <= angle_tol`` is the
+    identity and must not be billed for two CX gates.  *Adjacent-rotation
+    combination*: consecutive rotations about the same Pauli commute into one.
+
+    Both are no-ops on the registered QUEST solutions -- no angle falls below
+    tolerance and no two adjacent rotations share a Pauli -- and CovQ's
+    preparation contains no parameterised rotations at all.  They are
+    implemented anyway so the resource audit can state that identical
+    simplification was available to both sides, rather than leaving it silently
+    absent from one.
+    """
+    out: list = []
+    for rot, theta in rotations:
+        if out and out[-1][0].axes == rot.axes:
+            merged = out[-1][1] + theta
+            if abs(merged) <= angle_tol:
+                out.pop()
+            else:
+                out[-1] = (rot, merged)
+            continue
+        if abs(theta) <= angle_tol:
+            continue
+        out.append((rot, float(theta)))
+    return out
+
+
+def quest_circuit(result: QuestResult, n: int, angle_tol: float = 1e-8) -> Circuit:
     """Emit the rotation sequence so resources are parsed, never estimated.
 
     Each two-qubit Pauli rotation lowers to basis changes, two CX, and one RZ;
@@ -236,7 +265,15 @@ def quest_circuit(result: QuestResult, n: int) -> Circuit:
     comparison below counts these, not a formula.
     """
     c = Circuit(n)
-    for rot, t in result.rotations:
+    # The |+>^n preparation is part of the emitted program and must be in the
+    # circuit.  Without it the artifact is not self-contained: simulating it
+    # starts from |0..0> and produces a different state, and its resource count
+    # omits the preparation layer.  It adds no two-qubit gate, so the CX-based
+    # comparisons are unchanged -- but a circuit that does not prepare its own
+    # input is not an emitted program.
+    for q in range(n):
+        c.h(q)
+    for rot, t in canonicalise_rotations(result.rotations, angle_tol):
         pre = []
         for q, a in rot.axes:
             if a == "X":

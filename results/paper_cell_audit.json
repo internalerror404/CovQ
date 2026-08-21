@@ -1,7 +1,7 @@
 {
   "schema_version": "covq.measurement.record/0.1",
-  "source_commit": "fb921c38680153c8323e11011887edf10526e365",
-  "dirty": false,
+  "source_commit": "e62315c3a8da2076566287a6192ba08f544ccb14",
+  "dirty": true,
   "dirty_scope": [
     "prototype/src",
     "prototype/tests",
@@ -262,7 +262,7 @@
     {
       "claim": "k3_converged",
       "quoted_in_source": "ten converged",
-      "from_record": "11 converged",
+      "from_record": "eleven converged",
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/n_converged",
       "verdict": "MISMATCH",
@@ -287,9 +287,68 @@
       "present_in_source": true
     }
   ],
+  "retracted_literals": [
+    {
+      "literal": "135.6",
+      "occurrences": 2,
+      "verdict": "PRESENT_MUST_REMOVE"
+    },
+    {
+      "literal": "197.8",
+      "occurrences": 0,
+      "verdict": "CLEAR"
+    },
+    {
+      "literal": "80--198",
+      "occurrences": 0,
+      "verdict": "CLEAR"
+    },
+    {
+      "literal": "80-198",
+      "occurrences": 0,
+      "verdict": "CLEAR"
+    },
+    {
+      "literal": "ten converged",
+      "occurrences": 2,
+      "verdict": "PRESENT_MUST_REMOVE"
+    },
+    {
+      "literal": "44 two-qubit rotations",
+      "occurrences": 1,
+      "verdict": "PRESENT_MUST_REMOVE"
+    },
+    {
+      "literal": "five orders of magnitude",
+      "occurrences": 0,
+      "verdict": "CLEAR"
+    },
+    {
+      "literal": "3.51\\times10^5",
+      "occurrences": 1,
+      "verdict": "PRESENT_MUST_REMOVE"
+    },
+    {
+      "literal": "1.27\times10^5",
+      "occurrences": 0,
+      "verdict": "CLEAR"
+    },
+    {
+      "literal": "351088",
+      "occurrences": 1,
+      "verdict": "PRESENT_MUST_REMOVE"
+    },
+    {
+      "literal": "351{,}088",
+      "occurrences": 0,
+      "verdict": "CLEAR"
+    }
+  ],
+  "n_retracted_present": 5,
+  "retracted_scope": "active manuscript only; archived retraction documents must keep quoting the withdrawn numbers",
   "n_prose_mismatch": 3,
   "n_prose_absent_from_source": 0,
   "note": "the N10 table gains a deployable column: the frozen f=0.02 fixed-pilot exposure is the primary CovQ figure and the matched-analyzer value is retained as a diagnostic ceiling, so a cell-count difference there is expected and intended",
   "status": "FAILS",
-  "record_hash": "67a0e9807df32866078a870f55ffa558abbc0564484c0e697c2b05d07311c265"
+  "record_hash": "b815338e0aa269a798f0919ebae569892b3cc20089bff55c4981c4fabfb1c9b1"
 }
