@@ -384,7 +384,7 @@ def _best_single_angle(rots, angles, psi0, obs, cand_dense, position, grid):
 def quest_published(constraints, n: int, pool=None, variant: str = "tE",
                     max_depth: int = 64, tol: float = 1e-12,
                     psi0: np.ndarray | None = None, grid: int = 64,
-                    maxiter: int = 200) -> QuestResult:
+                    maxiter: int = 200, position_window: int | None = None) -> QuestResult:
     """QUEST as published (arXiv:2605.02367): insert, then jointly reoptimise.
 
     Each iteration has the paper's two phases:
@@ -406,6 +406,8 @@ def quest_published(constraints, n: int, pool=None, variant: str = "tE",
 
     if variant not in ("tE", "bE"):
         raise ValueError("variant must be 'tE' (terminal exact) or 'bE' (best-position)")
+    if position_window is not None and variant != "bE":
+        raise ValueError("position_window only applies to the bE variant")
     pool = default_pool(n) if pool is None else pool
     dense_pool = [(r, _dense(r.axes, n)) for r in pool]
     obs = [(np.asarray(O), float(tau)) for O, tau in constraints]
@@ -424,7 +426,26 @@ def quest_published(constraints, n: int, pool=None, variant: str = "tE",
         if history[-1] <= tol:
             stop = "converged"
             break
-        positions = [len(rots)] if variant == "tE" else list(range(len(rots) + 1))
+        if variant == "tE":
+            positions = [len(rots)]
+        elif position_window is None:
+            positions = list(range(len(rots) + 1))
+        else:
+            # Windowed best-position insertion: search only the last W slots.
+            # W = 1 recovers tE and W = inf recovers bE, so the *cost*
+            # interpolates between the two published variants, linear rather
+            # than quadratic in depth.
+            #
+            # The solution quality does NOT interpolate, and it is worth saying
+            # so plainly: on path_m4, W = 2 needs 152 emitted CX and fails to
+            # converge where W = 1 converges at 24 and W = 4 at 20.  Greedy
+            # insertion is not monotone in its candidate set -- widening the
+            # window changes which rotation wins the first few rounds and can
+            # steer the whole trajectory into a worse basin.  A windowed run is
+            # therefore evidence about the instance, never a bound on bE, and
+            # must never be reported as bE itself.
+            lo = max(0, len(rots) + 1 - int(position_window))
+            positions = list(range(lo, len(rots) + 1))
         best = None
         for rot, dense in dense_pool:
             for pos in positions:

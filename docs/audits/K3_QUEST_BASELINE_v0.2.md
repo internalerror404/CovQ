@@ -152,10 +152,59 @@ coverage is **8 of 11**, and the three uncovered instances are
 
 — that is, **exactly the three largest ratios**. This is not a coincidence: they are deep,
 which is both why `bE` is unaffordable there and where `bE` would have the most room to
-improve on `tE`. So the *upper* end of the `2.50 – 32.65` range rests on `tE` alone, and a
-referee is entitled to treat `32.65` as an upper bound on the separation rather than a
-measured one. The shallow half of the table is cross-validated; the headline maximum is
-not.
+improve on `tE`. The strengthening study below confirms the concern on the one instance it
+could settle: a cheaper windowed search beat the registered arm there. So the upper end of
+`2.50 – 32.65` is an **upper bound on the separation, not a measured one**, and the
+manuscript must say "up to".
+
+## Strengthening study on the three uncovered instances
+
+`bE` could not be afforded on `path_m4`, `path_m5` or `banded_m5` — exactly the three
+largest ratios — so their upper end rests on a single arm. This was a **falsification
+attempt** on that arm, not a search for a better number: reproduce with
+`prototype/scripts/quest_strengthening_study.py`.
+
+| instance | arm | rot | CX | ratio | verdict |
+|---|---|---|---|---|---|
+| `path_m4` | tE from `\|+⟩^m` (registered) | 14 | 24 | 17.78 | — |
+| `path_m4` | **bE window = 4** | **11** | **20** | **14.81** | **beats registered by 4 CX** |
+| `path_m4` | bE window = 2 | 80 | 152 | 112.59 | no verdict, hit depth cap |
+| `path_m4` | tE restart 0 | 75 | 102 | 75.56 | far worse |
+| `path_m4` | tE restart 1 | 61 | 110 | 81.48 | far worse |
+| `path_m5` | tE from `\|+⟩^m` (registered) | 28 | 46 | 25.56 | — |
+| `path_m5` | bE window = 2 | 39 | 76 | 42.22 | worse |
+| `path_m5` | bE window = 4 | — | — | — | **not completed within budget** |
+| `banded_m5` | bE window = 4 | — | — | — | **not run** |
+
+Three results, and one non-result that is recorded rather than dropped.
+
+**1. The registered deep-instance ratios are overestimates.** On `path_m4` a windowed
+best-position search found 20 emitted CX against the registered 24, taking the ratio from
+`17.78` to `14.81`. The falsification succeeded, so the registered numbers on the deep
+instances are not tight.
+
+**2. Greedy insertion is not monotone in its candidate set.** `W = 2` is worse than
+`W = 1` on both instances where it ran — 152 CX and non-convergent on `path_m4`, 76
+against 46 on `path_m5` — while `W = 4` beats both. Widening the window changes which
+rotation wins the opening rounds and can steer the whole trajectory into a worse basin.
+**A windowed run is therefore evidence about an instance and never a bound on `bE`.**
+
+**3. The `|+⟩^m` initialisation is doing real work.** Random restarts came in at 102 and
+110 CX against 24. That independently justifies the registered rule rather than leaving it
+as an unexplained choice.
+
+**The non-result.** `W = 4` on `path_m5` was stopped after 30 minutes without converging,
+and `banded_m5` was consequently never reached. The cost of windowed search grows with
+pool size, Hilbert dimension *and* achieved depth, and the two `m = 5` instances are worse
+in all three. No verdict is claimed for them, and none should be inferred: the absence of
+an improvement here is absence of evidence, not evidence of absence.
+
+**Consequence for the manuscript.** The abstract must read **"up to"**, not a measured
+range, and this does not depend on the pending arms. `W = 4` is itself only another
+heuristic, so even `14.81` is a lower bound on what a better search would find. The
+defensible claim is a **lower bound on CovQ's advantage**: QUEST's true minimum is at most
+what any arm here found, so the true ratio is at most the reported one. Reporting
+`2.50 – 32.65` as a measured separation would assert the opposite.
 
 ## Manuscript sentences that must change
 
