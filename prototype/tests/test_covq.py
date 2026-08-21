@@ -18,7 +18,7 @@ from covq import gates as gt
 from covq import polytope as pol
 from covq import programs as prg
 from covq import width as wid
-from covq.circuits import is_hardware_legal, lower_to_cx, route
+from covq.circuits import is_hardware_legal, lower_to_cx, resources, route
 from covq.instances import hypermetric_violator, path_target, random_signed_cat_mixture, star_target
 from covq.paulis import (
     all_commute,
@@ -1051,3 +1051,83 @@ def test_estimator_mle_is_consistent_and_saturates_the_cramer_rao_bound():
         assert rep["rank"] == 3
         assert rep["bias_within_4_stderr"], rep["max_abs_bias"]
         assert rep["efficiency_within_mp_band"], rep["efficiency_eigenvalues"]
+
+
+# ----------------------------------------------------------------------
+# K3: the QUEST baseline (arXiv:2605.02367), exact-target mode only.
+# ----------------------------------------------------------------------
+
+def test_quest_hits_exact_first_and_second_moment_targets():
+    """The baseline must actually work before any comparison means anything."""
+    from covq.instances import matching_target, toeplitz_like
+    from covq.quest import moment_constraints, quest
+
+    for name, F, m in (("matching3", matching_target(3, np.random.default_rng(39), load=0.8).F, 3),
+                       ("toeplitz3", toeplitz_like(3, 0.35).F, 3),
+                       ("toeplitz4", toeplitz_like(4, 0.35).F, 4)):
+        ps = z_generators(m)
+        res = quest(moment_constraints(ps, F), m, max_depth=48, tol=1e-13)
+        assert res.stop_reason == "converged", (name, res.stop_reason, res.residual)
+        psi = res.state / np.linalg.norm(res.state)
+        assert qfim_from_statevector(psi, ps) == pytest.approx(F, abs=1e-5)
+
+
+def test_quest_start_state_matters_and_the_default_is_the_fair_one():
+    """``|0..0>`` is a joint ``Z`` eigenstate and a trap for this constraint class.
+
+    Every ``<Z_i>`` is maximally wrong there and every ``Z``-type pool element is
+    a no-op, so greedy descent stalls on targets it clears easily from
+    ``|+>^n``.  Reporting the ``|0..0>`` numbers as the method's performance
+    would understate the baseline; this test pins the difference so the default
+    cannot regress silently.
+    """
+    from covq.instances import toeplitz_like
+    from covq.quest import moment_constraints, quest
+
+    m = 3
+    F = toeplitz_like(m, 0.35).F
+    cons = moment_constraints(z_generators(m), F)
+
+    zero = np.zeros(1 << m, dtype=complex)
+    zero[0] = 1.0
+    trapped = quest(cons, m, max_depth=48, tol=1e-13, psi0=zero)
+    default = quest(cons, m, max_depth=48, tol=1e-13)
+
+    assert trapped.stop_reason != "converged"
+    assert default.stop_reason == "converged"
+    assert default.depth_adaptive_length < trapped.depth_adaptive_length
+
+
+def test_quest_resources_are_parsed_from_emitted_circuits():
+    """Gate C9: no analytic resource estimates in the comparison."""
+    from covq.instances import toeplitz_like
+    from covq.quest import moment_constraints, quest, quest_circuit
+
+    m = 4
+    res = quest(moment_constraints(z_generators(m), toeplitz_like(m, 0.35).F), m,
+                max_depth=48, tol=1e-13)
+    parsed = resources(lower_to_cx(quest_circuit(res, m)))
+    assert parsed["cx_count"] == 2 * res.two_qubit_rotations
+    assert parsed["cx_count"] > 0
+
+
+def test_quest_line_search_is_exact_three_point_trigonometry():
+    """``<R(t) O R(t)^dag> = a + b cos t + c sin t`` exactly, for Pauli ``P``."""
+    from covq.quest import PauliRotation, _apply_rotation, _dense
+
+    rng = np.random.default_rng(5)
+    n = 3
+    dense = _dense(PauliRotation(((0, "X"), (2, "Y"))).axes, n)
+    obs = _dense(PauliRotation(((1, "Z"), (2, "Z"))).axes, n)
+    psi = rng.normal(size=1 << n) + 1j * rng.normal(size=1 << n)
+    psi /= np.linalg.norm(psi)
+
+    def val(t):
+        v = _apply_rotation(psi, dense, t)
+        return float(np.real(np.vdot(v, obs @ v)))
+
+    v0, vp, vm = val(0.0), val(math.pi / 2), val(-math.pi / 2)
+    a = 0.5 * (vp + vm)
+    b, c = v0 - a, 0.5 * (vp - vm)
+    for t in (0.3, 1.7, -2.2, 3.0):
+        assert val(t) == pytest.approx(a + b * math.cos(t) + c * math.sin(t), abs=1e-12)

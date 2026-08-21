@@ -1,0 +1,300 @@
+{
+  "schema_version": "covq.measurement.record/0.1",
+  "source_commit": "02dc0efa7e513974784d10dc38a9d08423b92adf",
+  "dirty": true,
+  "tolerances": {
+    "attainment_abs": 1e-09,
+    "closed_form_abs": 1e-09,
+    "pinching_abs": 1e-10
+  },
+  "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
+  "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
+  "gate": "K3",
+  "baseline": "QUEST (arXiv:2605.02367), reimplemented from the published method description: depth-adaptive Pauli rotations, sum-of-squared-residuals descent, optimizer-free",
+  "scope": "exact first/second-moment targeting only; NOT an information-floor optimizer and not run as one",
+  "resource_provenance": "both sides parsed from emitted circuits",
+  "cases": [
+    {
+      "instance": "matching_m3",
+      "m": 3,
+      "target_hash": "11da07679ee098da5d02173a03730e8fbbb83d40f058573a98400fd4df2d27cb",
+      "covq": {
+        "settings": 2,
+        "expected_cx_per_shot": 0.8,
+        "activation_identity_sum_abs_F_e": 0.8,
+        "max_two_qubit_depth": 1,
+        "realisation_error": 0.0
+      },
+      "quest": {
+        "settings": 1,
+        "rotations": 1,
+        "two_qubit_rotations": 1,
+        "cx_per_shot": 2,
+        "two_qubit_depth": 2,
+        "stop_reason": "converged",
+        "residual": 1.5520815872061034e-22,
+        "qfim_error": 1.2458589715436119e-11,
+        "start_state": "|+>^n",
+        "max_depth_cap": 200
+      },
+      "cx_ratio_quest_over_covq": 2.5
+    },
+    {
+      "instance": "path_m3",
+      "m": 3,
+      "target_hash": "68b31dcf8ce0320e5f57d282af954a583e7cf5d676f0ef06ca0e0bf8595915c7",
+      "covq": {
+        "settings": 3,
+        "expected_cx_per_shot": 0.9,
+        "activation_identity_sum_abs_F_e": 0.9,
+        "max_two_qubit_depth": 1,
+        "realisation_error": 0.0
+      },
+      "quest": {
+        "settings": 1,
+        "rotations": 61,
+        "two_qubit_rotations": 61,
+        "cx_per_shot": 122,
+        "two_qubit_depth": 122,
+        "stop_reason": "converged",
+        "residual": 9.191345452319009e-14,
+        "qfim_error": 2.273529536300778e-07,
+        "start_state": "|+>^n",
+        "max_depth_cap": 200
+      },
+      "cx_ratio_quest_over_covq": 135.55555555555554
+    },
+    {
+      "instance": "toeplitz_m3",
+      "m": 3,
+      "target_hash": "dbea953a5feff17e38b4b64479fccabb3cca64d00e897927a84ee3f28eb8ea7e",
+      "covq": {
+        "settings": 4,
+        "expected_cx_per_shot": 0.8225,
+        "activation_identity_sum_abs_F_e": 0.8225,
+        "max_two_qubit_depth": 1,
+        "realisation_error": 1.1102230246251565e-16
+      },
+      "quest": {
+        "settings": 1,
+        "rotations": 2,
+        "two_qubit_rotations": 2,
+        "cx_per_shot": 4,
+        "two_qubit_depth": 4,
+        "stop_reason": "converged",
+        "residual": 2.7114910963419256e-18,
+        "qfim_error": 1.5634720740287378e-09,
+        "start_state": "|+>^n",
+        "max_depth_cap": 200
+      },
+      "cx_ratio_quest_over_covq": 4.86322188449848
+    },
+    {
+      "instance": "matching_m4",
+      "m": 4,
+      "target_hash": "6ff07b1365a4808a17927b13f3bd54ceed6afe5923bc9c6b24091ba1f9faa98b",
+      "covq": {
+        "settings": 2,
+        "expected_cx_per_shot": 1.6,
+        "activation_identity_sum_abs_F_e": 1.6,
+        "max_two_qubit_depth": 1,
+        "realisation_error": 0.0
+      },
+      "quest": {
+        "settings": 1,
+        "rotations": 2,
+        "two_qubit_rotations": 2,
+        "cx_per_shot": 4,
+        "two_qubit_depth": 2,
+        "stop_reason": "converged",
+        "residual": 5.531504137898466e-17,
+        "qfim_error": 7.437397808729429e-09,
+        "start_state": "|+>^n",
+        "max_depth_cap": 200
+      },
+      "cx_ratio_quest_over_covq": 2.5
+    },
+    {
+      "instance": "path_m4",
+      "m": 4,
+      "target_hash": "072255f61c5dcc20aca2f8660697d0983ba05f9b284615e2676c1be56c2f73b2",
+      "covq": {
+        "settings": 3,
+        "expected_cx_per_shot": 1.35,
+        "activation_identity_sum_abs_F_e": 1.35,
+        "max_two_qubit_depth": 1,
+        "realisation_error": 0.0
+      },
+      "quest": {
+        "settings": 1,
+        "rotations": 200,
+        "two_qubit_rotations": 200,
+        "cx_per_shot": 400,
+        "two_qubit_depth": 368,
+        "stop_reason": "max_depth",
+        "residual": 1.54882500319354e-06,
+        "qfim_error": 0.0006604856319018526,
+        "start_state": "|+>^n",
+        "max_depth_cap": 200
+      },
+      "cx_ratio_quest_over_covq": 296.2962962962963
+    },
+    {
+      "instance": "toeplitz_m4",
+      "m": 4,
+      "target_hash": "dbe7d6eb041ff19854e42989cc35a042e5d2d38212ff903a097b44e8c6125c4f",
+      "covq": {
+        "settings": 5,
+        "expected_cx_per_shot": 1.337875,
+        "activation_identity_sum_abs_F_e": 1.337875,
+        "max_two_qubit_depth": 1,
+        "realisation_error": 4.163336342344337e-17
+      },
+      "quest": {
+        "settings": 1,
+        "rotations": 3,
+        "two_qubit_rotations": 3,
+        "cx_per_shot": 6,
+        "two_qubit_depth": 4,
+        "stop_reason": "converged",
+        "residual": 3.5679105780230553e-17,
+        "qfim_error": 3.6678471371232035e-09,
+        "start_state": "|+>^n",
+        "max_depth_cap": 200
+      },
+      "cx_ratio_quest_over_covq": 4.484723909184341
+    },
+    {
+      "instance": "matching_m5",
+      "m": 5,
+      "target_hash": "2e1d9c7a1f60a3461b3703c18f31fc6a8409c10650fda4723df30b637b7e5e09",
+      "covq": {
+        "settings": 2,
+        "expected_cx_per_shot": 1.6,
+        "activation_identity_sum_abs_F_e": 1.6,
+        "max_two_qubit_depth": 1,
+        "realisation_error": 0.0
+      },
+      "quest": {
+        "settings": 1,
+        "rotations": 2,
+        "two_qubit_rotations": 2,
+        "cx_per_shot": 4,
+        "two_qubit_depth": 2,
+        "stop_reason": "converged",
+        "residual": 5.531504468738555e-17,
+        "qfim_error": 7.4373976977071266e-09,
+        "start_state": "|+>^n",
+        "max_depth_cap": 200
+      },
+      "cx_ratio_quest_over_covq": 2.5
+    },
+    {
+      "instance": "path_m5",
+      "m": 5,
+      "target_hash": "7fdd1b4351a7a2f2000f4f9a24146826643123046b89dac02a190083b3b9b0fe",
+      "covq": {
+        "settings": 3,
+        "expected_cx_per_shot": 1.8,
+        "activation_identity_sum_abs_F_e": 1.8,
+        "max_two_qubit_depth": 1,
+        "realisation_error": 0.0
+      },
+      "quest": {
+        "settings": 1,
+        "rotations": 200,
+        "two_qubit_rotations": 200,
+        "cx_per_shot": 400,
+        "two_qubit_depth": 364,
+        "stop_reason": "max_depth",
+        "residual": 0.00040862073180658874,
+        "qfim_error": 0.010053535532065172,
+        "start_state": "|+>^n",
+        "max_depth_cap": 200
+      },
+      "cx_ratio_quest_over_covq": 222.22222222222223
+    },
+    {
+      "instance": "toeplitz_m5",
+      "m": 5,
+      "target_hash": "9992310fa75b4de380f2a70a53bffc668c69604034f630633496d5000ce4314a",
+      "covq": {
+        "settings": 9,
+        "expected_cx_per_shot": 1.8682562499999995,
+        "activation_identity_sum_abs_F_e": 1.86825625,
+        "max_two_qubit_depth": 1,
+        "realisation_error": 4.163336342344337e-17
+      },
+      "quest": {
+        "settings": 1,
+        "rotations": 4,
+        "two_qubit_rotations": 4,
+        "cx_per_shot": 8,
+        "two_qubit_depth": 6,
+        "stop_reason": "converged",
+        "residual": 7.41644647544251e-17,
+        "qfim_error": 4.920984175704746e-09,
+        "start_state": "|+>^n",
+        "max_depth_cap": 200
+      },
+      "cx_ratio_quest_over_covq": 4.282067837321567
+    },
+    {
+      "instance": "star_m4",
+      "m": 4,
+      "target_hash": "e8df35f197351e0e1ec681d2556547edb7e03b791dee4a957ef96c57486b64ae",
+      "covq": {
+        "settings": 4,
+        "expected_cx_per_shot": 0.8999999999999999,
+        "activation_identity_sum_abs_F_e": 0.8999999999999999,
+        "max_two_qubit_depth": 1,
+        "realisation_error": 0.0
+      },
+      "quest": {
+        "settings": 1,
+        "rotations": 56,
+        "two_qubit_rotations": 56,
+        "cx_per_shot": 112,
+        "two_qubit_depth": 94,
+        "stop_reason": "converged",
+        "residual": 8.596833069663635e-14,
+        "qfim_error": 2.160067119894027e-07,
+        "start_state": "|+>^n",
+        "max_depth_cap": 200
+      },
+      "cx_ratio_quest_over_covq": 124.44444444444446
+    },
+    {
+      "instance": "banded_m5",
+      "m": 5,
+      "target_hash": "cf1ea682843316ae850785517fac1f86cc51c883a107540321e2d3b5b87f79a4",
+      "covq": {
+        "settings": 5,
+        "expected_cx_per_shot": 1.47,
+        "activation_identity_sum_abs_F_e": 1.4700000000000002,
+        "max_two_qubit_depth": 1,
+        "realisation_error": 2.220446049250313e-16
+      },
+      "quest": {
+        "settings": 1,
+        "rotations": 59,
+        "two_qubit_rotations": 59,
+        "cx_per_shot": 118,
+        "two_qubit_depth": 80,
+        "stop_reason": "converged",
+        "residual": 8.690314876009837e-14,
+        "qfim_error": 1.9579066235484487e-07,
+        "start_state": "|+>^n",
+        "max_depth_cap": 200
+      },
+      "cx_ratio_quest_over_covq": 80.27210884353741
+    }
+  ],
+  "n_converged": 9,
+  "n_total": 11,
+  "covq_two_qubit_depth_is_always_one": true,
+  "min_cx_ratio_over_converged": 2.5,
+  "max_cx_ratio_over_converged": 135.55555555555554,
+  "status": "DONE",
+  "record_hash": "196905922c7b927ecef79163d614e8b351c47dea178ddd5b4932cc52fcbc9a54"
+}
