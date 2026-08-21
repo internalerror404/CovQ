@@ -1085,16 +1085,83 @@ def test_estimator_mle_is_consistent_and_saturates_the_cramer_rao_bound():
 # K3: the QUEST baseline (arXiv:2605.02367), exact-target mode only.
 # ----------------------------------------------------------------------
 
+def test_quest_published_beats_the_greedy_routine_by_an_order_of_magnitude():
+    """The fidelity gap, pinned so it cannot be forgotten again.
+
+    Published QUEST runs two phases per iteration: insert one rotation, then
+    **jointly reoptimise every accumulated angle**.  The earlier routine in this
+    package omits phase two, and that omission is not cosmetic -- later
+    rotations routinely make earlier angles suboptimal, so without
+    reoptimisation the depth required to hit a target is a large overestimate
+    and any resource comparison built on it understates the baseline.
+    """
+    from covq.quest import moment_constraints, quest, quest_published
+
+    m = 4
+    ps = z_generators(m)
+    F = np.full((m, m), 0.4)
+    np.fill_diagonal(F, 1.0)
+    cons = moment_constraints(ps, F)
+
+    greedy = quest(cons, m, max_depth=60, tol=1e-13)
+    published = quest_published(cons, m, variant="tE", max_depth=60, tol=1e-13)
+    assert greedy.stop_reason == "converged"
+    assert published.stop_reason == "converged"
+    assert published.two_qubit_rotations * 5 < greedy.two_qubit_rotations, (
+        published.two_qubit_rotations, greedy.two_qubit_rotations)
+
+
+def test_quest_published_variants_agree_on_the_registered_surface():
+    """``bE`` searches every insertion position; ``tE`` only the terminal one."""
+    from covq.instances import toeplitz_like
+    from covq.quest import moment_constraints, quest_published
+
+    m = 3
+    ps = z_generators(m)
+    cons = moment_constraints(ps, toeplitz_like(m, 0.35).F)
+    te = quest_published(cons, m, variant="tE", max_depth=40, tol=1e-13)
+    be = quest_published(cons, m, variant="bE", max_depth=40, tol=1e-13)
+    assert te.stop_reason == be.stop_reason == "converged"
+    assert be.two_qubit_rotations <= te.two_qubit_rotations
+
+
+def test_quest_published_gradient_matches_finite_differences():
+    """The adjoint gradient drives the joint phase; a wrong one would fail silently."""
+    from covq.quest import PauliRotation, _cost_and_grad, _dense, moment_constraints
+
+    rng = np.random.default_rng(3)
+    n = 3
+    ps = z_generators(n)
+    F = np.full((n, n), 0.3)
+    np.fill_diagonal(F, 1.0)
+    obs = [(np.asarray(O), float(t)) for O, t in moment_constraints(ps, F)]
+    rots = [(None, _dense(PauliRotation(((0, "X"), (1, "Y"))).axes, n)),
+            (None, _dense(PauliRotation(((2, "Z"),)).axes, n)),
+            (None, _dense(PauliRotation(((1, "X"), (2, "X"))).axes, n))]
+    psi0 = np.ones(1 << n, dtype=complex) / math.sqrt(1 << n)
+    angles = list(rng.uniform(-2, 2, len(rots)))
+    _, grad = _cost_and_grad(angles, rots, psi0, obs)
+    eps = 1e-6
+    for k in range(len(angles)):
+        up, dn = list(angles), list(angles)
+        up[k] += eps
+        dn[k] -= eps
+        fd = (_cost_and_grad(up, rots, psi0, obs)[0]
+              - _cost_and_grad(dn, rots, psi0, obs)[0]) / (2 * eps)
+        assert grad[k] == pytest.approx(fd, abs=1e-6), (k, grad[k], fd)
+
+
 def test_quest_hits_exact_first_and_second_moment_targets():
     """The baseline must actually work before any comparison means anything."""
     from covq.instances import matching_target, toeplitz_like
-    from covq.quest import moment_constraints, quest
+    from covq.quest import moment_constraints, quest_published
 
     for name, F, m in (("matching3", matching_target(3, np.random.default_rng(39), load=0.8).F, 3),
                        ("toeplitz3", toeplitz_like(3, 0.35).F, 3),
                        ("toeplitz4", toeplitz_like(4, 0.35).F, 4)):
         ps = z_generators(m)
-        res = quest(moment_constraints(ps, F), m, max_depth=48, tol=1e-13)
+        res = quest_published(moment_constraints(ps, F), m, variant="tE",
+                              max_depth=48, tol=1e-13)
         assert res.stop_reason == "converged", (name, res.stop_reason, res.residual)
         psi = res.state / np.linalg.norm(res.state)
         assert qfim_from_statevector(psi, ps) == pytest.approx(F, abs=1e-5)

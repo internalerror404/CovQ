@@ -19,7 +19,7 @@ from covq.noise import (FROZEN_PILOT_POLICY, BlockLocalNoise, branch_template,
 from covq.paulis import z_generators
 from covq.polytope import exact_decompose
 from covq.programs import single_pure_state_program
-from covq.quest import moment_constraints, quest
+from covq.quest import moment_constraints, quest_published
 from covq.sim import simulate
 from covq.width import decompose_width2
 
@@ -112,7 +112,8 @@ def quest_operational_comparison() -> dict:
 
     F_target = np.full((m, m), 0.4)
     np.fill_diagonal(F_target, 1.0)
-    qr = quest(moment_constraints(ps, F_target), m, max_depth=200, tol=1e-13)
+    qr = quest_published(moment_constraints(ps, F_target), m, variant='tE',
+                         max_depth=80, tol=1e-13)
 
     dec = exact_decompose(F_target)
     sparse_prog = single_pure_state_program(dec.signs, dec.weights)
@@ -159,8 +160,8 @@ def quest_operational_comparison() -> dict:
                 "covq_metric": "classical Fisher matrix of the emitted readout under the "
                                "frozen f=0.02 two-quadrature pilot policy; the "
                                "matched-analyzer value is retained only as a ceiling",
-                "quest_metric": "mixed-state SLD QFIM (optimistic upper bound, no readout "
-                                "compiled)",
+                "quest_metric": "mixed-state SLD QFIM of QUEST-tE (optimistic upper "
+                                "bound, no readout compiled)",
                 "sparse_metric": "mixed-state SLD QFIM (optimistic upper bound)",
                 "two_qubit_noise": "charged per emitted two-qubit gate on every arm",
                 "shot_metric": "shots to satisfy A^T F A >= G_req, i.e. 1 / floor margin",
@@ -172,6 +173,7 @@ def quest_operational_comparison() -> dict:
                           "reflects that circuit, not an intrinsic property of "
                           "single-state realisation",
             },
+            "quest_variant": "tE (published: insert, then joint L-BFGS reoptimisation)",
             "quest_preparation": {"stop_reason": qr.stop_reason,
                                   "rotations": qr.depth_adaptive_length,
                                   "two_qubit_rotations": qr.two_qubit_rotations},

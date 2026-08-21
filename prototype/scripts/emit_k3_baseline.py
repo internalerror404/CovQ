@@ -26,30 +26,24 @@ from covq.instances import banded, matching_target, path_target, star_target, to
 from covq.paulis import z_generators
 from covq.programs import labelled_schedule_from_width
 from covq.qfim import qfim_from_statevector
-from covq.quest import moment_constraints, quest, quest_circuit
+from covq.quest import moment_constraints, quest_circuit, quest_published
 from covq.width import decompose_width2
 
-MAX_DEPTH = 200
-N_RESTARTS = 4          # greedy methods are restarted as a matter of course
+MAX_DEPTH = 80
+VARIANT = "tE"          # terminal exact insertion, per the published algorithm
 
 
 def best_quest(cons, m, rng):
-    """Best of ``|+>^m`` plus random Haar-ish starts.
+    """QUEST as published: insertion followed by joint angle reoptimisation.
 
-    Greedy descent is restart-sensitive and it would be unfair to report its
-    first attempt.  ``path``-family targets in particular converge in ~80
-    rotations from a random start while grinding past 400 from ``|+>^m``.
+    The earlier terminal-greedy routine is not QUEST and is no longer used here;
+    see ``docs/audits/QUEST_FIDELITY_AUDIT_v0.4.md``.  Restarts are unnecessary
+    for the published algorithm on this surface -- every registered target
+    converges from ``|+>^m`` -- so the restart machinery is gone rather than
+    left switched off.
     """
-    best = quest(cons, m, max_depth=MAX_DEPTH, tol=1e-13)
-    tried = 1
-    while best.stop_reason != "converged" and tried <= N_RESTARTS:
-        v = rng.normal(size=1 << m) + 1j * rng.normal(size=1 << m)
-        v /= np.linalg.norm(v)
-        cand = quest(cons, m, max_depth=MAX_DEPTH, tol=1e-13, psi0=v)
-        if cand.residual < best.residual:
-            best = cand
-        tried += 1
-    return best, tried
+    return quest_published(cons, m, variant=VARIANT, max_depth=MAX_DEPTH,
+                           tol=1e-13), 1
 
 
 def families():
@@ -98,7 +92,7 @@ def run() -> dict:
                 "stop_reason": res.stop_reason,
                 "residual": res.residual,
                 "qfim_error": float(np.abs(qfim_from_statevector(psi, ps) - F).max()),
-                "start_state": "|+>^n then random restarts",
+                "start_state": "|+>^n",
                 "starts_tried": tried,
                 "max_depth_cap": MAX_DEPTH,
             },
@@ -112,9 +106,14 @@ def run() -> dict:
                  and c["quest"]["stop_reason"] == "converged"]
     return {
         "gate": "K3",
-        "baseline": "QUEST (arXiv:2605.02367), reimplemented from the published "
-                    "method description: depth-adaptive Pauli rotations, "
-                    "sum-of-squared-residuals descent, optimizer-free",
+        "baseline": "QUEST-tE (arXiv:2605.02367; Mahapatra and Kadiri), implemented "
+                    "from the published method description: per iteration, insert one "
+                    "Pauli rotation chosen by exact one-angle minimisation, then "
+                    "jointly reoptimise every accumulated angle by L-BFGS",
+        "variant": VARIANT,
+        "supersedes": "the terminal-greedy routine used before v0.4, which omitted the "
+                      "joint reoptimisation phase and is therefore not QUEST; it "
+                      "understated the baseline by roughly an order of magnitude",
         "scope": "exact first/second-moment targeting only; NOT an information-floor "
                  "optimizer and not run as one",
         "resource_provenance": "both sides parsed from emitted circuits",

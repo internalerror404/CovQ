@@ -1,13 +1,27 @@
 """QUEST baseline: expectation-value targeting by depth-adaptive Pauli rotations.
 
-Reimplementation of the method of arXiv:2605.02367, *Quantum State Engineering
-Under Multiple Expectation-Value Constraints* (QUEST, "Quantum Unitary
-Engineering of States to Target"), from its published description: the
-engineered state is built as a **depth-adaptive sequence of Pauli rotations**,
-each rotation chosen to descend a **sum-of-squared-residuals** cost, with no
-high-dimensional classical optimizer.  Written from the paper's method
-description rather than from released source; it is a faithful reimplementation
-of the stated algorithm, not a port, and should be read as such.
+Two implementations live here, and only one of them is QUEST.
+
+:func:`quest_published` implements the algorithm of arXiv:2605.02367 --
+Mahapatra and Kadiri, *Quantum State Engineering Under Multiple
+Expectation-Value Constraints*; QUEST expands to "Quantum Unitary Engineering
+of States to Target".  Every published variant runs **two phases per
+iteration**: insert one Pauli rotation, then **jointly reoptimise all
+accumulated angles** by classical optimisation (L-BFGS in the paper's numerical
+study).  ``variant='tE'`` inserts only at the terminal position;
+``variant='bE'`` searches every insertion position.  Written from the published
+method description rather than from released source.
+
+:func:`quest` is the *earlier* routine and is **not QUEST**.  It appends only at
+the terminal position and never reoptimises earlier angles, so it is a terminal
+greedy Pauli-path expectation-targeting baseline inspired by QUEST.  It was
+originally described here as a faithful reimplementation; that was wrong, and
+the fidelity audit in ``docs/audits/QUEST_FIDELITY_AUDIT_v0.4.md`` is what
+caught it.  The omission is not cosmetic: on the registered ``m = 4`` contract
+target the greedy routine needs 50 rotations and 44 two-qubit gates where
+QUEST-tE needs 4 and 3.  Any resource comparison built on the greedy routine
+understates the baseline by an order of magnitude, so it is retained only as a
+labelled ablation and must never be reported as QUEST.
 
 Why this is the right comparator, and only here.  CovQ's *exact-target* mode
 asks for a state whose first and second generator moments hit prescribed
@@ -242,3 +256,162 @@ def quest_circuit(result: QuestResult, n: int) -> Circuit:
             else:
                 c.h(q); c.s(q)
     return c
+
+
+# ----------------------------------------------------------------------
+# The published algorithm: insertion + joint reoptimisation
+# ----------------------------------------------------------------------
+
+def _forward(rots, angles, psi0):
+    """States after each prefix: ``phi[k] = R_k ... R_1 |psi0>``, with ``phi[0] = psi0``."""
+    out = [psi0]
+    cur = psi0
+    for (_, dense), t in zip(rots, angles):
+        cur = _apply_rotation(cur, dense, t)
+        out.append(cur)
+    return out
+
+
+def _cost_and_grad(angles, rots, psi0, obs):
+    """Sum-of-squared-residuals cost and its exact gradient.
+
+    The gradient is adjoint, not finite-difference and not parameter-shift.
+    Writing ``W = sum_c 2 (<O_c> - tau_c) O_c``, the chain rule collapses every
+    observable into one operator, so a single backward sweep gives every angle
+    derivative:
+
+        dC/dtheta_k = 2 Re <chi_k| (-i P_k / 2) |phi_k>,
+
+    with ``phi_k`` the forward prefix state and ``chi_k`` obtained by pulling
+    ``W|psi>`` back through the later rotations.  Cost is one forward and one
+    backward pass regardless of how many observables or angles there are, which
+    is what makes joint L-BFGS over all accumulated angles affordable at every
+    insertion.
+    """
+    phis = _forward(rots, angles, psi0)
+    psi = phis[-1]
+    resid = []
+    w = np.zeros_like(psi)
+    for O, tau in obs:
+        Opsi = O @ psi
+        v = float(np.real(np.vdot(psi, Opsi)))
+        resid.append((v - tau) ** 2)
+        w = w + 2.0 * (v - tau) * Opsi
+    cost = float(sum(resid))
+
+    grad = np.zeros(len(angles))
+    chi = w
+    for k in range(len(angles) - 1, -1, -1):
+        _, dense = rots[k]
+        # Undo R_k on the adjoint state, then contract with the generator.
+        chi = _apply_rotation(chi, dense, -angles[k])
+        dpsi = -0.5j * (dense @ phis[k])
+        grad[k] = 2.0 * float(np.real(np.vdot(chi, dpsi)))
+    return cost, grad
+
+
+def _best_single_angle(rots, angles, psi0, obs, cand_dense, position, grid):
+    """Exact one-angle minimum for inserting ``cand_dense`` at ``position``."""
+    trial_rots = rots[:position] + [(None, cand_dense)] + rots[position:]
+    base = list(angles[:position]) + [0.0] + list(angles[position:])
+    ts = np.linspace(-math.pi, math.pi, grid, endpoint=False)
+    best_t, best_c = 0.0, np.inf
+    for t in ts:
+        base[position] = float(t)
+        c, _ = _cost_and_grad(base, trial_rots, psi0, obs)
+        if c < best_c:
+            best_t, best_c = float(t), c
+    lo, hi = best_t - math.pi / grid, best_t + math.pi / grid
+    phi = (math.sqrt(5.0) - 1.0) / 2.0
+    a, b = lo, hi
+    c1, d1 = b - phi * (b - a), a + phi * (b - a)
+
+    def f(t):
+        base[position] = float(t)
+        return _cost_and_grad(base, trial_rots, psi0, obs)[0]
+
+    fc, fd = f(c1), f(d1)
+    for _ in range(40):
+        if fc < fd:
+            b, d1, fd = d1, c1, fc
+            c1 = b - phi * (b - a)
+            fc = f(c1)
+        else:
+            a, c1, fc = c1, d1, fd
+            d1 = a + phi * (b - a)
+            fd = f(d1)
+    t = c1 if fc < fd else d1
+    return float(t), float(min(fc, fd))
+
+
+def quest_published(constraints, n: int, pool=None, variant: str = "tE",
+                    max_depth: int = 64, tol: float = 1e-12,
+                    psi0: np.ndarray | None = None, grid: int = 64,
+                    maxiter: int = 200) -> QuestResult:
+    """QUEST as published (arXiv:2605.02367): insert, then jointly reoptimise.
+
+    Each iteration has the paper's two phases:
+
+    1. **insert one Pauli rotation**, chosen by the exact one-angle minimum of
+       the sum-of-squared-residuals cost.  ``variant='tE'`` searches only the
+       terminal position; ``variant='bE'`` searches every insertion position,
+       which the paper reports as the faster exact variant.
+    2. **jointly reoptimise every accumulated angle** by L-BFGS.
+
+    Phase 2 is the load-bearing difference from a terminal greedy Pauli-path
+    method, and omitting it is what made the earlier implementation in this file
+    a QUEST-*inspired* baseline rather than QUEST.  Later rotations routinely
+    make earlier angles suboptimal; without reoptimisation the depth needed to
+    hit a target is an overestimate, and any resource comparison built on it
+    understates the baseline.
+    """
+    from scipy.optimize import minimize
+
+    if variant not in ("tE", "bE"):
+        raise ValueError("variant must be 'tE' (terminal exact) or 'bE' (best-position)")
+    pool = default_pool(n) if pool is None else pool
+    dense_pool = [(r, _dense(r.axes, n)) for r in pool]
+    obs = [(np.asarray(O), float(tau)) for O, tau in constraints]
+
+    if psi0 is None:
+        psi0 = np.ones(1 << n, dtype=complex) / math.sqrt(1 << n)
+    else:
+        psi0 = psi0.astype(complex)
+
+    rots: list = []
+    angles: list[float] = []
+    history = [float(sum((np.real(np.vdot(psi0, O @ psi0)) - tau) ** 2 for O, tau in obs))]
+    stop = "max_depth"
+
+    for _ in range(max_depth):
+        if history[-1] <= tol:
+            stop = "converged"
+            break
+        positions = [len(rots)] if variant == "tE" else list(range(len(rots) + 1))
+        best = None
+        for rot, dense in dense_pool:
+            for pos in positions:
+                t, c = _best_single_angle(rots, angles, psi0, obs, dense, pos, grid)
+                if best is None or c < best[0]:
+                    best = (c, rot, dense, pos, t)
+        _, rot, dense, pos, t = best
+        rots.insert(pos, (rot, dense))
+        angles.insert(pos, t)
+
+        # Phase 2: joint reoptimisation of every accumulated angle.
+        res = minimize(lambda a: _cost_and_grad(list(a), rots, psi0, obs), np.array(angles),
+                       jac=True, method="L-BFGS-B", options={"maxiter": maxiter})
+        if res.fun <= _cost_and_grad(angles, rots, psi0, obs)[0]:
+            angles = [float(x) for x in res.x]
+        cost = _cost_and_grad(angles, rots, psi0, obs)[0]
+        if cost >= history[-1] - 1e-15:
+            history.append(cost)
+            stop = "stalled"
+            break
+        history.append(cost)
+
+    psi = _forward(rots, angles, psi0)[-1]
+    return QuestResult(history[-1] <= tol, history[-1],
+                       [(r, float(t)) for (r, _), t in zip(rots, angles)],
+                       psi, history,
+                       "converged" if history[-1] <= tol else stop)

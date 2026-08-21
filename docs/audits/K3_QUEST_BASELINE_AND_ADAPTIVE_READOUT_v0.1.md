@@ -1,3 +1,16 @@
+> ## ⚠ RETRACTED IN PART — superseded by `K3_QUEST_BASELINE_v0.2.md`
+>
+> Every QUEST number in this document was produced by a baseline that is **not
+> QUEST**. Published QUEST runs two phases per iteration — insert a rotation,
+> then *jointly reoptimise all accumulated angles*. The implementation used here
+> omitted the second phase entirely, which understated the baseline by roughly
+> an order of magnitude. The corrected results are in
+> `K3_QUEST_BASELINE_v0.2.md`; the fault is diagnosed in
+> `QUEST_FIDELITY_AUDIT_v0.4.md`.
+>
+> The adaptive-recentering half of this document (C10e / M5) is unaffected and
+> stands.
+
 # K3 — the QUEST baseline, and where the operating point comes from
 
 Evidence: `prototype/src/covq/quest.py`, `prototype/src/covq/estimator.py`,
