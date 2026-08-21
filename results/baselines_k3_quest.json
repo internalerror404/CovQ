@@ -1,6 +1,6 @@
 {
   "schema_version": "covq.measurement.record/0.1",
-  "source_commit": "26ed00e3d2f16576be88427690b1be79dea14026",
+  "source_commit": "c13e1ee954d539ccd0838bf7980d330be9893c87",
   "dirty": true,
   "tolerances": {
     "attainment_abs": 1e-09,
@@ -307,5 +307,5 @@
   "min_cx_ratio_over_converged": 2.5,
   "max_cx_ratio_over_converged": 135.55555555555554,
   "status": "DONE",
-  "record_hash": "1e98aec1b755f5abaea87c2afdd1541211699e884ac173d65eb0555fe1ed53f8"
+  "record_hash": "02e3b402e0bcb3489e37ac9252d1b1e25cca02c5d4f16e5deba65f2b8f0c1997"
 }

@@ -10,6 +10,20 @@ Current documents: `charter/*_v0.3.*`. Proof of record:
 program → hardware-native Bell-pair schedule. The `k = 2` theorem is the engine; the
 information-floor compiler is the reason anyone needs the engine.
 
+## Journal release gates (v0.4)
+
+| gate | status | note |
+|---|---|---|
+| `J0` scope freeze | `DONE` | `REGISTRATION.md`; targets, seeds, tolerances, grids, restart rules, cost models and baseline rules all pinned. |
+| `J1` independent SLD regression | `DONE` | `prototype/tests/test_mixed_qfim_sld_regression.py`. Lyapunov solve vs spectral Eq (110): `1.33e-15` on 30 full-rank complex states, against the registered `1e-10`. Rank-deficient states are singular by construction and are checked as a linearly convergent limit instead. |
+| `J2` frozen-pilot N10 | `DONE` | `f = 0.02`, phases `{0, π/2}`, pilot retained, globally fixed. Deployable overhead `1.10 %` → `1.44 %`; never below the oracle ceiling. |
+| `J3` clean pipeline | see below | Every canonical record regenerated from a clean tree. |
+| `J4` reproduction diff | see below | `results/reproduction_diff.json`, `docs/audits/JOURNAL_RELEASE_REPRODUCTION_v0.4.md`. |
+| `J5` documentation | `DONE` | `prototype/README.md` rewritten (it described an 85-test tree with no noise, estimator or QUEST work), `REGISTRATION.md` added, `STATUS.md` refreshed. |
+| `J6` machine-generated paper | `PARTIAL / BLOCKED` | `results/table_manifest.json` binds every headline quantity to artifact, JSON pointer, record hash and source commit — the input a deterministic generator consumes. **The manuscript LaTeX source is not in this repository**, so the paper itself cannot be regenerated here. |
+| `J7` proof and citation audit | `PARTIAL` | `docs/audits/J7_PROOF_AUDIT_v0.4.md`. Self-audit only — it does not discharge the requirement for an independent reader. Four items flagged. Citations **not verifiable**: `arxiv.org` is blocked by the egress proxy. |
+| `J8` archive | `PARTIAL` | `results/RELEASE_MANIFEST.json` (SHA-256 over source and results, environment lock) and a release tag. **DOI minting is external.** PDF checksums need the PDF in-repo. |
+
 ## Disposition
 
 | Item | Status |

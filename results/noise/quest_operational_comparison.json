@@ -1,6 +1,6 @@
 {
   "schema_version": "covq.measurement.record/0.1",
-  "source_commit": "517e73f8d488af19a40c777155b5d0db48027bcb",
+  "source_commit": "c13e1ee954d539ccd0838bf7980d330be9893c87",
   "dirty": true,
   "tolerances": {
     "attainment_abs": 1e-09,
@@ -10,8 +10,20 @@
   "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
   "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
   "gate": "N10",
+  "frozen_deployable_policy": {
+    "pilot_fraction": 0.02,
+    "pilot_phases": [
+      0.0,
+      1.5707963267948966
+    ],
+    "pilot_in_final_likelihood": true,
+    "selection_type": "globally_fixed",
+    "registered_campaign_shots": 20000
+  },
+  "primary_covq_field": "covq_deployable_fixed_pilot_exposure",
+  "diagnostic_covq_field": "covq_oracle_angle_exposure",
   "accounting": {
-    "covq_metric": "classical Fisher matrix of the emitted, matched readout",
+    "covq_metric": "classical Fisher matrix of the emitted readout under the frozen f=0.02 two-quadrature pilot policy; the matched-analyzer value is retained only as a ceiling",
     "quest_metric": "mixed-state SLD QFIM (optimistic upper bound, no readout compiled)",
     "sparse_metric": "mixed-state SLD QFIM (optimistic upper bound)",
     "two_qubit_noise": "charged per emitted two-qubit gate on every arm",
@@ -29,6 +41,11 @@
   "rows": [
     {
       "edge_depolarizing": 0.0,
+      "covq_deployable_fixed_pilot_exposure": 1.7854844662521132,
+      "covq_oracle_angle_exposure": 1.766063548900464,
+      "deployable_over_oracle": 1.0109967262297783,
+      "deployable_floor_slack_min_eig": -4.3144123181310885e-08,
+      "deployable_status": "solved",
       "covq_shots_emitted_readout_cfi": 1.766063548900464,
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 3.532127097800928,
@@ -39,6 +56,11 @@
     },
     {
       "edge_depolarizing": 0.01,
+      "covq_deployable_fixed_pilot_exposure": 1.8219543336327084,
+      "covq_oracle_angle_exposure": 1.801921792572661,
+      "deployable_over_oracle": 1.0111173199317638,
+      "deployable_floor_slack_min_eig": -4.1448677691373334e-08,
+      "deployable_status": "solved",
       "covq_shots_emitted_readout_cfi": 1.801921792572661,
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 3.603843585145322,
@@ -49,6 +71,11 @@
     },
     {
       "edge_depolarizing": 0.02,
+      "covq_deployable_fixed_pilot_exposure": 1.859557084169793,
+      "covq_oracle_angle_exposure": 1.8388833287176847,
+      "deployable_over_oracle": 1.011242559617159,
+      "deployable_floor_slack_min_eig": -8.94257480361896e-08,
+      "deployable_status": "solved",
       "covq_shots_emitted_readout_cfi": 1.8388833287176847,
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 3.6777666574353693,
@@ -59,6 +86,11 @@
     },
     {
       "edge_depolarizing": 0.05,
+      "covq_deployable_fixed_pilot_exposure": 1.9796381987912088,
+      "covq_oracle_angle_exposure": 1.956857117895252,
+      "deployable_over_oracle": 1.0116416680030575,
+      "deployable_floor_slack_min_eig": -7.684824672673802e-08,
+      "deployable_status": "solved",
       "covq_shots_emitted_readout_cfi": 1.956857117895252,
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 3.913714235790504,
@@ -69,6 +101,11 @@
     },
     {
       "edge_depolarizing": 0.1,
+      "covq_deployable_fixed_pilot_exposure": 2.207357593902785,
+      "covq_oracle_angle_exposure": 2.180325369012919,
+      "deployable_over_oracle": 1.0123982526984512,
+      "deployable_floor_slack_min_eig": -3.616997898282379e-08,
+      "deployable_status": "solved",
       "covq_shots_emitted_readout_cfi": 2.180325369012919,
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 4.360650738025838,
@@ -79,6 +116,11 @@
     },
     {
       "edge_depolarizing": 0.2,
+      "covq_deployable_fixed_pilot_exposure": 2.7991476027280737,
+      "covq_oracle_angle_exposure": 2.759474295156976,
+      "deployable_over_oracle": 1.0143771252519824,
+      "deployable_floor_slack_min_eig": -7.259718833314686e-08,
+      "deployable_status": "solved",
       "covq_shots_emitted_readout_cfi": 2.759474295156976,
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 5.518948590313952,
@@ -89,5 +131,5 @@
     }
   ],
   "status": "DONE",
-  "record_hash": "1ca1d63d32276c3e2fc7066bbcfb856949597478dd01aa5acc794f8f654a4dcd"
+  "record_hash": "0fd584a0d881579b430c70375f518fcc1532b5d9f15575fe65b5a74bd9777331"
 }

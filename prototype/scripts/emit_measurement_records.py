@@ -52,11 +52,29 @@ def _git(*args, default="unknown"):
         return default
 
 
+SOURCE_PATHS = ("prototype/src", "prototype/tests", "prototype/scripts",
+                "STATUS.md", "REGISTRATION.md", "docs", "charter")
+
+
+def _source_dirty() -> bool:
+    """Uncommitted modifications to the **source** tree.
+
+    Deliberately excludes ``results/``.  A record's provenance answers "which
+    source produced this?", and every emitter necessarily modifies ``results/``
+    while running -- so a whole-tree check makes the first emitter of a run
+    report clean and every later one report dirty, which is an artefact of
+    ordering rather than a fact about the code.  Scoping the check to source
+    paths makes the flag mean what it is read as meaning.
+    """
+    return bool(_git("status", "--porcelain", "--", *SOURCE_PATHS))
+
+
 def _provenance() -> dict:
     return {
         "schema_version": SCHEMA,
         "source_commit": _git("rev-parse", "HEAD"),
-        "dirty": bool(_git("status", "--porcelain")),
+        "dirty": _source_dirty(),
+        "dirty_scope": list(SOURCE_PATHS),
         "tolerances": TOL,
         "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
         "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
