@@ -1,6 +1,6 @@
 {
   "schema_version": "covq.release_manifest/0.4",
-  "release_commit": "8c7ef7cc7290a0a7d8b07cf66fbec35a41bb4f2b",
+  "release_commit": "71a6f2a7f7f33696db37aea60a2f6e96def0b039",
   "source_dirty": false,
   "environment": {
     "python": "3.11.15",
@@ -52,8 +52,8 @@
     },
     {
       "path": "docs/audits/JOURNAL_RELEASE_REPRODUCTION_v0.4.md",
-      "bytes": 1611,
-      "sha256": "071c90ab4caffe3b7ce6274d6d3d10c95111d6fc28abb70b9ef9ec8da403e98a"
+      "bytes": 2722,
+      "sha256": "e449fa8d5ccd961f0b3e3061750e195cbfc69b71eefbc03c44cfcc7783f6e59d"
     },
     {
       "path": "docs/audits/K3_QUEST_BASELINE_AND_ADAPTIVE_READOUT_v0.1.md",
@@ -157,8 +157,8 @@
     },
     {
       "path": "prototype/scripts/emit_release_manifest.py",
-      "bytes": 2771,
-      "sha256": "51944926f3cd6f81f2be2cae9c2e23daa8f90e1004d196cc3f74ba2f9debb474"
+      "bytes": 3367,
+      "sha256": "e46d707402a029a80b5d81cdc07e541c7c15786e102fcac02197dab31e87eaa9"
     },
     {
       "path": "prototype/scripts/emit_table_manifest.py",
@@ -282,8 +282,8 @@
     },
     {
       "path": "results/RELEASE_MANIFEST.json",
-      "bytes": 12749,
-      "sha256": "f184854c445e3fe243ed48db787aa59887a9eac6433afa7a34a2c72ac26515c1"
+      "bytes": 13021,
+      "sha256": "669678c22c79416f4919e7decb434b060c6f9b3cd61276d49f6e207a023d1811"
     },
     {
       "path": "results/baselines_k3_quest.json",
@@ -376,5 +376,11 @@
       "sha256": "f98dc7359a9c4b28f4074064b2ee8968a3fec236659e9537fe928d805d3fab65"
     }
   ],
-  "manifest_sha256": "37a714f72a1857a7c13d173b8f72b3ed674420163dcaee5247d37dc79a072075"
+  "release_tag": {
+    "name": "covq-v0.4-journal-release",
+    "target_commit": "71a6f2a7f7f33696db37aea60a2f6e96def0b039",
+    "pushed": false,
+    "reason": "this environment's git proxy refuses refs/tags; branch refs push normally, so the commit SHA is the durable identifier"
+  },
+  "manifest_sha256": "1e90909e6c055ac6b74e2213f063303b88a8da23426ea4309fac762ec522e117"
 }
