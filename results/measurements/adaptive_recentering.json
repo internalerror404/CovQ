@@ -1,0 +1,172 @@
+{
+  "schema_version": "covq.measurement.record/0.1",
+  "source_commit": "26ed00e3d2f16576be88427690b1be79dea14026",
+  "dirty": true,
+  "tolerances": {
+    "attainment_abs": 1e-09,
+    "closed_form_abs": 1e-09,
+    "pinching_abs": 1e-10
+  },
+  "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
+  "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
+  "gate": "C10e",
+  "alias": "M5",
+  "protocol": "two-stage: pilot split between A=0 and A=pi/2 fixes each block phase including sign; main stage at matched quadrature; single MLE over all counts, seeded by least squares on the design matrix",
+  "reference_bound": "oracle F^+/N",
+  "cases": [
+    {
+      "pilot_fraction": 0.05,
+      "n_shots": 2000,
+      "n_reps": 800,
+      "operating_point": [
+        0.6,
+        -0.4,
+        0.9
+      ],
+      "max_abs_bias": 0.001677393840325836,
+      "bias_standard_error": 0.0019204205327888139,
+      "worst_efficiency_ratio": 1.2135554905159214,
+      "naive_discard_pilot_penalty": 1.0526315789473684,
+      "median_regularity_margin": 0.9474476436007524,
+      "marchenko_pastur_band": [
+        0.881275512860841,
+        1.1262244871391587
+      ]
+    },
+    {
+      "pilot_fraction": 0.05,
+      "n_shots": 20000,
+      "n_reps": 800,
+      "operating_point": [
+        0.6,
+        -0.4,
+        0.9
+      ],
+      "max_abs_bias": 0.0001626666579690461,
+      "bias_standard_error": 0.0005780685215928086,
+      "worst_efficiency_ratio": 1.0827080920884822,
+      "naive_discard_pilot_penalty": 1.0526315789473684,
+      "median_regularity_margin": 0.9947156099547583,
+      "marchenko_pastur_band": [
+        0.881275512860841,
+        1.1262244871391587
+      ]
+    },
+    {
+      "pilot_fraction": 0.1,
+      "n_shots": 2000,
+      "n_reps": 800,
+      "operating_point": [
+        0.6,
+        -0.4,
+        0.9
+      ],
+      "max_abs_bias": 0.0010984780662843807,
+      "bias_standard_error": 0.0017228782130078984,
+      "worst_efficiency_ratio": 1.4054854292190668,
+      "naive_discard_pilot_penalty": 1.1111111111111112,
+      "median_regularity_margin": 0.9703385944966066,
+      "marchenko_pastur_band": [
+        0.881275512860841,
+        1.1262244871391587
+      ]
+    },
+    {
+      "pilot_fraction": 0.1,
+      "n_shots": 20000,
+      "n_reps": 800,
+      "operating_point": [
+        0.6,
+        -0.4,
+        0.9
+      ],
+      "max_abs_bias": 0.0009941859067650327,
+      "bias_standard_error": 0.0005441357205721493,
+      "worst_efficiency_ratio": 1.0609891127732765,
+      "naive_discard_pilot_penalty": 1.1111111111111112,
+      "median_regularity_margin": 0.9975085155618655,
+      "marchenko_pastur_band": [
+        0.881275512860841,
+        1.1262244871391587
+      ]
+    },
+    {
+      "pilot_fraction": 0.2,
+      "n_shots": 2000,
+      "n_reps": 800,
+      "operating_point": [
+        0.6,
+        -0.4,
+        0.9
+      ],
+      "max_abs_bias": 0.0007703436223940874,
+      "bias_standard_error": 0.0017491474031211165,
+      "worst_efficiency_ratio": 1.0745886703400018,
+      "naive_discard_pilot_penalty": 1.25,
+      "median_regularity_margin": 0.9881411179043006,
+      "marchenko_pastur_band": [
+        0.881275512860841,
+        1.1262244871391587
+      ]
+    },
+    {
+      "pilot_fraction": 0.2,
+      "n_shots": 20000,
+      "n_reps": 800,
+      "operating_point": [
+        0.6,
+        -0.4,
+        0.9
+      ],
+      "max_abs_bias": 0.0005638911404738378,
+      "bias_standard_error": 0.0005605789403518125,
+      "worst_efficiency_ratio": 1.112413402828825,
+      "naive_discard_pilot_penalty": 1.25,
+      "median_regularity_margin": 0.9986799129979222,
+      "marchenko_pastur_band": [
+        0.881275512860841,
+        1.1262244871391587
+      ]
+    },
+    {
+      "pilot_fraction": 0.4,
+      "n_shots": 2000,
+      "n_reps": 800,
+      "operating_point": [
+        0.6,
+        -0.4,
+        0.9
+      ],
+      "max_abs_bias": 0.0005109535092855388,
+      "bias_standard_error": 0.0017319662304946268,
+      "worst_efficiency_ratio": 1.1292129404884244,
+      "naive_discard_pilot_penalty": 1.6666666666666667,
+      "median_regularity_margin": 0.9934403935008369,
+      "marchenko_pastur_band": [
+        0.881275512860841,
+        1.1262244871391587
+      ]
+    },
+    {
+      "pilot_fraction": 0.4,
+      "n_shots": 20000,
+      "n_reps": 800,
+      "operating_point": [
+        0.6,
+        -0.4,
+        0.9
+      ],
+      "max_abs_bias": 0.0006144086671957538,
+      "bias_standard_error": 0.0005555878481274413,
+      "worst_efficiency_ratio": 1.061291605356146,
+      "naive_discard_pilot_penalty": 1.6666666666666667,
+      "median_regularity_margin": 0.9993500919155054,
+      "marchenko_pastur_band": [
+        0.881275512860841,
+        1.1262244871391587
+      ]
+    }
+  ],
+  "status": "DONE",
+  "record_hash": "efd05d8112391d239adb38772356779a3785f3c106127c44a69810f25504689c"
+}

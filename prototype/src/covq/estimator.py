@@ -174,3 +174,116 @@ def efficiency_report(model: ScheduleModel, theta_true: np.ndarray, n_shots: int
         "empirical_covariance": emp,
         "cramer_rao_bound": crb,
     }
+
+
+# ----------------------------------------------------------------------
+# Adaptive recentering: where the operating point actually comes from
+# ----------------------------------------------------------------------
+
+def _stage_counts(model: ScheduleModel, theta: np.ndarray, analyzers: np.ndarray,
+                  n_shots: int, rng: np.random.Generator):
+    shifted = ScheduleModel(model.m, model.weights,
+                            [BlockChannel(c.branch, c.block, c.sign, float(a), c.visibility)
+                             for c, a in zip(model.channels, analyzers)])
+    return shifted, *sample_counts(shifted, theta, n_shots, rng)
+
+
+def adaptive_recentering(model: ScheduleModel, theta_true: np.ndarray, n_shots: int,
+                         rng: np.random.Generator, pilot_fraction: float = 0.1) -> dict:
+    """Two-stage protocol that needs no oracle knowledge of the operating point.
+
+    M2 shows the matched readout must be phased to the operating point, which
+    raises the obvious objection: the operating point is what we are trying to
+    estimate.  The resolution is standard two-stage adaptive estimation, and it
+    costs almost nothing here because the fringe is a pure sinusoid.
+
+    Stage 1 spends ``pilot_fraction`` of the budget split between analyzers
+    ``A = 0`` and ``A = pi/2``.  Those two settings determine ``cos phi_B`` and
+    ``sin phi_B``, hence ``phi_B`` itself including its sign -- one setting
+    alone cannot, since ``cos`` is even.  Stage 2 re-phases every block to
+    ``A_B = phi_B_hat - pi/2`` and spends the rest at unit regularity margin.
+
+    The final estimate is a single maximum likelihood over *all* counts from
+    both stages with their respective analyzers, so no pilot data is discarded.
+    """
+    n_pilot = max(2, int(round(pilot_fraction * n_shots)))
+    half = max(1, n_pilot // 2)
+    n_main = n_shots - 2 * half
+
+    zeros = np.zeros(len(model.channels))
+    quarter = np.full(len(model.channels), math.pi / 2.0)
+    m_a, k_a, n_a = _stage_counts(model, theta_true, zeros, half, rng)
+    m_b, k_b, n_b = _stage_counts(model, theta_true, quarter, half, rng)
+
+    # cos and sin of each block phase from the two pilot settings.
+    vis = np.array([c.visibility for c in model.channels])
+    cos_hat = np.clip((2.0 * k_a / np.maximum(n_a, 1) - 1.0) / np.maximum(vis, 1e-12), -1, 1)
+    sin_hat = np.clip((2.0 * k_b / np.maximum(n_b, 1) - 1.0) / np.maximum(vis, 1e-12), -1, 1)
+    phi_hat = np.arctan2(sin_hat, cos_hat)
+
+    analyzers = phi_hat - math.pi / 2.0
+    m_c, k_c, n_c = _stage_counts(model, theta_true, analyzers, n_main, rng)
+
+    def nll(theta):
+        return (neg_log_likelihood(theta, m_a, k_a, n_a)
+                + neg_log_likelihood(theta, m_b, k_b, n_b)
+                + neg_log_likelihood(theta, m_c, k_c, n_c))
+
+    # Seed the likelihood from the pilot itself, never from an oracle.  The
+    # pilot already gives every block phase, and the phases are linear in
+    # theta, so least squares on the design matrix is a consistent starting
+    # estimate.  Without it the likelihood is periodic and multimodal and BFGS
+    # from an arbitrary point lands in the wrong mode often enough to destroy
+    # the efficiency -- which is a real property of this problem, not a
+    # numerical nuisance, and is precisely why the pilot stage has to exist.
+    theta_seed, *_ = np.linalg.lstsq(model.design(), phi_hat, rcond=None)
+    res = minimize(nll, theta_seed, method="BFGS")
+    achieved = np.abs(np.sin(model.phases(theta_true) - analyzers))
+    return {
+        "estimate": res.x,
+        "pilot_seed": theta_seed,
+        "pilot_shots": 2 * half,
+        "main_shots": n_main,
+        "phi_hat": phi_hat,
+        "analyzers": analyzers,
+        "achieved_regularity_margin": float(achieved.min()),
+        "mean_regularity_margin": float(achieved.mean()),
+    }
+
+
+def adaptive_efficiency_report(model: ScheduleModel, theta_true: np.ndarray, n_shots: int,
+                               n_reps: int, rng: np.random.Generator,
+                               pilot_fraction: float = 0.1, tol: float = 1e-10) -> dict:
+    """Does the two-stage protocol still reach the oracle Cramer-Rao bound?
+
+    The reference is the *oracle* bound ``F^+/N`` -- the bound available to an
+    experimenter who already knew the operating point.  Paying a pilot fraction
+    to discover it must show up as an efficiency ratio above one, and the
+    overhead should track the pilot fraction rather than exceed it.
+    """
+    F = model.fisher()
+    w, V = np.linalg.eigh(F)
+    keep = w > tol
+    proj = V[:, keep]
+    d = int(keep.sum())
+
+    runs = [adaptive_recentering(model, theta_true, n_shots, rng, pilot_fraction)
+            for _ in range(n_reps)]
+    q = np.array([r["estimate"] for r in runs]) @ proj
+    bias = q.mean(axis=0) - proj.T @ theta_true
+    emp = np.atleast_2d(np.cov(q, rowvar=False))
+    crb = np.diag(1.0 / w[keep]) / n_shots
+    half = np.diag(1.0 / np.sqrt(np.diag(crb)))
+    ratio = np.linalg.eigvalsh(half @ emp @ half)
+    edge = math.sqrt(d / n_reps)
+    return {
+        "rank": d, "n_shots": n_shots, "n_reps": n_reps,
+        "pilot_fraction": pilot_fraction,
+        "max_abs_bias": float(np.abs(bias).max()),
+        "bias_standard_error": float(np.sqrt(np.diag(emp)).max() / math.sqrt(n_reps)),
+        "efficiency_eigenvalues": ratio,
+        "worst_efficiency_ratio": float(ratio.max()),
+        "median_regularity_margin": float(np.median([r["achieved_regularity_margin"]
+                                                     for r in runs])),
+        "mp_band": [(1.0 - edge) ** 2, (1.0 + edge) ** 2],
+    }

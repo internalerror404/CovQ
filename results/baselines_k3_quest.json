@@ -1,6 +1,6 @@
 {
   "schema_version": "covq.measurement.record/0.1",
-  "source_commit": "02dc0efa7e513974784d10dc38a9d08423b92adf",
+  "source_commit": "26ed00e3d2f16576be88427690b1be79dea14026",
   "dirty": true,
   "tolerances": {
     "attainment_abs": 1e-09,
@@ -34,7 +34,8 @@
         "stop_reason": "converged",
         "residual": 1.5520815872061034e-22,
         "qfim_error": 1.2458589715436119e-11,
-        "start_state": "|+>^n",
+        "start_state": "|+>^n then random restarts",
+        "starts_tried": 1,
         "max_depth_cap": 200
       },
       "cx_ratio_quest_over_covq": 2.5
@@ -59,7 +60,8 @@
         "stop_reason": "converged",
         "residual": 9.191345452319009e-14,
         "qfim_error": 2.273529536300778e-07,
-        "start_state": "|+>^n",
+        "start_state": "|+>^n then random restarts",
+        "starts_tried": 1,
         "max_depth_cap": 200
       },
       "cx_ratio_quest_over_covq": 135.55555555555554
@@ -84,7 +86,8 @@
         "stop_reason": "converged",
         "residual": 2.7114910963419256e-18,
         "qfim_error": 1.5634720740287378e-09,
-        "start_state": "|+>^n",
+        "start_state": "|+>^n then random restarts",
+        "starts_tried": 1,
         "max_depth_cap": 200
       },
       "cx_ratio_quest_over_covq": 4.86322188449848
@@ -109,7 +112,8 @@
         "stop_reason": "converged",
         "residual": 5.531504137898466e-17,
         "qfim_error": 7.437397808729429e-09,
-        "start_state": "|+>^n",
+        "start_state": "|+>^n then random restarts",
+        "starts_tried": 1,
         "max_depth_cap": 200
       },
       "cx_ratio_quest_over_covq": 2.5
@@ -127,17 +131,18 @@
       },
       "quest": {
         "settings": 1,
-        "rotations": 200,
-        "two_qubit_rotations": 200,
-        "cx_per_shot": 400,
-        "two_qubit_depth": 368,
-        "stop_reason": "max_depth",
-        "residual": 1.54882500319354e-06,
-        "qfim_error": 0.0006604856319018526,
-        "start_state": "|+>^n",
+        "rotations": 86,
+        "two_qubit_rotations": 79,
+        "cx_per_shot": 158,
+        "two_qubit_depth": 142,
+        "stop_reason": "converged",
+        "residual": 7.536131088218382e-14,
+        "qfim_error": 1.4531911112174374e-07,
+        "start_state": "|+>^n then random restarts",
+        "starts_tried": 2,
         "max_depth_cap": 200
       },
-      "cx_ratio_quest_over_covq": 296.2962962962963
+      "cx_ratio_quest_over_covq": 117.03703703703702
     },
     {
       "instance": "toeplitz_m4",
@@ -159,7 +164,8 @@
         "stop_reason": "converged",
         "residual": 3.5679105780230553e-17,
         "qfim_error": 3.6678471371232035e-09,
-        "start_state": "|+>^n",
+        "start_state": "|+>^n then random restarts",
+        "starts_tried": 1,
         "max_depth_cap": 200
       },
       "cx_ratio_quest_over_covq": 4.484723909184341
@@ -184,7 +190,8 @@
         "stop_reason": "converged",
         "residual": 5.531504468738555e-17,
         "qfim_error": 7.4373976977071266e-09,
-        "start_state": "|+>^n",
+        "start_state": "|+>^n then random restarts",
+        "starts_tried": 1,
         "max_depth_cap": 200
       },
       "cx_ratio_quest_over_covq": 2.5
@@ -203,16 +210,17 @@
       "quest": {
         "settings": 1,
         "rotations": 200,
-        "two_qubit_rotations": 200,
-        "cx_per_shot": 400,
-        "two_qubit_depth": 364,
+        "two_qubit_rotations": 178,
+        "cx_per_shot": 356,
+        "two_qubit_depth": 296,
         "stop_reason": "max_depth",
-        "residual": 0.00040862073180658874,
-        "qfim_error": 0.010053535532065172,
-        "start_state": "|+>^n",
+        "residual": 1.6098215977966945e-07,
+        "qfim_error": 0.00019251881403498095,
+        "start_state": "|+>^n then random restarts",
+        "starts_tried": 5,
         "max_depth_cap": 200
       },
-      "cx_ratio_quest_over_covq": 222.22222222222223
+      "cx_ratio_quest_over_covq": 197.77777777777777
     },
     {
       "instance": "toeplitz_m5",
@@ -234,7 +242,8 @@
         "stop_reason": "converged",
         "residual": 7.41644647544251e-17,
         "qfim_error": 4.920984175704746e-09,
-        "start_state": "|+>^n",
+        "start_state": "|+>^n then random restarts",
+        "starts_tried": 1,
         "max_depth_cap": 200
       },
       "cx_ratio_quest_over_covq": 4.282067837321567
@@ -259,7 +268,8 @@
         "stop_reason": "converged",
         "residual": 8.596833069663635e-14,
         "qfim_error": 2.160067119894027e-07,
-        "start_state": "|+>^n",
+        "start_state": "|+>^n then random restarts",
+        "starts_tried": 1,
         "max_depth_cap": 200
       },
       "cx_ratio_quest_over_covq": 124.44444444444446
@@ -284,17 +294,18 @@
         "stop_reason": "converged",
         "residual": 8.690314876009837e-14,
         "qfim_error": 1.9579066235484487e-07,
-        "start_state": "|+>^n",
+        "start_state": "|+>^n then random restarts",
+        "starts_tried": 1,
         "max_depth_cap": 200
       },
       "cx_ratio_quest_over_covq": 80.27210884353741
     }
   ],
-  "n_converged": 9,
+  "n_converged": 10,
   "n_total": 11,
   "covq_two_qubit_depth_is_always_one": true,
   "min_cx_ratio_over_converged": 2.5,
   "max_cx_ratio_over_converged": 135.55555555555554,
   "status": "DONE",
-  "record_hash": "196905922c7b927ecef79163d614e8b351c47dea178ddd5b4932cc52fcbc9a54"
+  "record_hash": "1e98aec1b755f5abaea87c2afdd1541211699e884ac173d65eb0555fe1ed53f8"
 }

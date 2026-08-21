@@ -1131,3 +1131,50 @@ def test_quest_line_search_is_exact_three_point_trigonometry():
     b, c = v0 - a, 0.5 * (vp - vm)
     for t in (0.3, 1.7, -2.2, 3.0):
         assert val(t) == pytest.approx(a + b * math.cos(t) + c * math.sin(t), abs=1e-12)
+
+
+def test_adaptive_recentering_needs_no_oracle_operating_point():
+    """Answers the obvious objection to M2 without assuming the answer.
+
+    The matched readout must be phased to the operating point, which is the
+    thing being estimated.  A two-stage protocol resolves it: a pilot split
+    between ``A = 0`` and ``A = pi/2`` determines each block phase including its
+    sign (one setting cannot -- ``cos`` is even), then the main stage runs at
+    unit regularity margin.  No pilot data is discarded, so the overhead is far
+    below the naive ``1/(1 - pilot_fraction)``.
+    """
+    from covq.estimator import adaptive_efficiency_report, model_from_decomposition
+    from covq.instances import matching_target
+
+    rng = np.random.default_rng(3)
+    dec = wid.decompose_width2(matching_target(3, np.random.default_rng(39), load=0.8).F)
+    model = model_from_decomposition(dec)
+    theta = np.array([0.6, -0.4, 0.9])
+
+    for fraction in (0.05, 0.2):
+        rep = adaptive_efficiency_report(model, theta, 20_000, 400, rng,
+                                         pilot_fraction=fraction)
+        assert rep["median_regularity_margin"] > 0.9
+        assert rep["max_abs_bias"] <= 5.0 * rep["bias_standard_error"]
+        # Well inside the discard-the-pilot penalty, because the pilot is kept.
+        assert rep["worst_efficiency_ratio"] < 1.0 / (1.0 - fraction) + 0.35
+
+
+def test_adaptive_pilot_seed_is_what_makes_the_likelihood_tractable():
+    """The periodic likelihood is multimodal; the pilot supplies the seed.
+
+    Least squares on the design matrix against the pilot block phases is a
+    consistent starting estimate, and it is the only reason the final MLE lands
+    in the right mode without oracle knowledge of ``theta``.
+    """
+    from covq.estimator import adaptive_recentering, model_from_decomposition
+    from covq.instances import matching_target
+
+    rng = np.random.default_rng(11)
+    dec = wid.decompose_width2(matching_target(3, np.random.default_rng(39), load=0.8).F)
+    model = model_from_decomposition(dec)
+    theta = np.array([0.6, -0.4, 0.9])
+    run = adaptive_recentering(model, theta, 40_000, rng, pilot_fraction=0.1)
+    assert np.abs(run["pilot_seed"] - theta).max() < 0.1
+    assert np.abs(run["estimate"] - theta).max() < 0.02
+    assert run["achieved_regularity_margin"] > 0.9

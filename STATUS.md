@@ -43,7 +43,7 @@ information-floor compiler is the reason anyone needs the engine.
 | `SUPPLEMENTARY_SWEEP_FLOOR_INTERFACE` | `DONE` | Fisher-information LMI constraints in minimum-cost sensor design are established. The interface alone is **not** claimable. |
 | `SUBUNIT_DIAGONAL_SECTOR` | `REJECTED_FOR_V1` | Needs joint `(μ, M)` moment feasibility, not `M ∈ Q_m`. Not audited. |
 | `K1_SPLIT` | `DONE` | K1a specification collision: **FIRED**. K1b end-to-end compiler collision: **NOT ESTABLISHED**. |
-| `QUEST_BASELINE` | `ABSENT` | Not run. No advantage over QUEST is claimable until it is. |
+| `QUEST_BASELINE` | `RUN_EXACT_MODE_ONLY` | arXiv:2605.02367, reimplemented from the published method description. `docs/audits/K3_QUEST_BASELINE_AND_ADAPTIVE_READOUT_v0.1.md`, `results/baselines_k3_quest.json`. 10/11 exact targets converged. Two regimes: `matching`/`toeplitz` separate by only 2.5–4.9× in expected 2q gates against a 2–9× settings disadvantage — **not a demonstrated win** while setting cost is unpriced; `path`/`star`/`banded` separate by 80–198×. CovQ 2q depth is 1 in every instance, by the matching theorem. Not run on information floors, and the handoff forbids forcing it there. |
 | `SPARSE_PURE_STATE_BASELINE` | `IMPLEMENTED` | Carathéodory-sparse single state, plus three realisation-matched siblings. |
 | `MANUSCRIPT_INTEGRATION_MD` | `RECEIVED` | Arrived 2026-08-21 with `CovQ_Repository_Handoff_v0.3.md` and `CovQ_Experiment_Protocol_v0.3.yaml`. Unblocks the record schema, status vocabulary and freeze-before-run rules. The gate table is C1–C14 (v0.3), not C1–C16; `C2a/b/c` already match the prototype. |
 | `GATE_ALIAS_MAP` | `DECLARED` | `M1→C10a`, `M1_schedule→C10b`, `M2→C10c`, `M3_qfi→C15a`, `M3_sep→C15b`, `M3_dephase→C15c`. Composite `C10` is split so a readout failure cannot invalidate unrelated matrix-pullback code. Commit `4a261a8` artifacts are **not** retroactively renamed. |
@@ -75,7 +75,8 @@ information-floor compiler is the reason anyone needs the engine.
 | `COHERENT_FLAG_JOINT_READOUT` | `ABSENT` | |
 | `ESTIMATOR_LAYER_EQ_112` | `DONE` | Branch-conditioned MLE over block-parity counts. Sufficient statistic is one parity count per `(branch, block)`; its Fisher matrix equals the schedule QFIM exactly (`0.0`). Consistent, and saturates `F_Π⁺/N` on the identifiable quotient — efficiency eigenvalues in `[0.992, 1.039]` against a Marchenko–Pastur band of `[0.946, 1.056]` at `N = 5·10⁴`, `R = 4000`. Gate alias `C10d` / `M4`. `results/measurements/estimator_efficiency.json`. |
 | `NOISE_AWARE_OBJECTIVE_EQ_111` | `ABSENT` | M3 supplies the measuring stick; no compiler optimises it. |
-| `ADAPTIVE_RECENTERING_POLICY` | `ABSENT` | Backend needs a nominal operating point or a coarse-estimate-then-recentre rule. |
+| `ADAPTIVE_RECENTERING_POLICY` | `DONE` | Two-stage protocol; pilot split between `A = 0` and `A = π/2` fixes each block phase including sign. Efficiency `1.06–1.11` against the **oracle** `F⁺/N` at every pilot fraction from 0.05 to 0.40, far below the `1/(1−f)` discard penalty, because the pilot enters the final likelihood. Gate alias `C10e` / `M5`. |
+| `LIKELIHOOD_MULTIMODALITY` | `NEW / VERIFIED` | The periodic likelihood is genuinely multimodal: an arbitrarily seeded MLE inflates the variance ratio to 10–2400×. Seeded from the pilot it is efficient. The pilot stage is therefore what makes `θ` identifiable at all — a second, independent reason `Readout` cannot be optional. |
 | `PROTOTYPE` | `PARTIAL` | `prototype/`. Built before this decision arrived; retained as the audit's evidence, not as Task 0C. See `prototype/README.md`. |
 
 ## Corrections carried into v0.2

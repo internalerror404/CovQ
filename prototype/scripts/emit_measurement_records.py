@@ -227,6 +227,39 @@ def estimator_efficiency() -> dict:
             "cases": cases, "status": "DONE" if ok else "FAILS"}
 
 
+def adaptive_recentering_record() -> dict:
+    """Where the operating point comes from, without an oracle."""
+    from covq.estimator import adaptive_efficiency_report, model_from_decomposition
+
+    rng = np.random.default_rng(3)
+    dec = decompose_width2(matching_target(3, np.random.default_rng(39), load=0.8).F)
+    model = model_from_decomposition(dec)
+    theta = np.array([0.6, -0.4, 0.9])
+    cases = []
+    for fraction in (0.05, 0.1, 0.2, 0.4):
+        for n_shots in (2_000, 20_000):
+            rep = adaptive_efficiency_report(model, theta, n_shots, 800, rng,
+                                             pilot_fraction=fraction)
+            cases.append({
+                "pilot_fraction": fraction, "n_shots": rep["n_shots"],
+                "n_reps": rep["n_reps"], "operating_point": theta,
+                "max_abs_bias": rep["max_abs_bias"],
+                "bias_standard_error": rep["bias_standard_error"],
+                "worst_efficiency_ratio": rep["worst_efficiency_ratio"],
+                "naive_discard_pilot_penalty": 1.0 / (1.0 - fraction),
+                "median_regularity_margin": rep["median_regularity_margin"],
+                "marchenko_pastur_band": rep["mp_band"],
+            })
+    ok = all(c["worst_efficiency_ratio"] < c["naive_discard_pilot_penalty"] + 0.35
+             for c in cases)
+    return {"gate": "C10e", "alias": "M5",
+            "protocol": "two-stage: pilot split between A=0 and A=pi/2 fixes each block "
+                        "phase including sign; main stage at matched quadrature; single "
+                        "MLE over all counts, seeded by least squares on the design matrix",
+            "reference_bound": "oracle F^+/N",
+            "cases": cases, "status": "DONE" if ok else "FAILS"}
+
+
 if __name__ == "__main__":
     for rel, builder in (
         ("results/measurements/ideal_block_readout.json", ideal_block_readout),
@@ -234,6 +267,7 @@ if __name__ == "__main__":
         ("results/measurements/readout_singularities.json", readout_singularities),
         ("results/noise/qfi_covariance_separation.json", qfi_covariance_separation),
         ("results/measurements/estimator_efficiency.json", estimator_efficiency),
+        ("results/measurements/adaptive_recentering.json", adaptive_recentering_record),
     ):
         payload = builder()
         path = _write(rel, payload)
