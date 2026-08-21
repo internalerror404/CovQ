@@ -3,6 +3,8 @@ name: CovQ v0.12 major-revision evidence
 on:
   push:
     branches: [v012-major-revision]
+  pull_request:
+    branches: [claude/experiment-review-mac-rthiz1]
   workflow_dispatch:
 
 permissions:
