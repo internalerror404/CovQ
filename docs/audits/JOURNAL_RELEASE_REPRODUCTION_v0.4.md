@@ -7,25 +7,25 @@ A disagreement beyond the registered tolerance pauses submission. It does not re
 ## What was compared
 
 - Development records at `HEAD~1` versus a clean-tree rerun.
-- 27 headline quantities, bound by JSON pointer in `results/table_manifest.json`.
+- 30 headline quantities, bound by JSON pointer in `results/table_manifest.json`.
 - Relative tolerance `1e-06`.
 
 | outcome | count |
 |---|---|
-| unchanged | 23 |
+| unchanged | 26 |
 | changed | 0 |
-| new in this release | 0 |
-| changed by the QUEST fidelity correction | 4 |
+| new in this release | 3 |
+| changed by the QUEST fidelity correction | 0 |
 | absent | 0 |
 
 ## Rows that are not identical
 
 | quantity | verdict | development | release | rel. diff |
 |---|---|---|---|---|
-| `k3_converged` | EXPECTED_CHANGE | 10 | 11 | 9.09e-02 |
-| `k3_max_cx_ratio` | EXPECTED_CHANGE | 135.55555555555554 | 32.6530612244898 | 7.59e-01 |
-| `n10_noiseless_quest` | EXPECTED_CHANGE | 1.6260855073181055 | 1.6261456545651514 | 3.70e-05 |
-| `quest_two_qubit_rotations` | EXPECTED_CHANGE | 44 | 3 | 9.32e-01 |
+| `quest_two_qubit_rotations` | RENAMED | None | 3 | — |
+| `quest_emitted_cx` | NEW | None | 6 | — |
+| `k3_bE_coverage` | NEW | None | 8/11 converged instances | — |
+| `k3_variants_agree` | NEW | None | True | — |
 
 ## Why the QUEST-derived quantities moved
 
@@ -43,8 +43,8 @@ The v0.1 baseline omitted the joint angle-reoptimisation phase and was therefore
 
 - All records clean: `True`
 - Single source commit across records: `True`
-- Commit(s): `f141111cab92`
-- Quantities bound to a record: 27, unresolved: 0
+- Commit(s): `daa5587ee9e6`
+- Quantities bound to a record: 30, unresolved: 0
 
 ## Manuscript cell audit
 

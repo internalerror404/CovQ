@@ -2,10 +2,10 @@
   "schema_version": "covq.reproduction_diff/0.4",
   "development_ref": "HEAD~1",
   "relative_tolerance": 1e-06,
-  "n_compared": 27,
+  "n_compared": 30,
   "n_changed": 0,
   "n_absent": 0,
-  "n_expected_change": 4,
+  "n_expected_change": 0,
   "expected_change_reasons": {
     "k3_converged": "path_m5 no longer hits the depth cap once angles are reoptimised",
     "k3_max_cx_ratio": "greedy overestimated QUEST depth; 135.6 was an artefact",
@@ -13,6 +13,10 @@
     "n10_noiseless_quest": "same target state, far fewer gates",
     "quest_two_qubit_rotations": "44 under terminal greedy, 3 under QUEST-tE"
   },
+  "expected_renamed": {
+    "quest_two_qubit_rotations": "two_qubit_rotations -> quest_two_qubit_pauli_rotations, to stop rotations being read as emitted gates"
+  },
+  "n_renamed": 1,
   "rows": [
     {
       "label": "readout_worst_attainment_gap",
@@ -90,11 +94,10 @@
       "label": "k3_converged",
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/n_converged",
-      "development": 10,
+      "development": 11,
       "release": 11,
-      "relative_difference": 0.09090909090909091,
-      "verdict": "EXPECTED_CHANGE",
-      "reason": "path_m5 no longer hits the depth cap once angles are reoptimised"
+      "relative_difference": 0.0,
+      "verdict": "same"
     },
     {
       "label": "k3_total",
@@ -118,11 +121,10 @@
       "label": "k3_max_cx_ratio",
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/max_cx_ratio_over_converged",
-      "development": 135.55555555555554,
+      "development": 32.6530612244898,
       "release": 32.6530612244898,
-      "relative_difference": 0.7591167614586819,
-      "verdict": "EXPECTED_CHANGE",
-      "reason": "greedy overestimated QUEST depth; 135.6 was an artefact"
+      "relative_difference": 0.0,
+      "verdict": "same"
     },
     {
       "label": "k3_depth_always_one",
@@ -233,11 +235,10 @@
       "label": "n10_noiseless_quest",
       "artifact": "results/noise/quest_operational_comparison.json",
       "json_pointer": "/rows/0/quest_shots_noisy_qfi_upper_bound",
-      "development": 1.6260855073181055,
-      "release": 1.6261456545651514,
-      "relative_difference": 3.698761354924423e-05,
-      "verdict": "EXPECTED_CHANGE",
-      "reason": "same target state, far fewer gates"
+      "development": 1.6261456545651514,
+      "release": 1.6261456545651511,
+      "relative_difference": 1.3654656598667872e-16,
+      "verdict": "same"
     },
     {
       "label": "n10_primary_field",
@@ -251,12 +252,34 @@
     {
       "label": "quest_two_qubit_rotations",
       "artifact": "results/noise/quest_operational_comparison.json",
-      "json_pointer": "/quest_preparation/two_qubit_rotations",
-      "development": 44,
+      "verdict": "RENAMED",
+      "development": null,
       "release": 3,
-      "relative_difference": 0.9318181818181818,
-      "verdict": "EXPECTED_CHANGE",
-      "reason": "44 under terminal greedy, 3 under QUEST-tE"
+      "reason": "two_qubit_rotations -> quest_two_qubit_pauli_rotations, to stop rotations being read as emitted gates"
+    },
+    {
+      "label": "quest_emitted_cx",
+      "artifact": "results/noise/quest_operational_comparison.json",
+      "verdict": "NEW",
+      "development": null,
+      "release": 6,
+      "reason": null
+    },
+    {
+      "label": "k3_bE_coverage",
+      "artifact": "results/baselines_k3_quest.json",
+      "verdict": "NEW",
+      "development": null,
+      "release": "8/11 converged instances",
+      "reason": null
+    },
+    {
+      "label": "k3_variants_agree",
+      "artifact": "results/baselines_k3_quest.json",
+      "verdict": "NEW",
+      "development": null,
+      "release": true,
+      "reason": null
     },
     {
       "label": "sparse_preparation_cx",

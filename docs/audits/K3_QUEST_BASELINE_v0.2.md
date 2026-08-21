@@ -58,32 +58,71 @@ and it does not depend on the baseline's quality. What does not survive is the
 order-of-magnitude framing: the separation is one order, not two, and the largest ratio
 is 32.65×.
 
+## Emitted-gate accounting, fixed in both directions
+
+Three unit errors were found and corrected; one of them favoured CovQ and two favoured
+QUEST.
+
+1. **Rotations are not gates.** A two-qubit Pauli rotation lowers to **two** CX. The
+   `m = 4` QUEST state uses 3 two-qubit *rotations* and **6 emitted CX**; describing it as
+   "3 two-qubit gates" was wrong. Rotations and emitted gates are now separate record
+   fields and are never conflated.
+2. **The emitted circuit did not prepare its own input.** `quest_circuit` emitted only the
+   rotations, omitting `|+⟩^m`, so simulating it started from `|0…0⟩` and produced a
+   different state from the one the result claims. CX count unaffected — the preparation
+   is single-qubit — but an artifact that does not prepare its own input is not an emitted
+   program.
+3. **Noise was charged per rotation, not per gate.** QUEST paid one two-qubit
+   depolarizing event per Pauli rotation while CovQ paid one per Bell pair. Since a
+   rotation is two CX, **QUEST was under-billed by exactly 2×**. Both arms now run through
+   one code path that charges once per emitted CX.
+
+Lowering symmetry is now explicit and identical on both arms: same native set `{1q, CX}`,
+near-zero-angle removal, adjacent-rotation combination, all-to-all routing with no SWAPs,
+one noise event per emitted CX. The first two rules are no-ops on the registered
+solutions — no angle falls below tolerance and no two adjacent rotations share a Pauli —
+which is worth being able to state rather than leaving silently absent.
+
 ## Corrected equal-accounting noise campaign
 
-QUEST's preparation for the N10 target drops from 44 two-qubit gates to **3**, which is
-most of the campaign's mechanism. CovQ is scored on its emitted-readout CFI under the
-frozen `f = 0.02` pilot; QUEST gets its noisy QFI as an optimistic bound.
-
-| edge depol | CovQ deployable | CovQ oracle | product | QUEST bound | winner | v0.1 QUEST |
+| edge depol | CovQ deployable | CovQ oracle | product | QUEST ceiling | ratio | reading |
 |---|---|---|---|---|---|---|
-| 0.00 | 1.785 | 1.766 | 3.255 | **1.626** | QUEST | 1.626 |
-| 0.01 | 1.822 | 1.802 | 3.255 | **1.697** | QUEST | ~~2.876~~ |
-| 0.02 | 1.860 | 1.839 | 3.255 | **1.769** | QUEST | ~~5.122~~ |
-| 0.05 | **1.980** | 1.957 | 3.255 | 2.001 | CovQ | ~~32.80~~ |
-| 0.10 | **2.207** | 2.180 | 3.255 | 2.469 | CovQ | ~~835.8~~ |
-| 0.20 | **2.799** | 2.759 | 3.255 | 3.893 | CovQ | ~~351 089~~ |
+| 0.00 | 1.785 | 1.766 | 3.255 | 1.626 | 0.911 | optimistic QUEST ceiling lower |
+| 0.01 | 1.822 | 1.802 | 3.255 | 1.768 | 0.971 | optimistic QUEST ceiling lower |
+| **0.02** | 1.860 | 1.839 | 3.255 | 1.917 | **1.031** | CovQ beats the ceiling |
+| 0.05 | 1.980 | 1.957 | 3.255 | 2.441 | 1.233 | CovQ beats the ceiling |
+| 0.10 | 2.207 | 2.180 | 3.255 | 3.699 | 1.676 | CovQ beats the ceiling |
+| 0.20 | 2.799 | 2.759 | 3.255 | 8.961 | **3.201** | CovQ beats the ceiling |
 
-**The crossover moves from 1 % to between 2 % and 5 %, and the advantage at 20 % collapses
-from `1.27e5×` to `1.39×`.**
+Crossover on the registered grid: `q_edge ∈ (0.01, 0.02]`. Margin at 20 %: **3.20×**.
 
-The qualitative regime statement survives: one-state preparation wins while coherence is
-cheap; the depth-one schedule wins once it is not. The quantitative claim does not, and
-any sentence quoting `3.51e5` must go.
+**The low-noise rows are not operational QUEST victories** and must not be described as
+such. QUEST is credited with its noisy SLD QFI and has no compiled attaining readout, so
+`F_C,CovQ < F_Q,QUEST` proves nothing operational. The reverse inequality is the strong
+statement: a real QUEST measurement cannot exceed its own QFI ceiling, so
+`F_C,CovQ > F_Q,QUEST` at 2 %, 5 %, 10 % and 20 % is a genuine CovQ win.
 
-Two things still make the surviving CovQ wins conservative rather than generous: CovQ is
-measured on an attained classical Fisher matrix while QUEST is credited with a quantum
-bound it has no compiled readout to reach, and CovQ pays its pilot while QUEST pays no
-calibration at all.
+**Monte Carlo adequacy.** The deployable template is sampled, so the narrow crossing needs
+a stated uncertainty. Across 12 independent pilot seeds the deployable exposure has
+relative standard deviation `4.2e-5` (at `q_edge = 0`) to `2.0e-4` (at `0.20`). The 2 %
+margin of 3.1 % exceeds that by roughly two to three orders of magnitude, so the crossover
+is not a Monte Carlo artefact.
+
+## bE coverage — a real limitation on the upper ratio
+
+`bE` agrees with `tE` **exactly** where both ran: 40 emitted CX in total across the 8
+instances covered, identical instance by instance. But best-position insertion costs
+`(pool size) × (current depth)` per iteration and does not finish on deep targets, so
+coverage is **8 of 11**, and the three uncovered instances are
+
+  `path_m4` (17.78), `path_m5` (25.56), `banded_m5` (32.65)
+
+— that is, **exactly the three largest ratios**. This is not a coincidence: they are deep,
+which is both why `bE` is unaffordable there and where `bE` would have the most room to
+improve on `tE`. So the *upper* end of the `2.50 – 32.65` range rests on `tE` alone, and a
+referee is entitled to treat `32.65` as an upper bound on the separation rather than a
+measured one. The shallow half of the table is cross-validated; the headline maximum is
+not.
 
 ## Manuscript sentences that must change
 
@@ -92,10 +131,10 @@ calibration at all.
 | abstract | "faithful QUEST reimplementation" | QUEST-tE as published, with the joint reoptimisation phase |
 | abstract | "factors of $2.5$–$135.6$" | `2.5`–`32.7` |
 | abstract | "ten converged instances… one harder path instance reached the QUEST depth cap" | eleven converged; no cap reached |
-| abstract | "at $20\%$… 2.759 versus $3.51\times10^5$" | `2.799` versus `3.893` |
-| abstract / §results | "less exposure at every tested point from $1\%$… onward" | from `5 %` onward; QUEST wins at `0`, `1 %`, `2 %` |
-| §results-n10 | "44 two-qubit rotations in the QUEST preparation" | `3` |
-| §results-n10 | "QUEST/CovQ exposure ratio is approximately $1.27\times10^5$" | `1.39` |
+| abstract | "at $20\%$… 2.759 versus $3.51\times10^5$" | `2.799` versus `8.961`, a `3.20×` ratio |
+| abstract / §results | "less exposure at every tested point from $1\%$… onward" | from `2 %` onward; the optimistic QUEST ceiling is lower at `0` and `1 %` |
+| §results-n10 | "44 two-qubit rotations in the QUEST preparation" | 3 two-qubit Pauli rotations, **6 emitted CX** |
+| §results-n10 | "QUEST/CovQ exposure ratio is approximately $1.27\times10^5$" | `3.20` |
 | §results-quest-exact | "On the ten converged targets the ratio ranges from $2.5$ to $135.6$" | eleven targets, `2.5` to `32.7` |
 | §limitations | "faithful reimplementation, not official QUEST source" | keep, but say which variant (tE) and that bE agrees |
 

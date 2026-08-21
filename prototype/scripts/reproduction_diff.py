@@ -29,6 +29,19 @@ ABS_FLOOR = 1e-9
 EXPECTED_NEW = {
     "n10_noiseless_covq",
     "n10_primary_field",
+    # Bindings added with the emitted-gate accounting fix and the bE cross-check.
+    "quest_emitted_cx",
+    "k3_bE_coverage",
+    "k3_variants_agree",
+}
+
+# Pointers whose *field* was renamed, so the development record cannot be
+# resolved even though the quantity is unchanged.  Recorded separately from
+# genuinely new bindings so the distinction survives in the artifact.
+EXPECTED_RENAMED = {
+    "quest_two_qubit_rotations":
+        "two_qubit_rotations -> quest_two_qubit_pauli_rotations, to stop rotations "
+        "being read as emitted gates",
 }
 
 # Quantities the QUEST fidelity correction was *supposed* to move.  The v0.1
@@ -72,7 +85,7 @@ def main(ref: str = "HEAD") -> int:
         dev_doc = git_show(ref, rel)
         cur_path = ROOT / rel
         cur_doc = json.loads(cur_path.read_text()) if cur_path.exists() else None
-        expected_new = label in EXPECTED_NEW
+        expected_new = label in EXPECTED_NEW or label in EXPECTED_RENAMED
         if dev_doc is None or cur_doc is None:
             rows.append({"label": label, "artifact": rel,
                          "verdict": "NEW" if expected_new else "ABSENT",
@@ -90,9 +103,11 @@ def main(ref: str = "HEAD") -> int:
             dev = resolve(dev_doc, pointer)
         except Exception as exc:
             rows.append({"label": label, "artifact": rel,
-                         "verdict": "NEW" if expected_new else "ABSENT",
+                         "verdict": ("RENAMED" if label in EXPECTED_RENAMED
+                                     else "NEW" if expected_new else "ABSENT"),
                          "development": None, "release": cur,
-                         "reason": None if expected_new else str(exc)})
+                         "reason": EXPECTED_RENAMED.get(
+                             label, None if expected_new else str(exc))})
             absent += 0 if expected_new else 1
             continue
         verdict, rel_diff = compare(dev, cur)
@@ -112,6 +127,8 @@ def main(ref: str = "HEAD") -> int:
         "n_compared": len(rows), "n_changed": changed, "n_absent": absent,
         "n_expected_change": sum(r["verdict"] == "EXPECTED_CHANGE" for r in rows),
         "expected_change_reasons": EXPECTED_CHANGED,
+        "expected_renamed": EXPECTED_RENAMED,
+        "n_renamed": sum(r["verdict"] == "RENAMED" for r in rows),
         "rows": rows,
         "submission_gate": "PASS" if changed == 0 and absent == 0 else "PAUSE",
     }

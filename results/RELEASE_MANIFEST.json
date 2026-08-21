@@ -1,7 +1,11 @@
 {
-  "schema_version": "covq.release_manifest/0.4",
-  "release_commit": "71a6f2a7f7f33696db37aea60a2f6e96def0b039",
-  "source_dirty": false,
+  "schema_version": "covq.release_manifest/0.5",
+  "evidence_source_commit": [
+    "daa5587ee9e6a9d4791ea0855b8f38a68ccff336"
+  ],
+  "release_packaging_commit": "daa5587ee9e6a9d4791ea0855b8f38a68ccff336",
+  "release_commit": "daa5587ee9e6a9d4791ea0855b8f38a68ccff336",
+  "source_dirty": true,
   "environment": {
     "python": "3.11.15",
     "numpy": "2.4.6",
@@ -52,8 +56,8 @@
     },
     {
       "path": "docs/audits/JOURNAL_RELEASE_REPRODUCTION_v0.4.md",
-      "bytes": 2722,
-      "sha256": "e449fa8d5ccd961f0b3e3061750e195cbfc69b71eefbc03c44cfcc7783f6e59d"
+      "bytes": 2628,
+      "sha256": "36bcba4a262c7459e86dd037f4899e645d878cd966990c7d83cd1e421052fda6"
     },
     {
       "path": "docs/audits/K3_QUEST_BASELINE_AND_ADAPTIVE_READOUT_v0.1.md",
@@ -132,13 +136,13 @@
     },
     {
       "path": "prototype/scripts/emit_campaign_records.py",
-      "bytes": 10005,
-      "sha256": "bdc74300928473a39bef7526c5fad1a5a8cbd637fd5232d8f96078deb1d6d76a"
+      "bytes": 11519,
+      "sha256": "01d9d031e67ba22d34dd7a4bce75c26ad40078bb8739d04304ea0835249b00f0"
     },
     {
       "path": "prototype/scripts/emit_k3_baseline.py",
-      "bytes": 6224,
-      "sha256": "3ea52241d5ff011f671f0e98fb158172b16fdac265261f73df2d096f1fc019ad"
+      "bytes": 9416,
+      "sha256": "3eb2d71cd7bb93cda92fffedfd4ccb142c88e4dacc3b605cfbbed10cbf3681c7"
     },
     {
       "path": "prototype/scripts/emit_measurement_records.py",
@@ -152,28 +156,28 @@
     },
     {
       "path": "prototype/scripts/emit_paper_tables.py",
-      "bytes": 10373,
-      "sha256": "a60f16772340cfd2d802c1908bc3735c94b99f05ac6328bc459342339dac57a4"
+      "bytes": 11685,
+      "sha256": "789bc33516062300d5a5d24651cdee71102aeccc252da42c3c50cc30761baf90"
     },
     {
       "path": "prototype/scripts/emit_release_manifest.py",
-      "bytes": 3367,
-      "sha256": "e46d707402a029a80b5d81cdc07e541c7c15786e102fcac02197dab31e87eaa9"
+      "bytes": 4056,
+      "sha256": "ea94759122ab2be3c3ca09622274eb3d076c89b33ef3d0e0e57d82bc212aa7c2"
     },
     {
       "path": "prototype/scripts/emit_table_manifest.py",
-      "bytes": 6331,
-      "sha256": "f5f59f05f89a9a9eb52d80393cccce52a7283cc043986caba2084679f5d1c2be"
+      "bytes": 6635,
+      "sha256": "673888e4413bbb5b84de820d08b0f8516116203f76e49747be9cf24c76b7fe90"
     },
     {
       "path": "prototype/scripts/make_figures.py",
-      "bytes": 12310,
-      "sha256": "6793f4b44068714e22f00080f6d736ad870da45453a5b258619e12479ccdf410"
+      "bytes": 13426,
+      "sha256": "0df3bf2d858acb9aaf445d1975fde643c6c9b31110e76c02d34d09ff5a0c2d06"
     },
     {
       "path": "prototype/scripts/reproduction_diff.py",
-      "bytes": 5526,
-      "sha256": "c6894770620455fcf055fee196459d19d3399a03965205e42b044435a254bb9e"
+      "bytes": 6364,
+      "sha256": "f693dc1eeb38e111f69257045aaa618fff531f2b0799b2c2117db6eb02aef430"
     },
     {
       "path": "prototype/scripts/run_evidence.py",
@@ -252,8 +256,8 @@
     },
     {
       "path": "prototype/src/covq/quest.py",
-      "bytes": 16715,
-      "sha256": "75c9a1095cb4ac954739bf5177460c9b9227e8778c60989174814ec1050ab0d7"
+      "bytes": 18409,
+      "sha256": "3e0639baa9bc7fac26d00c4ab55782e5e4133ec0f069e64b0b8f35df3fd749fd"
     },
     {
       "path": "prototype/src/covq/sim.py",
@@ -272,8 +276,8 @@
     },
     {
       "path": "prototype/tests/test_covq.py",
-      "bytes": 69356,
-      "sha256": "ab53c5e59c9211713ea22ec597e7ad87cd0ea21abef76e8759d8f7fff8e84c34"
+      "bytes": 72531,
+      "sha256": "92d6e0fd74f25fbb17dbdfac4054101ce6f1f9545434c294d6577d9f591775f5"
     },
     {
       "path": "prototype/tests/test_mixed_qfim_sld_regression.py",
@@ -282,105 +286,105 @@
     },
     {
       "path": "results/RELEASE_MANIFEST.json",
-      "bytes": 13021,
-      "sha256": "669678c22c79416f4919e7decb434b060c6f9b3cd61276d49f6e207a023d1811"
+      "bytes": 13307,
+      "sha256": "340bce8c1f54c63c39cfb21137f2721f2cc43ea451d0b202f1afc7f1e325b930"
     },
     {
       "path": "results/baselines_k3_quest.json",
-      "bytes": 10163,
-      "sha256": "44f79db800c37c8dffd4fff7378f27bdffb6108399ef603a3ce4d9095699e503"
+      "bytes": 15440,
+      "sha256": "003182b8ca6f146daee3670bd58b8b4ce380fc63fa812738f5ae5fa463072674"
     },
     {
       "path": "results/measurements/adaptive_recentering.json",
       "bytes": 5061,
-      "sha256": "04e3409e8ec0b2db34ba31049d907efb3a048c1a8138bfbf182b3a9508372482"
+      "sha256": "213ea7c72bb0e59fd06cd21b141aee86b51c528dcc76006f5e21339d5baa3712"
     },
     {
       "path": "results/measurements/estimator_efficiency.json",
       "bytes": 4463,
-      "sha256": "bc2bd854f377529b137797bc0eccc56ac76ecf84e45919cbd80ce62c699376fc"
+      "sha256": "d06e372a5d7b44e771e794da473a5fe15674274bdd7dd9bdcfef91c1ecd770ac"
     },
     {
       "path": "results/measurements/ideal_block_readout.json",
       "bytes": 14141,
-      "sha256": "0df9f05875d030d58e3a8b37c6e8f5502cea43f14eb76dcf67545934f078c2c7"
+      "sha256": "9b9b47d6e36fa69ef0ab2e11ccd392c22a5f663cb63441b6c2f1274b242f0375"
     },
     {
       "path": "results/measurements/readout_singularities.json",
       "bytes": 2095,
-      "sha256": "3fc5528be8643cc80a5564d2edb0a3209732bd97f9345c1282991f1c6d444a71"
+      "sha256": "44972a095566f1e71046fcd4d600789d3a8f0922327daceb414653947f283f3d"
     },
     {
       "path": "results/measurements/schedule_attainability.json",
       "bytes": 16188,
-      "sha256": "85cfd7e1a874183f92cf09caa0cadaf5a34fecac085b2426669f5a8f1f41367e"
+      "sha256": "3a4304a3520a9280505b0e38bee798f255d0bb83e1b4ee7695c7e9c64bd83897"
     },
     {
       "path": "results/noise/adaptive_readout_performance.json",
       "bytes": 4697,
-      "sha256": "14b1e4c696038fe4a413b39d799b08c7dac81beb9cf1e1cd82f21149e9719fd2"
+      "sha256": "541b7db7c2e0e471587e13cd4cb3ef6b53e67cc85686b693e3a541d8ed84a667"
     },
     {
       "path": "results/noise/fixed_setting_cost_solver.json",
       "bytes": 2313,
-      "sha256": "b1c49b8adbb2614079257449c604ef42d3ad97a184b3060d7c8c3d84a9841ec1"
+      "sha256": "ceb0f2307cc19364c67b1a8ada0eed7c09b8b682001b98c1b4a2c42077295f46"
     },
     {
       "path": "results/noise/noise_aware_floor_compiler.json",
       "bytes": 12747,
-      "sha256": "38be3b2413b2efa647fd62bf460f1a94417e561fb9f91e90c6f56de335f6349e"
+      "sha256": "8d8ed6413754f352a7cab1a6dd32c5c22f0499563b9139b0ca4af6c19fb50c88"
     },
     {
       "path": "results/noise/noisy_branch_templates.json",
       "bytes": 6802,
-      "sha256": "c057f82ef53369f3ec93576fe0d54756dfcc2c561bbc4897198380b18625e190"
+      "sha256": "a3bcf7ba982238571a223d2b079650ba742d6df863c57c93361e4c288de6fd85"
     },
     {
       "path": "results/noise/noisy_pricing_oracle.json",
       "bytes": 20103,
-      "sha256": "6cc0b973517dafa550f1c0b6d77bfc386dfb12a944e85b7588e3cf9c7bcba2f1"
+      "sha256": "903592b37c91a6b695bfd2f876896ffe757864a7043a66f3a02dc029c7d78fdd"
     },
     {
       "path": "results/noise/qfi_covariance_separation.json",
       "bytes": 14332,
-      "sha256": "5566604fc3224c4870f77e878108c57abbe841a5fdb1eac0aac1b79d09bb8568"
+      "sha256": "228d0252d1bc83188ceb202c49db1d7df379968b5626a09fd5f7a8b28a22402c"
     },
     {
       "path": "results/noise/quest_operational_comparison.json",
-      "bytes": 6326,
-      "sha256": "3711b46ced1a92c77b1b5e70ffd9a6b3adc0a092ba188ae858de8ead2665e10d"
+      "bytes": 7074,
+      "sha256": "ad3f59748d648e025ba52103e2e0b76790e5bbd101b3687e4ad816574bbcc04b"
     },
     {
       "path": "results/noise/setting_cost_phase_diagram.json",
       "bytes": 4572,
-      "sha256": "f3ed600e86ca9b11bfec4be6d320a36efbc7ac5d9e1089d2335ef8104267aa6a"
+      "sha256": "262cfc3335ea2001c545c788427fe1d46ef2e019bc3f76e311914919a68c9c46"
     },
     {
       "path": "results/paper_cell_audit.json",
-      "bytes": 8300,
-      "sha256": "b951992a1d4252034ef746f868a82e1bf191f0f740dff591525ba17d04afe244"
+      "bytes": 9600,
+      "sha256": "5e3e5f70837858414e336dc8a48808e432a3b17f42f2724374ef38df399bd80a"
     },
     {
       "path": "results/prototype_evidence.json",
-      "bytes": 342589,
-      "sha256": "2cccc24ccf7e10c676d5630be153fe5343bef45f80429e0ce2229ab55709ffdc"
+      "bytes": 342603,
+      "sha256": "ab93d919c32d25662787bb410b2f965de4163dc9c9400a91fe403ead72f05081"
     },
     {
       "path": "results/reproduction_diff.json",
-      "bytes": 9056,
-      "sha256": "045878800ae04a3dafe9113cc8b09becf85befad3c5cfda82e30fdcb031b5ffa"
+      "bytes": 9524,
+      "sha256": "8b77ec61fab68f4da546517983e14509769fe367403c27512d1ea4e77f794ea1"
     },
     {
       "path": "results/table_manifest.json",
-      "bytes": 11754,
-      "sha256": "f98dc7359a9c4b28f4074064b2ee8968a3fec236659e9537fe928d805d3fab65"
+      "bytes": 12893,
+      "sha256": "9b34872e9564bd938383f770bef867707119473759608afb3e455d1a59614a23"
     }
   ],
   "release_tag": {
-    "name": "covq-v0.4-journal-release",
-    "target_commit": "71a6f2a7f7f33696db37aea60a2f6e96def0b039",
+    "name": null,
+    "target_commit": null,
     "pushed": false,
     "reason": "this environment's git proxy refuses refs/tags; branch refs push normally, so the commit SHA is the durable identifier"
   },
-  "manifest_sha256": "1e90909e6c055ac6b74e2213f063303b88a8da23426ea4309fac762ec522e117"
+  "manifest_sha256": "2b700b10645a4a39d561a09620f9a502e09b5aaebfdc41f91ce2701a67fd8877"
 }

@@ -1137,7 +1137,7 @@
       "aborted_at": null
     },
     "stop_rule": "write_report_then_abort_without_tolerance_changes",
-    "seconds": 1.232720024000173
+    "seconds": 1.1771377120003308
   },
   "instances": [
     {
@@ -1161,17 +1161,17 @@
         "feasible": true,
         "support": 3,
         "residual": 1.5700924586837752e-16,
-        "seconds": 0.0017663550001998374,
+        "seconds": 0.0015803829992364626,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 3,
         "residual": 1.5700924586837752e-16,
-        "seconds": 0.00667269599989595,
+        "seconds": 0.007869762999689556,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0016891280001800624
+        "brute_force_seconds": 0.001744723000228987
       },
       "min_width": {
         "k": 2,
@@ -1188,13 +1188,13 @@
       "column_generation": {
         "feasible": true,
         "support": 3,
-        "seconds": 0.0037407280001389154,
+        "seconds": 0.00445577200025582,
         "rounds": 2,
         "columns": 9
       },
       "frank_wolfe": {
         "residual": 4.259926486937404e-13,
-        "seconds": 0.0019576100003178,
+        "seconds": 0.0021141839997653733,
         "iterations": 21,
         "away_steps": 18,
         "final_duality_gap": 5.473679825947251e-13,
@@ -1204,7 +1204,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 3,
-        "seconds": 0.001929898999605939
+        "seconds": 0.0020153430004938855
       },
       "programs": {
         "labelled_global_cat": {
@@ -1433,14 +1433,14 @@
         "feasible": true,
         "support": 2,
         "residual": 0.0,
-        "seconds": 0.001884859000256256,
+        "seconds": 0.001578917999722762,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 4.37370003965043e-05,
+        "seconds": 4.5587999920826405e-05,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -1452,7 +1452,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.002017928999975993
+        "brute_force_seconds": 0.0017743950002113706
       },
       "min_width": {
         "k": 3,
@@ -1478,13 +1478,13 @@
       "column_generation": {
         "feasible": true,
         "support": 2,
-        "seconds": 0.003991281000253366,
+        "seconds": 0.004113261999918905,
         "rounds": 2,
         "columns": 9
       },
       "frank_wolfe": {
         "residual": 0.0,
-        "seconds": 0.0002615719999994326,
+        "seconds": 0.0003672860002552625,
         "iterations": 2,
         "away_steps": 0,
         "final_duality_gap": 0.0,
@@ -1494,7 +1494,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 2,
-        "seconds": 0.0017309969998677843
+        "seconds": 0.0021692930004064692
       },
       "programs": {
         "labelled_global_cat": {
@@ -1693,17 +1693,17 @@
         "feasible": true,
         "support": 4,
         "residual": 1.5700924586837752e-16,
-        "seconds": 0.0017681219997029984,
+        "seconds": 0.0017759269994712668,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 2,
         "residual": 0.0,
-        "seconds": 0.0037021910002295044,
+        "seconds": 0.003510108000227774,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0019530229997144488
+        "brute_force_seconds": 0.0016605649998382432
       },
       "min_width": {
         "k": 2,
@@ -1720,13 +1720,13 @@
       "column_generation": {
         "feasible": true,
         "support": 4,
-        "seconds": 0.0039115219997256645,
+        "seconds": 0.0038614470004176837,
         "rounds": 2,
         "columns": 9
       },
       "frank_wolfe": {
         "residual": 4.257523645819914e-12,
-        "seconds": 0.002139391999662621,
+        "seconds": 0.0020789479995073634,
         "iterations": 22,
         "away_steps": 9,
         "final_duality_gap": 3.5953462431273694e-13,
@@ -1736,7 +1736,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 4,
-        "seconds": 0.0017085060003410035
+        "seconds": 0.0016066799998952774
       },
       "programs": {
         "labelled_global_cat": {
@@ -1969,17 +1969,17 @@
         "feasible": true,
         "support": 4,
         "residual": 1.1102230246251565e-16,
-        "seconds": 0.0017382880000695877,
+        "seconds": 0.001704424999843468,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 3,
         "residual": 0.0,
-        "seconds": 0.005074124000202573,
+        "seconds": 0.005301108999447024,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0017240300003322773
+        "brute_force_seconds": 0.001676971000051708
       },
       "min_width": {
         "k": 2,
@@ -1996,13 +1996,13 @@
       "column_generation": {
         "feasible": true,
         "support": 4,
-        "seconds": 0.003936402999897837,
+        "seconds": 0.0041975350004577194,
         "rounds": 2,
         "columns": 9
       },
       "frank_wolfe": {
         "residual": 4.2436001285588545e-13,
-        "seconds": 0.003296288999990793,
+        "seconds": 0.0033116090007752064,
         "iterations": 36,
         "away_steps": 32,
         "final_duality_gap": 6.59777787959295e-13,
@@ -2012,7 +2012,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 4,
-        "seconds": 0.001780083000085142
+        "seconds": 0.0016936570000325446
       },
       "programs": {
         "labelled_global_cat": {
@@ -2241,14 +2241,14 @@
         "feasible": true,
         "support": 4,
         "residual": 0.0,
-        "seconds": 0.0017603289998078253,
+        "seconds": 0.0016771499995229533,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 3.173000004608184e-05,
+        "seconds": 3.160899996146327e-05,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -2260,7 +2260,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0020688200002041413
+        "brute_force_seconds": 0.0017500260000815615
       },
       "min_width": {
         "k": 3,
@@ -2286,13 +2286,13 @@
       "column_generation": {
         "feasible": true,
         "support": 4,
-        "seconds": 0.003799055999934353,
+        "seconds": 0.0037902399999438785,
         "rounds": 2,
         "columns": 9
       },
       "frank_wolfe": {
         "residual": 7.313111917542022e-13,
-        "seconds": 0.002555304999987129,
+        "seconds": 0.0023732449999442906,
         "iterations": 25,
         "away_steps": 14,
         "final_duality_gap": 9.49823553142972e-13,
@@ -2302,7 +2302,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 4,
-        "seconds": 0.00206221700000242
+        "seconds": 0.0015043989997138851
       },
       "programs": {
         "labelled_global_cat": {
@@ -2495,14 +2495,14 @@
         "feasible": true,
         "support": 1,
         "residual": 0.0,
-        "seconds": 0.0016643680000925087,
+        "seconds": 0.0018700460004765773,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 4.461500020624953e-05,
+        "seconds": 3.397999989829259e-05,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -2514,7 +2514,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.001808126000014454
+        "brute_force_seconds": 0.00180903899945406
       },
       "min_width": {
         "k": 3,
@@ -2540,13 +2540,13 @@
       "column_generation": {
         "feasible": true,
         "support": 1,
-        "seconds": 0.0019134780000058527,
+        "seconds": 0.0018895929997597705,
         "rounds": 1,
         "columns": 8
       },
       "frank_wolfe": {
         "residual": 0.0,
-        "seconds": 0.00023232800003825105,
+        "seconds": 0.00022374499985744478,
         "iterations": 2,
         "away_steps": 0,
         "final_duality_gap": 0.0,
@@ -2556,7 +2556,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 1,
-        "seconds": 0.0014883120002195938
+        "seconds": 0.001595918999555579
       },
       "programs": {
         "labelled_global_cat": {
@@ -2762,7 +2762,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.0015476710000257299,
+        "seconds": 0.0016058159999374766,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.3999999999999997,
@@ -2780,7 +2780,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 6.562499993378879e-05,
+        "seconds": 6.784200013498776e-05,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -2792,7 +2792,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.001675427000009222
+        "brute_force_seconds": 0.0016995070000120904
       },
       "min_width": {
         "k": null,
@@ -2837,17 +2837,17 @@
         "feasible": true,
         "support": 3,
         "residual": 2.7194799110210365e-16,
-        "seconds": 0.0015546270001323137,
+        "seconds": 0.0016243629997916287,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 3,
         "residual": 1.5700924586837752e-16,
-        "seconds": 0.006774119000056089,
+        "seconds": 0.006471616999988328,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0018168249998780084
+        "brute_force_seconds": 0.0017317700003331993
       },
       "min_width": {
         "k": 2,
@@ -2864,13 +2864,13 @@
       "column_generation": {
         "feasible": true,
         "support": 3,
-        "seconds": 0.0037812370001120144,
+        "seconds": 0.0045271180006238865,
         "rounds": 2,
         "columns": 9
       },
       "frank_wolfe": {
         "residual": 2.87325750947149e-13,
-        "seconds": 0.004225466999741911,
+        "seconds": 0.004886785000053351,
         "iterations": 46,
         "away_steps": 14,
         "final_duality_gap": 5.746514375460635e-13,
@@ -2880,7 +2880,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 3,
-        "seconds": 0.0015129429998523847
+        "seconds": 0.0015891470002316055
       },
       "programs": {
         "labelled_global_cat": {
@@ -3109,14 +3109,14 @@
         "feasible": true,
         "support": 4,
         "residual": 2.9373740229761033e-16,
-        "seconds": 0.0017467550001128984,
+        "seconds": 0.0017208989993378054,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 4.1170999793394e-05,
+        "seconds": 3.967599968746072e-05,
         "violation": {
           "kind": "degree",
           "subset": [
@@ -3126,7 +3126,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0019778179998866108
+        "brute_force_seconds": 0.0020693160004157107
       },
       "min_width": {
         "k": 4,
@@ -3150,13 +3150,13 @@
       "column_generation": {
         "feasible": true,
         "support": 4,
-        "seconds": 0.003846147000331257,
+        "seconds": 0.0040636399999129935,
         "rounds": 2,
         "columns": 9
       },
       "frank_wolfe": {
         "residual": 4.437321087548655e-13,
-        "seconds": 0.0029963040001348418,
+        "seconds": 0.0030163929995978833,
         "iterations": 34,
         "away_steps": 29,
         "final_duality_gap": 6.100417320217828e-13,
@@ -3166,7 +3166,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 4,
-        "seconds": 0.0074353730001348595
+        "seconds": 0.009069104000445805
       },
       "programs": {
         "labelled_global_cat": {
@@ -3375,14 +3375,14 @@
         "feasible": true,
         "support": 2,
         "residual": 0.0,
-        "seconds": 0.0016491790001964546,
+        "seconds": 0.0016819909997138893,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 3.7368999983300455e-05,
+        "seconds": 4.075600008945912e-05,
         "violation": {
           "kind": "degree",
           "subset": [
@@ -3392,7 +3392,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0019662630002130754
+        "brute_force_seconds": 0.002063254999484343
       },
       "min_width": {
         "k": 4,
@@ -3416,13 +3416,13 @@
       "column_generation": {
         "feasible": true,
         "support": 2,
-        "seconds": 0.0019612940000115486,
+        "seconds": 0.0019735050000235788,
         "rounds": 1,
         "columns": 8
       },
       "frank_wolfe": {
         "residual": 0.0,
-        "seconds": 0.00025834300004135,
+        "seconds": 0.0002437940001982497,
         "iterations": 2,
         "away_steps": 0,
         "final_duality_gap": 0.0,
@@ -3432,7 +3432,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 2,
-        "seconds": 0.00184541899989199
+        "seconds": 0.0017723549999573152
       },
       "programs": {
         "labelled_global_cat": {
@@ -3651,17 +3651,17 @@
         "feasible": true,
         "support": 6,
         "residual": 2.830524433501838e-16,
-        "seconds": 0.0017893710000862484,
+        "seconds": 0.0020879040002910187,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 3,
         "residual": 0.0,
-        "seconds": 0.0052139119998173555,
+        "seconds": 0.005266782999569841,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.001964196999779233
+        "brute_force_seconds": 0.002036054000200238
       },
       "min_width": {
         "k": 2,
@@ -3678,13 +3678,13 @@
       "column_generation": {
         "feasible": true,
         "support": 6,
-        "seconds": 0.0048678180000933935,
+        "seconds": 0.003816419000031601,
         "rounds": 2,
         "columns": 9
       },
       "frank_wolfe": {
         "residual": 2.881861750317601e-13,
-        "seconds": 0.007040752000193606,
+        "seconds": 0.00693031599985261,
         "iterations": 63,
         "away_steps": 6,
         "final_duality_gap": 7.304236579709417e-13,
@@ -3694,7 +3694,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 6,
-        "seconds": 0.011435663999691315
+        "seconds": 0.009504888000265055
       },
       "programs": {
         "labelled_global_cat": {
@@ -3945,14 +3945,14 @@
         "feasible": true,
         "support": 2,
         "residual": 0.0,
-        "seconds": 0.0016534870001123636,
+        "seconds": 0.001697924999461975,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 7.821500003046822e-05,
+        "seconds": 4.072199953952804e-05,
         "violation": {
           "kind": "degree",
           "subset": [
@@ -3962,7 +3962,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0022073300001466123
+        "brute_force_seconds": 0.0024260589998448268
       },
       "min_width": {
         "k": 4,
@@ -3986,13 +3986,13 @@
       "column_generation": {
         "feasible": true,
         "support": 2,
-        "seconds": 0.0024046629996519187,
+        "seconds": 0.002636330999848724,
         "rounds": 1,
         "columns": 8
       },
       "frank_wolfe": {
         "residual": 0.0,
-        "seconds": 0.0003117559999736841,
+        "seconds": 0.00032057499993243255,
         "iterations": 2,
         "away_steps": 0,
         "final_duality_gap": 0.0,
@@ -4002,7 +4002,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 2,
-        "seconds": 0.0021027409998168878
+        "seconds": 0.0022476499998447252
       },
       "programs": {
         "labelled_global_cat": {
@@ -4222,17 +4222,17 @@
         "feasible": true,
         "support": 6,
         "residual": 2.220446049250313e-16,
-        "seconds": 0.0017486259998804599,
+        "seconds": 0.0017520530000183498,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 2,
         "residual": 0.0,
-        "seconds": 0.0036364719999255612,
+        "seconds": 0.0033883480000440613,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0022000719995958207
+        "brute_force_seconds": 0.0019526930000210996
       },
       "min_width": {
         "k": 2,
@@ -4249,13 +4249,13 @@
       "column_generation": {
         "feasible": true,
         "support": 6,
-        "seconds": 0.004366285999822139,
+        "seconds": 0.003812206000475271,
         "rounds": 2,
         "columns": 9
       },
       "frank_wolfe": {
         "residual": 6.021047679995524e-12,
-        "seconds": 0.0021258669999042468,
+        "seconds": 0.0020598700002665282,
         "iterations": 22,
         "away_steps": 9,
         "final_duality_gap": 7.190692486254739e-13,
@@ -4265,7 +4265,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 4,
-        "seconds": 0.007725425999979052
+        "seconds": 0.0076379599995561875
       },
       "programs": {
         "labelled_global_cat": {
@@ -4515,17 +4515,17 @@
         "feasible": true,
         "support": 7,
         "residual": 2.0770370905276122e-16,
-        "seconds": 0.0017538199999762583,
+        "seconds": 0.0016994739999063313,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 3,
         "residual": 0.0,
-        "seconds": 0.005100726999899052,
+        "seconds": 0.005153824999979406,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.001978481999685755
+        "brute_force_seconds": 0.0019789890002357424
       },
       "min_width": {
         "k": 2,
@@ -4542,13 +4542,13 @@
       "column_generation": {
         "feasible": true,
         "support": 7,
-        "seconds": 0.003955270000005839,
+        "seconds": 0.0037866909997319453,
         "rounds": 2,
         "columns": 9
       },
       "frank_wolfe": {
         "residual": 5.740370555477121e-13,
-        "seconds": 0.009249779999663588,
+        "seconds": 0.009704621000309999,
         "iterations": 89,
         "away_steps": 34,
         "final_duality_gap": 7.115585898279618e-13,
@@ -4558,7 +4558,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 6,
-        "seconds": 0.008275969999886001
+        "seconds": 0.008328826000251865
       },
       "programs": {
         "labelled_global_cat": {
@@ -4808,7 +4808,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.0019586569997045444,
+        "seconds": 0.0016949740002019098,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.2360000000000002,
@@ -4827,7 +4827,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 0.00010376899990660604,
+        "seconds": 7.774200003041187e-05,
         "violation": {
           "kind": "degree",
           "subset": [
@@ -4837,7 +4837,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0020681510000031267
+        "brute_force_seconds": 0.0019549580001694267
       },
       "min_width": {
         "k": null,
@@ -4877,7 +4877,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.001650383000196598,
+        "seconds": 0.0017241880004803534,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.07846096908265299,
@@ -4896,7 +4896,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 8.470900002066628e-05,
+        "seconds": 7.662600000912789e-05,
         "violation": {
           "kind": "degree",
           "subset": [
@@ -4906,7 +4906,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0021851970000170695
+        "brute_force_seconds": 0.0019479230004435522
       },
       "min_width": {
         "k": null,
@@ -4943,14 +4943,14 @@
         "feasible": true,
         "support": 7,
         "residual": 0.0,
-        "seconds": 0.0016754970001784386,
+        "seconds": 0.001676055000643828,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 3.910300029019709e-05,
+        "seconds": 3.702100002556108e-05,
         "violation": {
           "kind": "degree",
           "subset": [
@@ -4960,7 +4960,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.00197138699968491
+        "brute_force_seconds": 0.0019310719999339199
       },
       "min_width": {
         "k": 3,
@@ -4984,13 +4984,13 @@
       "column_generation": {
         "feasible": true,
         "support": 7,
-        "seconds": 0.0038401580000027025,
+        "seconds": 0.0038348139996742248,
         "rounds": 2,
         "columns": 9
       },
       "frank_wolfe": {
         "residual": 6.28943208925834e-13,
-        "seconds": 0.013835626000400225,
+        "seconds": 0.012983677000192984,
         "iterations": 125,
         "away_steps": 60,
         "final_duality_gap": 6.653080864009246e-13,
@@ -5000,7 +5000,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 6,
-        "seconds": 0.008078499000021111
+        "seconds": 0.007963423000546754
       },
       "programs": {
         "labelled_global_cat": {
@@ -5210,7 +5210,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.0017086180000660534,
+        "seconds": 0.001647314999900118,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.49960763257154195,
@@ -5229,7 +5229,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 7.953000022098422e-05,
+        "seconds": 7.96350004748092e-05,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -5241,7 +5241,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.002052126000307908
+        "brute_force_seconds": 0.0019896399999197456
       },
       "min_width": {
         "k": null,
@@ -5295,7 +5295,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.0017346879999422526,
+        "seconds": 0.0017721959993650671,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.3999999999999997,
@@ -5314,7 +5314,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 8.650599966131267e-05,
+        "seconds": 8.141699981933925e-05,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -5326,7 +5326,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0019951310000578815
+        "brute_force_seconds": 0.0020255429999451735
       },
       "min_width": {
         "k": null,
@@ -5371,17 +5371,17 @@
         "feasible": true,
         "support": 6,
         "residual": 2.603703785810335e-16,
-        "seconds": 0.0018737099999270868,
+        "seconds": 0.0016710939999029506,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 3,
         "residual": 0.0,
-        "seconds": 0.00690305999978591,
+        "seconds": 0.00757153499944252,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0020280809999349003
+        "brute_force_seconds": 0.0022288259997367277
       },
       "min_width": {
         "k": 2,
@@ -5398,13 +5398,13 @@
       "column_generation": {
         "feasible": true,
         "support": 6,
-        "seconds": 0.005831729999954405,
+        "seconds": 0.006168195000100241,
         "rounds": 3,
         "columns": 10
       },
       "frank_wolfe": {
         "residual": 1.6823378242007743e-06,
-        "seconds": 0.02515535899965471,
+        "seconds": 0.02382700999987719,
         "iterations": 200,
         "away_steps": 103,
         "final_duality_gap": 2.0537079403842767e-06,
@@ -5414,7 +5414,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 6,
-        "seconds": 0.00808770799994818
+        "seconds": 0.008265098000265425
       },
       "programs": {
         "labelled_global_cat": {
@@ -5660,14 +5660,14 @@
         "feasible": true,
         "support": 3,
         "residual": 5.978733960281817e-16,
-        "seconds": 0.0018539130001045123,
+        "seconds": 0.0018775319995256723,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 5.3295999805413885e-05,
+        "seconds": 5.5792999773984775e-05,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -5681,7 +5681,7 @@
           "rhs": 2.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0029342600000745733
+        "brute_force_seconds": 0.002865034000024025
       },
       "min_width": {
         "k": 5,
@@ -5709,13 +5709,13 @@
       "column_generation": {
         "feasible": true,
         "support": 3,
-        "seconds": 0.006002281000291987,
+        "seconds": 0.005893159000152082,
         "rounds": 3,
         "columns": 10
       },
       "frank_wolfe": {
         "residual": 6.422994461100793e-13,
-        "seconds": 0.007005493999713508,
+        "seconds": 0.006081502000597538,
         "iterations": 56,
         "away_steps": 18,
         "final_duality_gap": 2.581391753139286e-13,
@@ -5725,7 +5725,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 3,
-        "seconds": 0.006725730000198382
+        "seconds": 0.006427907000215782
       },
       "programs": {
         "labelled_global_cat": {
@@ -5917,14 +5917,14 @@
         "feasible": true,
         "support": 2,
         "residual": 0.0,
-        "seconds": 0.0018632569999681436,
+        "seconds": 0.0019101770003544516,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 7.247699977597222e-05,
+        "seconds": 5.196599977352889e-05,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -5938,7 +5938,7 @@
           "rhs": 2.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0028040470001542417
+        "brute_force_seconds": 0.0026810159997694427
       },
       "min_width": {
         "k": 5,
@@ -5966,13 +5966,13 @@
       "column_generation": {
         "feasible": true,
         "support": 2,
-        "seconds": 0.006383132999872032,
+        "seconds": 0.006016664000526362,
         "rounds": 3,
         "columns": 10
       },
       "frank_wolfe": {
         "residual": 1.6176671424064586e-07,
-        "seconds": 0.0024532239999643934,
+        "seconds": 0.0024979400004667696,
         "iterations": 27,
         "away_steps": 16,
         "final_duality_gap": 4.308343006902036e-14,
@@ -5982,7 +5982,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 2,
-        "seconds": 0.006494504999864148
+        "seconds": 0.006329292999907921
       },
       "programs": {
         "labelled_global_cat": {
@@ -6187,17 +6187,17 @@
         "feasible": true,
         "support": 10,
         "residual": 4.440892098500626e-16,
-        "seconds": 0.0017986290004046168,
+        "seconds": 0.001771289999851433,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 3,
         "residual": 1.5700924586837752e-16,
-        "seconds": 0.0051938750002591405,
+        "seconds": 0.005493972999829566,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.002670965000106662
+        "brute_force_seconds": 0.0027603329999692505
       },
       "min_width": {
         "k": 2,
@@ -6214,13 +6214,13 @@
       "column_generation": {
         "feasible": true,
         "support": 10,
-        "seconds": 0.014398799999980838,
+        "seconds": 0.01430216999960976,
         "rounds": 7,
         "columns": 14
       },
       "frank_wolfe": {
         "residual": 7.498900255838283e-13,
-        "seconds": 0.03219948000014483,
+        "seconds": 0.02785616500023025,
         "iterations": 200,
         "away_steps": 84,
         "final_duality_gap": 1.5180355207472107e-12,
@@ -6230,7 +6230,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 9,
-        "seconds": 0.09279826200008756
+        "seconds": 0.0910146509995684
       },
       "programs": {
         "labelled_global_cat": {
@@ -6465,14 +6465,14 @@
         "feasible": true,
         "support": 2,
         "residual": 9.614813431917819e-17,
-        "seconds": 0.002049196000371012,
+        "seconds": 0.002185237000048801,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 6.515899985970464e-05,
+        "seconds": 6.887500057928264e-05,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -6486,7 +6486,7 @@
           "rhs": 2.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0028009229999952368
+        "brute_force_seconds": 0.002764759999990929
       },
       "min_width": {
         "k": 5,
@@ -6514,13 +6514,13 @@
       "column_generation": {
         "feasible": true,
         "support": 2,
-        "seconds": 0.0021100109997860272,
+        "seconds": 0.0024161880000974634,
         "rounds": 1,
         "columns": 8
       },
       "frank_wolfe": {
         "residual": 9.614813431917819e-17,
-        "seconds": 0.0002507740000510239,
+        "seconds": 0.00025048500083357794,
         "iterations": 2,
         "away_steps": 0,
         "final_duality_gap": 2.5837358689009134e-16,
@@ -6530,7 +6530,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 2,
-        "seconds": 0.006967808999888803
+        "seconds": 0.0068065490004300955
       },
       "programs": {
         "labelled_global_cat": {
@@ -6733,17 +6733,17 @@
         "feasible": true,
         "support": 8,
         "residual": 2.220446049250313e-16,
-        "seconds": 0.0019420620001255884,
+        "seconds": 0.0018590749996292288,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 2,
         "residual": 0.0,
-        "seconds": 0.003638611999576824,
+        "seconds": 0.003465879000032146,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.002648041999691486
+        "brute_force_seconds": 0.002634691999446659
       },
       "min_width": {
         "k": 2,
@@ -6760,13 +6760,13 @@
       "column_generation": {
         "feasible": true,
         "support": 8,
-        "seconds": 0.010051914000086981,
+        "seconds": 0.010395018000053824,
         "rounds": 5,
         "columns": 12
       },
       "frank_wolfe": {
         "residual": 1.5626926126946396e-10,
-        "seconds": 0.03341594099993017,
+        "seconds": 0.032907324000007065,
         "iterations": 200,
         "away_steps": 87,
         "final_duality_gap": 2.7205815871969374e-10,
@@ -6776,7 +6776,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 8,
-        "seconds": 0.01970008299986148
+        "seconds": 0.01964171899999201
       },
       "programs": {
         "labelled_global_cat": {
@@ -7009,17 +7009,17 @@
         "feasible": true,
         "support": 10,
         "residual": 5.324442579404919e-16,
-        "seconds": 0.002077277999887883,
+        "seconds": 0.0018656219999684254,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 3,
         "residual": 0.0,
-        "seconds": 0.005455976000121154,
+        "seconds": 0.005318593000083638,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.00272170800008098
+        "brute_force_seconds": 0.002786238000226149
       },
       "min_width": {
         "k": 2,
@@ -7036,13 +7036,13 @@
       "column_generation": {
         "feasible": true,
         "support": 8,
-        "seconds": 0.009919262000039453,
+        "seconds": 0.010238806000415934,
         "rounds": 5,
         "columns": 12
       },
       "frank_wolfe": {
         "residual": 9.160634688216551e-06,
-        "seconds": 0.035257717999684246,
+        "seconds": 0.033901115000844584,
         "iterations": 200,
         "away_steps": 58,
         "final_duality_gap": 1.1629656954651385e-05,
@@ -7052,7 +7052,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 8,
-        "seconds": 0.05331209399992076
+        "seconds": 0.05252171600022848
       },
       "programs": {
         "labelled_global_cat": {
@@ -7285,7 +7285,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.002374523000071349,
+        "seconds": 0.0023707319996901788,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.3120000000000003,
@@ -7305,7 +7305,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 0.0001108209999074461,
+        "seconds": 0.00010185900009673787,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -7319,7 +7319,7 @@
           "rhs": 2.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0027506030000949977
+        "brute_force_seconds": 0.00275652300024376
       },
       "min_width": {
         "k": null,
@@ -7363,14 +7363,14 @@
         "feasible": true,
         "support": 9,
         "residual": 6.936117791011997e-16,
-        "seconds": 0.0021551889999500418,
+        "seconds": 0.00198893600008887,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 5.333599983714521e-05,
+        "seconds": 6.431499969039578e-05,
         "violation": {
           "kind": "degree",
           "subset": [
@@ -7380,7 +7380,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.003315187999760383
+        "brute_force_seconds": 0.0028754030008713016
       },
       "min_width": {
         "k": 3,
@@ -7404,13 +7404,13 @@
       "column_generation": {
         "feasible": true,
         "support": 9,
-        "seconds": 0.013849268999820197,
+        "seconds": 0.013305449000654335,
         "rounds": 6,
         "columns": 13
       },
       "frank_wolfe": {
         "residual": 0.012066283356079847,
-        "seconds": 0.02882157699968957,
+        "seconds": 0.0349936880002133,
         "iterations": 200,
         "away_steps": 152,
         "final_duality_gap": 0.0067497286382506815,
@@ -7420,7 +7420,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 8,
-        "seconds": 0.01850823099994159
+        "seconds": 0.022372574999280914
       },
       "programs": {
         "labelled_global_cat": {
@@ -7612,14 +7612,14 @@
         "feasible": true,
         "support": 10,
         "residual": 0.0,
-        "seconds": 0.001923434000218549,
+        "seconds": 0.0019617470006778603,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 5.572200007009087e-05,
+        "seconds": 5.691499973181635e-05,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -7633,7 +7633,7 @@
           "rhs": 2.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0028786300003957876
+        "brute_force_seconds": 0.0035488639996401616
       },
       "min_width": {
         "k": 3,
@@ -7661,13 +7661,13 @@
       "column_generation": {
         "feasible": true,
         "support": 11,
-        "seconds": 0.014245836000100098,
+        "seconds": 0.014797241000451322,
         "rounds": 7,
         "columns": 14
       },
       "frank_wolfe": {
         "residual": 0.0004464638405811797,
-        "seconds": 0.03227176100017459,
+        "seconds": 0.029124659999979485,
         "iterations": 200,
         "away_steps": 84,
         "final_duality_gap": 0.0004500893374544248,
@@ -7677,7 +7677,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 10,
-        "seconds": 0.03475327800015293
+        "seconds": 0.03355230799934361
       },
       "programs": {
         "labelled_global_cat": {
@@ -7870,7 +7870,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.002098424999985582,
+        "seconds": 0.0022572810003111954,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.926486396672584,
@@ -7890,7 +7890,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 0.00012112800004615565,
+        "seconds": 0.0001077960005204659,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -7904,7 +7904,7 @@
           "rhs": 2.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.002931229000296298
+        "brute_force_seconds": 0.0028398879994711024
       },
       "min_width": {
         "k": null,
@@ -7961,7 +7961,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.002029067999956169,
+        "seconds": 0.002016149000155565,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.3999999999999997,
@@ -7981,7 +7981,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 9.186199986288557e-05,
+        "seconds": 8.868399982020492e-05,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -7993,7 +7993,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.00258957999994891
+        "brute_force_seconds": 0.0026808669999809354
       },
       "min_width": {
         "k": null,
@@ -8038,17 +8038,17 @@
         "feasible": true,
         "support": 8,
         "residual": 6.425880329391634e-16,
-        "seconds": 0.001963497000360803,
+        "seconds": 0.0017977549996430753,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 3,
         "residual": 0.0,
-        "seconds": 0.007266182999956072,
+        "seconds": 0.007121894999727374,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0030131299999993644
+        "brute_force_seconds": 0.0027073419996668235
       },
       "min_width": {
         "k": 2,
@@ -8065,13 +8065,13 @@
       "column_generation": {
         "feasible": true,
         "support": 8,
-        "seconds": 0.01972617599994919,
+        "seconds": 0.018282208999153227,
         "rounds": 9,
         "columns": 16
       },
       "frank_wolfe": {
         "residual": 4.760153859807767e-06,
-        "seconds": 0.03345716700005141,
+        "seconds": 0.030983162000666198,
         "iterations": 200,
         "away_steps": 94,
         "final_duality_gap": 5.907918563118983e-06,
@@ -8081,7 +8081,7 @@
       "min_support_milp": {
         "feasible": true,
         "support": 8,
-        "seconds": 0.028579993000221293
+        "seconds": 0.025775731000067026
       },
       "programs": {
         "labelled_global_cat": {
@@ -8326,7 +8326,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.0022624729999733972,
+        "seconds": 0.002134268999725464,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.020000000000000018,
@@ -8346,7 +8346,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 0.00010811599986482179,
+        "seconds": 0.00012194600003567757,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -8358,7 +8358,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.003109150000000227
+        "brute_force_seconds": 0.002664505999746325
       },
       "min_width": {
         "k": null,
@@ -8413,7 +8413,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.0019740449997698306,
+        "seconds": 0.0019370150002941955,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.19999999999999996,
@@ -8433,7 +8433,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 9.180400002151146e-05,
+        "seconds": 9.526800022285897e-05,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -8445,7 +8445,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0028705349996016594
+        "brute_force_seconds": 0.0027499030002218205
       },
       "min_width": {
         "k": null,
@@ -8502,7 +8502,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.0019383580001886003,
+        "seconds": 0.0019321480003782199,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.3000000000000007,
@@ -8522,7 +8522,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 8.751099994697142e-05,
+        "seconds": 0.00010361899967392674,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -8536,7 +8536,7 @@
           "rhs": 2.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0028553639999699953
+        "brute_force_seconds": 0.0027461899999252637
       },
       "min_width": {
         "k": null,
@@ -8577,14 +8577,14 @@
         "feasible": true,
         "support": 4,
         "residual": 1.1240151438116956e-15,
-        "seconds": 0.0020596039998963533,
+        "seconds": 0.0021060939998278627,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 7.640800004082848e-05,
+        "seconds": 9.131899969361257e-05,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -8598,7 +8598,7 @@
           "rhs": 2.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.00605525699984355
+        "brute_force_seconds": 0.005885577999833913
       },
       "min_width": {
         "k": 4,
@@ -8626,13 +8626,13 @@
       "column_generation": {
         "feasible": true,
         "support": 4,
-        "seconds": 0.021573034999619267,
+        "seconds": 0.0216268289996151,
         "rounds": 10,
         "columns": 17
       },
       "frank_wolfe": {
         "residual": 1.2723330241589085e-13,
-        "seconds": 0.005455929999698128,
+        "seconds": 0.005502420000084385,
         "iterations": 52,
         "away_steps": 17,
         "final_duality_gap": 6.467937637201973e-13,
@@ -8829,14 +8829,14 @@
         "feasible": true,
         "support": 2,
         "residual": 6.080941944488118e-16,
-        "seconds": 0.0019583900002544397,
+        "seconds": 0.0020885269996142597,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 7.907000008344767e-05,
+        "seconds": 9.348399998998502e-05,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -8850,7 +8850,7 @@
           "rhs": 2.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.005940087999988464
+        "brute_force_seconds": 0.006945568999981333
       },
       "min_width": {
         "k": 6,
@@ -8878,13 +8878,13 @@
       "column_generation": {
         "feasible": true,
         "support": 2,
-        "seconds": 0.010390327000095567,
+        "seconds": 0.010559109000496392,
         "rounds": 5,
         "columns": 12
       },
       "frank_wolfe": {
         "residual": 2.066703362778734e-07,
-        "seconds": 0.001593416999639885,
+        "seconds": 0.0017279140001846827,
         "iterations": 17,
         "away_steps": 7,
         "final_duality_gap": 5.028804139974407e-14,
@@ -9095,17 +9095,17 @@
         "feasible": true,
         "support": 6,
         "residual": 4.871083751574258e-16,
-        "seconds": 0.0021058749998701387,
+        "seconds": 0.0020902039996144595,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 2,
         "residual": 0.0,
-        "seconds": 0.005493808000210265,
+        "seconds": 0.0053214129993648385,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.005441909000182932
+        "brute_force_seconds": 0.005625292000331683
       },
       "min_width": {
         "k": 2,
@@ -9122,13 +9122,13 @@
       "column_generation": {
         "feasible": true,
         "support": 6,
-        "seconds": 0.010334024000258069,
+        "seconds": 0.010921721999693546,
         "rounds": 5,
         "columns": 12
       },
       "frank_wolfe": {
         "residual": 4.651614741869768e-13,
-        "seconds": 0.022179822999987664,
+        "seconds": 0.02106308199927298,
         "iterations": 192,
         "away_steps": 89,
         "final_duality_gap": 8.964946733119933e-13,
@@ -9369,14 +9369,14 @@
         "feasible": true,
         "support": 2,
         "residual": 4.440892098500626e-16,
-        "seconds": 0.0021439329998429457,
+        "seconds": 0.0026087659998665913,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 8.338599991475348e-05,
+        "seconds": 8.798700037004892e-05,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -9390,7 +9390,7 @@
           "rhs": 2.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.005857691000073828
+        "brute_force_seconds": 0.006602772999940498
       },
       "min_width": {
         "k": 6,
@@ -9418,13 +9418,13 @@
       "column_generation": {
         "feasible": true,
         "support": 2,
-        "seconds": 0.004213893999803986,
+        "seconds": 0.004352472999926249,
         "rounds": 2,
         "columns": 9
       },
       "frank_wolfe": {
         "residual": 4.440892098500626e-16,
-        "seconds": 0.00026727400017989567,
+        "seconds": 0.00031158500041783554,
         "iterations": 2,
         "away_steps": 0,
         "final_duality_gap": 5.680769833057336e-16,
@@ -9636,17 +9636,17 @@
         "feasible": true,
         "support": 10,
         "residual": 3.236828524569469e-16,
-        "seconds": 0.0021985899998071545,
+        "seconds": 0.0021394200002760044,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 2,
         "residual": 0.0,
-        "seconds": 0.003674802999739768,
+        "seconds": 0.003587662999962049,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0057110289999400266
+        "brute_force_seconds": 0.005609504999483761
       },
       "min_width": {
         "k": 2,
@@ -9663,13 +9663,13 @@
       "column_generation": {
         "feasible": true,
         "support": 14,
-        "seconds": 0.024715848999676382,
+        "seconds": 0.024050932999671204,
         "rounds": 11,
         "columns": 18
       },
       "frank_wolfe": {
         "residual": 2.1564010206035853e-10,
-        "seconds": 0.041097430999798235,
+        "seconds": 0.042571575999318156,
         "iterations": 200,
         "away_steps": 91,
         "final_duality_gap": 3.097175602983923e-10,
@@ -9907,17 +9907,17 @@
         "feasible": true,
         "support": 15,
         "residual": 5.667848928154234e-16,
-        "seconds": 0.0025581250001778244,
+        "seconds": 0.0026848750003409805,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 3,
         "residual": 0.0,
-        "seconds": 0.0058474480001677875,
+        "seconds": 0.005602424999779032,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.006033736000063072
+        "brute_force_seconds": 0.005807178000395652
       },
       "min_width": {
         "k": 2,
@@ -9934,13 +9934,13 @@
       "column_generation": {
         "feasible": true,
         "support": 16,
-        "seconds": 0.027963355999872874,
+        "seconds": 0.026438511999913317,
         "rounds": 12,
         "columns": 19
       },
       "frank_wolfe": {
         "residual": 1.5959296047590932e-06,
-        "seconds": 0.04243562200008455,
+        "seconds": 0.04493016099968372,
         "iterations": 200,
         "away_steps": 75,
         "final_duality_gap": 2.74917343941907e-06,
@@ -10178,7 +10178,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.003399939000246377,
+        "seconds": 0.003493907999654766,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.2160000000000002,
@@ -10199,7 +10199,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 0.00018753000040305778,
+        "seconds": 0.00015029899986984674,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -10213,7 +10213,7 @@
           "rhs": 2.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.006265330000132963
+        "brute_force_seconds": 0.006975793000492558
       },
       "min_width": {
         "k": null,
@@ -10257,7 +10257,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.005024158000196621,
+        "seconds": 0.004834802000004856,
         "certificate": {
           "kind": "lp_hyperplane",
           "margin": 0.012461179749811091,
@@ -10269,7 +10269,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 6.429699988075299e-05,
+        "seconds": 6.508499973278958e-05,
         "violation": {
           "kind": "degree",
           "subset": [
@@ -10279,7 +10279,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.005667587000061758
+        "brute_force_seconds": 0.00569165700017038
       },
       "min_width": {
         "k": null,
@@ -10316,14 +10316,14 @@
         "feasible": true,
         "support": 16,
         "residual": 0.0,
-        "seconds": 0.002029320000019652,
+        "seconds": 0.002044844999545603,
         "certificate": null
       },
       "width2": {
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 7.561900019936729e-05,
+        "seconds": 0.00010730799931479851,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -10337,7 +10337,7 @@
           "rhs": 2.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.0057904979998966155
+        "brute_force_seconds": 0.006037398999978905
       },
       "min_width": {
         "k": 3,
@@ -10365,13 +10365,13 @@
       "column_generation": {
         "feasible": true,
         "support": 16,
-        "seconds": 0.024582824999924924,
+        "seconds": 0.024906665999878896,
         "rounds": 11,
         "columns": 18
       },
       "frank_wolfe": {
         "residual": 0.0002727202929967099,
-        "seconds": 0.03341147099990849,
+        "seconds": 0.04227149200050917,
         "iterations": 200,
         "away_steps": 95,
         "final_duality_gap": 0.00031462190247123593,
@@ -10569,7 +10569,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.005249445000117703,
+        "seconds": 0.0032949249998637242,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.9713597264985891,
@@ -10590,7 +10590,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 0.00021939499993095524,
+        "seconds": 0.00016136399972310755,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -10604,7 +10604,7 @@
           "rhs": 2.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.006835981000222091
+        "brute_force_seconds": 0.008028059000025678
       },
       "min_width": {
         "k": null,
@@ -10662,7 +10662,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.003245223000249098,
+        "seconds": 0.002940913000202272,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.3999999999999997,
@@ -10683,7 +10683,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 0.00012916400009999052,
+        "seconds": 0.0001633669999137055,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -10695,7 +10695,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.006185318000007101
+        "brute_force_seconds": 0.005992518999846652
       },
       "min_width": {
         "k": null,
@@ -10740,17 +10740,17 @@
         "feasible": true,
         "support": 12,
         "residual": 1.652098034980246e-15,
-        "seconds": 0.002146695999726944,
+        "seconds": 0.0019147809998685261,
         "certificate": null
       },
       "width2": {
         "feasible": true,
         "n_branches": 3,
         "residual": 0.0,
-        "seconds": 0.007177452999712841,
+        "seconds": 0.007170045999373542,
         "violation": null,
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.005722485000205779
+        "brute_force_seconds": 0.005634699000438559
       },
       "min_width": {
         "k": 2,
@@ -10767,13 +10767,13 @@
       "column_generation": {
         "feasible": true,
         "support": 13,
-        "seconds": 0.037049510999622726,
+        "seconds": 0.03512022300037643,
         "rounds": 16,
         "columns": 23
       },
       "frank_wolfe": {
         "residual": 0.0037643362726277824,
-        "seconds": 0.041675551000025735,
+        "seconds": 0.04367690199978824,
         "iterations": 200,
         "away_steps": 62,
         "final_duality_gap": 0.0035377231029776763,
@@ -11024,7 +11024,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.0030841990001135855,
+        "seconds": 0.003321146999951452,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.020000000000000018,
@@ -11045,7 +11045,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 0.00011596199965424603,
+        "seconds": 0.0001279680000152439,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -11057,7 +11057,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.005749883000135014
+        "brute_force_seconds": 0.005864368999937142
       },
       "min_width": {
         "k": null,
@@ -11113,7 +11113,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.002949364000414789,
+        "seconds": 0.0029073839996272,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.19999999999999996,
@@ -11134,7 +11134,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 0.000140523000027315,
+        "seconds": 0.00011589899986574892,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -11146,7 +11146,7 @@
           "rhs": 1.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.005637995000142837
+        "brute_force_seconds": 0.005881084000066039
       },
       "min_width": {
         "k": null,
@@ -11204,7 +11204,7 @@
         "feasible": false,
         "support": 0,
         "residual": null,
-        "seconds": 0.0028982450003240956,
+        "seconds": 0.003387144999578595,
         "certificate": {
           "kind": "hypermetric",
           "margin": 0.3000000000000007,
@@ -11225,7 +11225,7 @@
         "feasible": false,
         "n_branches": 0,
         "residual": null,
-        "seconds": 0.00013118700007908046,
+        "seconds": 0.00014635600018664263,
         "violation": {
           "kind": "odd_set",
           "subset": [
@@ -11239,7 +11239,7 @@
           "rhs": 2.0
         },
         "brute_force_agrees": true,
-        "brute_force_seconds": 0.00580425699990883
+        "brute_force_seconds": 0.005959690000054252
       },
       "min_width": {
         "k": null,

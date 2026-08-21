@@ -73,6 +73,19 @@
             "/cases/9",
             "/cases/10"
           ]
+        },
+        "e": {
+          "artifact": "results/noise/quest_operational_comparison.json",
+          "json_pointers": [
+            "/rows/0",
+            "/rows/1",
+            "/rows/2",
+            "/rows/3",
+            "/rows/4",
+            "/rows/5"
+          ],
+          "reading": "points below one favour the optimistic QUEST QFI ceiling; points above one establish that CovQ's emitted-readout CFI beats that ceiling",
+          "series": "quest_shots_noisy_qfi_upper_bound / covq_deployable_fixed_pilot_exposure"
         }
       }
     },
@@ -92,38 +105,38 @@
   "inputs": {
     "k3": {
       "path": "results/baselines_k3_quest.json",
-      "record_hash": "4aa949048de0a4c09f493381b858bb4ed96701a0ebdaef2e9e020115c01ca70d",
-      "sha256": "44f79db800c37c8dffd4fff7378f27bdffb6108399ef603a3ce4d9095699e503"
+      "record_hash": "f9090989eaf58d13ae519277434fd05993159b46c8f58c12832e5c8dbf3c8b72",
+      "sha256": "003182b8ca6f146daee3670bd58b8b4ce380fc63fa812738f5ae5fa463072674"
     },
     "n10": {
       "path": "results/noise/quest_operational_comparison.json",
-      "record_hash": "d4539c38e7e8cc0e515fafbf4b0a97ca88860ff5b9bd17970b2c93c4d65e5ac5",
-      "sha256": "3711b46ced1a92c77b1b5e70ffd9a6b3adc0a092ba188ae858de8ead2665e10d"
+      "record_hash": "c02af931071a0dfe025fe8a1bcca709abcb8c1a0401707dbe40b5c3724c47e67",
+      "sha256": "ad3f59748d648e025ba52103e2e0b76790e5bbd101b3687e4ad816574bbcc04b"
     },
     "n6": {
       "path": "results/noise/noise_aware_floor_compiler.json",
-      "record_hash": "734071c398b89581ed0fdba341078bc93a134cc1d3c59c65f6243ff82e22623f",
-      "sha256": "38be3b2413b2efa647fd62bf460f1a94417e561fb9f91e90c6f56de335f6349e"
+      "record_hash": "51c70784daff68bc1f05165b7797b3c94fc86175f54469e05f212766e3bddeea",
+      "sha256": "8d8ed6413754f352a7cab1a6dd32c5c22f0499563b9139b0ca4af6c19fb50c88"
     },
     "n7": {
       "path": "results/noise/adaptive_readout_performance.json",
-      "record_hash": "c106f1e0f428f0e9b8eb39e86d66184cad0923294008a26b32bbee441a8d5a44",
-      "sha256": "14b1e4c696038fe4a413b39d799b08c7dac81beb9cf1e1cd82f21149e9719fd2"
+      "record_hash": "63887bbae443f0c1ed4f61e4bb9c796e1961b82ddd0a845317b1cc9d8c363d85",
+      "sha256": "541b7db7c2e0e471587e13cd4cb3ef6b53e67cc85686b693e3a541d8ed84a667"
     },
     "n9": {
       "path": "results/noise/fixed_setting_cost_solver.json",
-      "record_hash": "03194bc243dcd7e1e5c2c6635fb8e3e744fee1378cacfab053314e7ba34550e0",
-      "sha256": "b1c49b8adbb2614079257449c604ef42d3ad97a184b3060d7c8c3d84a9841ec1"
+      "record_hash": "cb819a7dc55e448712b5be068453ea44f28863c4010b9efb8126c918b787c21b",
+      "sha256": "ceb0f2307cc19364c67b1a8ada0eed7c09b8b682001b98c1b4a2c42077295f46"
     }
   },
   "outputs": [
     {
       "path": "paper/figures/operational_results.pdf",
-      "sha256": "778a7600b88d3ef9472af3458a7bcb296cf2dfa0a2580f89bb5a6e29315f00fd"
+      "sha256": "56429d04db96c0f28399f95015f5dc11c7536c10c9a1927ac3de3911ec9c4f96"
     },
     {
       "path": "paper/figures/operational_results.png",
-      "sha256": "2cc01efe8d6d0d153245e9ee1adbe6bdfee792dd8e5b6c80e6ce65993fd51dc0"
+      "sha256": "301a7b6abf59cdb2aef48f77f6747b49d43957c7382f705b1151a0d72ff3b419"
     },
     {
       "path": "paper/figures/fixed_setting_failure.pdf",
@@ -135,5 +148,5 @@
     }
   ],
   "schema_version": "covq.figure_manifest/0.4",
-  "source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194"
+  "source_commit": "daa5587ee9e6a9d4791ea0855b8f38a68ccff336"
 }

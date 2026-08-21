@@ -156,7 +156,8 @@ PROSE_CLAIMS = [
      "/n_converged", lambda v: f"{_WORDS.get(int(v), str(int(v)))} converged"),
     ("quest_two_qubit", "44 two-qubit rotations",
      "results/noise/quest_operational_comparison.json",
-     "/quest_preparation/two_qubit_rotations", lambda v: f"{int(v)} two-qubit rotations"),
+     "/quest_preparation/quest_two_qubit_pauli_rotations",
+     lambda v: f"{int(v)} two-qubit rotations"),
     ("sparse_cx", "232-CX", "results/noise/quest_operational_comparison.json",
      "/sparse_caratheodory_preparation/cx_count", lambda v: f"{int(v)}-CX"),
 ]

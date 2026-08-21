@@ -1,6 +1,6 @@
 {
   "schema_version": "covq.measurement.record/0.1",
-  "source_commit": "e62315c3a8da2076566287a6192ba08f544ccb14",
+  "source_commit": "daa5587ee9e6a9d4791ea0855b8f38a68ccff336",
   "dirty": true,
   "dirty_scope": [
     "prototype/src",
@@ -183,31 +183,31 @@
         {
           "row": 1,
           "issue": "cell count differs",
-          "generated": "0.01 & 1.822 & 1.802 & 3.255 & 1.697 & 7.802\\\\",
+          "generated": "0.01 & 1.822 & 1.802 & 3.255 & 1.768 & 7.802\\\\",
           "manuscript": "0.05 & 2.3482 & 3 & 3\\\\"
         },
         {
           "row": 2,
           "issue": "cell count differs",
-          "generated": "0.02 & 1.860 & 1.839 & 3.255 & 1.769 & 46.890\\\\",
+          "generated": "0.02 & 1.860 & 1.839 & 3.255 & 1.917 & 46.890\\\\",
           "manuscript": "0.10 & 2.6164 & 3 & 3\\\\"
         },
         {
           "row": 3,
           "issue": "cell count differs",
-          "generated": "0.05 & 1.980 & 1.957 & 3.255 & 2.001 & 31102.752\\\\",
+          "generated": "0.05 & 1.980 & 1.957 & 3.255 & 2.441 & 31102.752\\\\",
           "manuscript": "0.15 & 2.9333 & 3 & 3\\\\"
         },
         {
           "row": 4,
           "issue": "cell count differs",
-          "generated": "0.10 & 2.207 & 2.180 & 3.255 & 2.469 & 5200690140.045\\\\",
+          "generated": "0.10 & 2.207 & 2.180 & 3.255 & 3.699 & 5200690140.045\\\\",
           "manuscript": "0.20 & 3.2552 & 1 & 0\\\\"
         },
         {
           "row": 5,
           "issue": "missing in manuscript",
-          "generated": "0.20 & 2.799 & 2.759 & 3.255 & 3.893 & {infinite}\\\\"
+          "generated": "0.20 & 2.799 & 2.759 & 3.255 & 8.961 & {infinite}\\\\"
         }
       ],
       "verdict": "EXPECTED_CHANGE",
@@ -273,7 +273,7 @@
       "quoted_in_source": "44 two-qubit rotations",
       "from_record": "3 two-qubit rotations",
       "artifact": "results/noise/quest_operational_comparison.json",
-      "json_pointer": "/quest_preparation/two_qubit_rotations",
+      "json_pointer": "/quest_preparation/quest_two_qubit_pauli_rotations",
       "verdict": "MISMATCH",
       "present_in_source": true
     },
@@ -350,5 +350,5 @@
   "n_prose_absent_from_source": 0,
   "note": "the N10 table gains a deployable column: the frozen f=0.02 fixed-pilot exposure is the primary CovQ figure and the matched-analyzer value is retained as a diagnostic ceiling, so a cell-count difference there is expected and intended",
   "status": "FAILS",
-  "record_hash": "b815338e0aa269a798f0919ebae569892b3cc20089bff55c4981c4fabfb1c9b1"
+  "record_hash": "52d3a26459d6c9e56fa184e0f1a4d5f9a342b63ec665cefb39cd33aa2b9499f5"
 }

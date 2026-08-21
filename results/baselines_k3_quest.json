@@ -1,6 +1,6 @@
 {
   "schema_version": "covq.measurement.record/0.1",
-  "source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
+  "source_commit": "daa5587ee9e6a9d4791ea0855b8f38a68ccff336",
   "dirty": false,
   "dirty_scope": [
     "prototype/src",
@@ -23,7 +23,8 @@
   "variant": "tE",
   "supersedes": "the terminal-greedy routine used before v0.4, which omitted the joint reoptimisation phase and is therefore not QUEST; it understated the baseline by roughly an order of magnitude",
   "scope": "exact first/second-moment targeting only; NOT an information-floor optimizer and not run as one",
-  "resource_provenance": "both sides parsed from emitted circuits",
+  "resource_provenance": "both sides parsed from emitted circuits after the same lowering; a two-qubit Pauli rotation emits two CX and rotations are never reported as gates",
+  "primary_variant_rule": "lower total emitted CX across all registered instances, fixed globally",
   "cases": [
     {
       "instance": "matching_m3",
@@ -38,6 +39,11 @@
       },
       "quest": {
         "settings": 1,
+        "variant": "tE",
+        "quest_total_pauli_rotations": 1,
+        "quest_two_qubit_pauli_rotations": 1,
+        "quest_emitted_cx_count": 2,
+        "quest_two_qubit_depth": 2,
         "rotations": 1,
         "two_qubit_rotations": 1,
         "cx_per_shot": 2,
@@ -48,6 +54,14 @@
         "start_state": "|+>^n",
         "starts_tried": 1,
         "max_depth_cap": 80
+      },
+      "quest_cross_check": {
+        "variant": "bE",
+        "stop_reason": "converged",
+        "quest_total_pauli_rotations": 1,
+        "quest_two_qubit_pauli_rotations": 1,
+        "quest_emitted_cx_count": 2,
+        "quest_two_qubit_depth": 2
       },
       "cx_ratio_quest_over_covq": 2.5
     },
@@ -64,6 +78,11 @@
       },
       "quest": {
         "settings": 1,
+        "variant": "tE",
+        "quest_total_pauli_rotations": 2,
+        "quest_two_qubit_pauli_rotations": 2,
+        "quest_emitted_cx_count": 4,
+        "quest_two_qubit_depth": 4,
         "rotations": 2,
         "two_qubit_rotations": 2,
         "cx_per_shot": 4,
@@ -74,6 +93,14 @@
         "start_state": "|+>^n",
         "starts_tried": 1,
         "max_depth_cap": 80
+      },
+      "quest_cross_check": {
+        "variant": "bE",
+        "stop_reason": "converged",
+        "quest_total_pauli_rotations": 2,
+        "quest_two_qubit_pauli_rotations": 2,
+        "quest_emitted_cx_count": 4,
+        "quest_two_qubit_depth": 4
       },
       "cx_ratio_quest_over_covq": 4.444444444444445
     },
@@ -90,6 +117,11 @@
       },
       "quest": {
         "settings": 1,
+        "variant": "tE",
+        "quest_total_pauli_rotations": 2,
+        "quest_two_qubit_pauli_rotations": 2,
+        "quest_emitted_cx_count": 4,
+        "quest_two_qubit_depth": 4,
         "rotations": 2,
         "two_qubit_rotations": 2,
         "cx_per_shot": 4,
@@ -100,6 +132,14 @@
         "start_state": "|+>^n",
         "starts_tried": 1,
         "max_depth_cap": 80
+      },
+      "quest_cross_check": {
+        "variant": "bE",
+        "stop_reason": "converged",
+        "quest_total_pauli_rotations": 2,
+        "quest_two_qubit_pauli_rotations": 2,
+        "quest_emitted_cx_count": 4,
+        "quest_two_qubit_depth": 4
       },
       "cx_ratio_quest_over_covq": 4.86322188449848
     },
@@ -116,6 +156,11 @@
       },
       "quest": {
         "settings": 1,
+        "variant": "tE",
+        "quest_total_pauli_rotations": 2,
+        "quest_two_qubit_pauli_rotations": 2,
+        "quest_emitted_cx_count": 4,
+        "quest_two_qubit_depth": 2,
         "rotations": 2,
         "two_qubit_rotations": 2,
         "cx_per_shot": 4,
@@ -126,6 +171,14 @@
         "start_state": "|+>^n",
         "starts_tried": 1,
         "max_depth_cap": 80
+      },
+      "quest_cross_check": {
+        "variant": "bE",
+        "stop_reason": "converged",
+        "quest_total_pauli_rotations": 2,
+        "quest_two_qubit_pauli_rotations": 2,
+        "quest_emitted_cx_count": 4,
+        "quest_two_qubit_depth": 2
       },
       "cx_ratio_quest_over_covq": 2.5
     },
@@ -142,6 +195,11 @@
       },
       "quest": {
         "settings": 1,
+        "variant": "tE",
+        "quest_total_pauli_rotations": 14,
+        "quest_two_qubit_pauli_rotations": 12,
+        "quest_emitted_cx_count": 24,
+        "quest_two_qubit_depth": 20,
         "rotations": 14,
         "two_qubit_rotations": 12,
         "cx_per_shot": 24,
@@ -152,6 +210,11 @@
         "start_state": "|+>^n",
         "starts_tried": 1,
         "max_depth_cap": 80
+      },
+      "quest_cross_check": {
+        "variant": "bE",
+        "stop_reason": "not_run_within_budget",
+        "reason": "tE needed 14 rotations; best-position search is quadratic in depth and exceeds the registered budget of 8"
       },
       "cx_ratio_quest_over_covq": 17.777777777777775
     },
@@ -168,6 +231,11 @@
       },
       "quest": {
         "settings": 1,
+        "variant": "tE",
+        "quest_total_pauli_rotations": 3,
+        "quest_two_qubit_pauli_rotations": 3,
+        "quest_emitted_cx_count": 6,
+        "quest_two_qubit_depth": 6,
         "rotations": 3,
         "two_qubit_rotations": 3,
         "cx_per_shot": 6,
@@ -178,6 +246,14 @@
         "start_state": "|+>^n",
         "starts_tried": 1,
         "max_depth_cap": 80
+      },
+      "quest_cross_check": {
+        "variant": "bE",
+        "stop_reason": "converged",
+        "quest_total_pauli_rotations": 3,
+        "quest_two_qubit_pauli_rotations": 3,
+        "quest_emitted_cx_count": 6,
+        "quest_two_qubit_depth": 6
       },
       "cx_ratio_quest_over_covq": 4.484723909184341
     },
@@ -194,6 +270,11 @@
       },
       "quest": {
         "settings": 1,
+        "variant": "tE",
+        "quest_total_pauli_rotations": 2,
+        "quest_two_qubit_pauli_rotations": 2,
+        "quest_emitted_cx_count": 4,
+        "quest_two_qubit_depth": 2,
         "rotations": 2,
         "two_qubit_rotations": 2,
         "cx_per_shot": 4,
@@ -204,6 +285,14 @@
         "start_state": "|+>^n",
         "starts_tried": 1,
         "max_depth_cap": 80
+      },
+      "quest_cross_check": {
+        "variant": "bE",
+        "stop_reason": "converged",
+        "quest_total_pauli_rotations": 2,
+        "quest_two_qubit_pauli_rotations": 2,
+        "quest_emitted_cx_count": 4,
+        "quest_two_qubit_depth": 2
       },
       "cx_ratio_quest_over_covq": 2.5
     },
@@ -220,6 +309,11 @@
       },
       "quest": {
         "settings": 1,
+        "variant": "tE",
+        "quest_total_pauli_rotations": 28,
+        "quest_two_qubit_pauli_rotations": 23,
+        "quest_emitted_cx_count": 46,
+        "quest_two_qubit_depth": 36,
         "rotations": 28,
         "two_qubit_rotations": 23,
         "cx_per_shot": 46,
@@ -230,6 +324,11 @@
         "start_state": "|+>^n",
         "starts_tried": 1,
         "max_depth_cap": 80
+      },
+      "quest_cross_check": {
+        "variant": "bE",
+        "stop_reason": "not_run_within_budget",
+        "reason": "tE needed 28 rotations; best-position search is quadratic in depth and exceeds the registered budget of 8"
       },
       "cx_ratio_quest_over_covq": 25.555555555555554
     },
@@ -246,6 +345,11 @@
       },
       "quest": {
         "settings": 1,
+        "variant": "tE",
+        "quest_total_pauli_rotations": 4,
+        "quest_two_qubit_pauli_rotations": 4,
+        "quest_emitted_cx_count": 8,
+        "quest_two_qubit_depth": 8,
         "rotations": 4,
         "two_qubit_rotations": 4,
         "cx_per_shot": 8,
@@ -256,6 +360,14 @@
         "start_state": "|+>^n",
         "starts_tried": 1,
         "max_depth_cap": 80
+      },
+      "quest_cross_check": {
+        "variant": "bE",
+        "stop_reason": "converged",
+        "quest_total_pauli_rotations": 4,
+        "quest_two_qubit_pauli_rotations": 4,
+        "quest_emitted_cx_count": 8,
+        "quest_two_qubit_depth": 6
       },
       "cx_ratio_quest_over_covq": 4.282067837321567
     },
@@ -272,6 +384,11 @@
       },
       "quest": {
         "settings": 1,
+        "variant": "tE",
+        "quest_total_pauli_rotations": 5,
+        "quest_two_qubit_pauli_rotations": 4,
+        "quest_emitted_cx_count": 8,
+        "quest_two_qubit_depth": 8,
         "rotations": 5,
         "two_qubit_rotations": 4,
         "cx_per_shot": 8,
@@ -282,6 +399,14 @@
         "start_state": "|+>^n",
         "starts_tried": 1,
         "max_depth_cap": 80
+      },
+      "quest_cross_check": {
+        "variant": "bE",
+        "stop_reason": "converged",
+        "quest_total_pauli_rotations": 5,
+        "quest_two_qubit_pauli_rotations": 4,
+        "quest_emitted_cx_count": 8,
+        "quest_two_qubit_depth": 8
       },
       "cx_ratio_quest_over_covq": 8.88888888888889
     },
@@ -298,6 +423,11 @@
       },
       "quest": {
         "settings": 1,
+        "variant": "tE",
+        "quest_total_pauli_rotations": 26,
+        "quest_two_qubit_pauli_rotations": 24,
+        "quest_emitted_cx_count": 48,
+        "quest_two_qubit_depth": 36,
         "rotations": 26,
         "two_qubit_rotations": 24,
         "cx_per_shot": 48,
@@ -309,14 +439,25 @@
         "starts_tried": 1,
         "max_depth_cap": 80
       },
+      "quest_cross_check": {
+        "variant": "bE",
+        "stop_reason": "not_run_within_budget",
+        "reason": "tE needed 26 rotations; best-position search is quadratic in depth and exceeds the registered budget of 8"
+      },
       "cx_ratio_quest_over_covq": 32.6530612244898
     }
   ],
   "n_converged": 11,
   "n_total": 11,
   "covq_two_qubit_depth_is_always_one": true,
+  "cross_check_coverage": "8/11 converged instances",
+  "cross_check_budget_rotations": 8,
+  "total_emitted_cx_primary": 40,
+  "total_emitted_cx_cross_check": 40,
+  "primary_variant_is_not_worse": true,
+  "variants_agree": true,
   "min_cx_ratio_over_converged": 2.5,
   "max_cx_ratio_over_converged": 32.6530612244898,
   "status": "DONE",
-  "record_hash": "4aa949048de0a4c09f493381b858bb4ed96701a0ebdaef2e9e020115c01ca70d"
+  "record_hash": "f9090989eaf58d13ae519277434fd05993159b46c8f58c12832e5c8dbf3c8b72"
 }
