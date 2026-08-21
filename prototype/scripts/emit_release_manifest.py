@@ -48,7 +48,13 @@ def main() -> int:
     manifest = {
         "schema_version": "covq.release_manifest/0.4",
         "release_commit": git("rev-parse", "HEAD"),
-        "dirty": bool(git("status", "--porcelain")),
+        # Scoped to source, for the same reason the records are: this script
+        # writes into results/, so a whole-tree check would always report dirty
+        # and the flag would carry no information.
+        "source_dirty": bool(git("status", "--porcelain", "--",
+                                 "prototype/src", "prototype/tests",
+                                 "prototype/scripts", "paper", "docs", "charter",
+                                 "STATUS.md", "REGISTRATION.md")),
         "environment": {
             "python": sys.version.split()[0],
             "numpy": numpy.__version__,

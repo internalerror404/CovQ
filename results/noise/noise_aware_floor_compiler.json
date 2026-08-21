@@ -1,7 +1,7 @@
 {
   "schema_version": "covq.measurement.record/0.1",
-  "source_commit": "1c8cc6817a04ab18c9be07890358c8ea002cf6bd",
-  "dirty": true,
+  "source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+  "dirty": false,
   "dirty_scope": [
     "prototype/src",
     "prototype/tests",
@@ -485,5 +485,5 @@
   ],
   "worst_optimality_gap": 2.0954757928848256e-16,
   "status": "DONE",
-  "record_hash": "899d38baea2f2f83f4a215d9d41cb6e33507cb24ee646a03b297ea36673cd1bc"
+  "record_hash": "6602a16be707708b20337b267e9839430680d5fcad9f262d930920754155a339"
 }

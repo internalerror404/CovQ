@@ -1,0 +1,260 @@
+{
+  "schema_version": "covq.reproduction_diff/0.4",
+  "development_ref": "HEAD",
+  "relative_tolerance": 1e-06,
+  "n_compared": 27,
+  "n_changed": 0,
+  "n_absent": 0,
+  "rows": [
+    {
+      "label": "readout_worst_attainment_gap",
+      "artifact": "results/measurements/ideal_block_readout.json",
+      "json_pointer": "/worst_attainment_gap",
+      "development": 3.108624468950438e-15,
+      "release": 3.108624468950438e-15,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "schedule_worst_cfi_gap",
+      "artifact": "results/measurements/schedule_attainability.json",
+      "json_pointer": "/worst_schedule_gap",
+      "development": 1.5667258001043705e-15,
+      "release": 1.5667258001043705e-15,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "fixed_readout_information_at_origin",
+      "artifact": "results/measurements/readout_singularities.json",
+      "json_pointer": "/cases/0/fixed_all_x_trace",
+      "development": 0.0,
+      "release": 0.0,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "matched_readout_information_at_origin",
+      "artifact": "results/measurements/readout_singularities.json",
+      "json_pointer": "/cases/0/matched_readout_trace",
+      "development": 3.9999999999999964,
+      "release": 3.9999999999999964,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "dephasing_covariance_max_drift",
+      "artifact": "results/noise/qfi_covariance_separation.json",
+      "json_pointer": "/dephasing_covariance_max_drift",
+      "development": 1.1102230246251565e-16,
+      "release": 1.1102230246251565e-16,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "dephasing_cfi_minus_qfim_max",
+      "artifact": "results/noise/qfi_covariance_separation.json",
+      "json_pointer": "/dephasing_cfi_minus_qfim_max",
+      "development": 6.661338147750939e-16,
+      "release": 6.661338147750939e-16,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "estimator_status",
+      "artifact": "results/measurements/estimator_efficiency.json",
+      "json_pointer": "/status",
+      "development": "DONE",
+      "release": "DONE",
+      "relative_difference": null,
+      "verdict": "same"
+    },
+    {
+      "label": "adaptive_status",
+      "artifact": "results/measurements/adaptive_recentering.json",
+      "json_pointer": "/status",
+      "development": "DONE",
+      "release": "DONE",
+      "relative_difference": null,
+      "verdict": "same"
+    },
+    {
+      "label": "k3_converged",
+      "artifact": "results/baselines_k3_quest.json",
+      "json_pointer": "/n_converged",
+      "development": 10,
+      "release": 10,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "k3_total",
+      "artifact": "results/baselines_k3_quest.json",
+      "json_pointer": "/n_total",
+      "development": 11,
+      "release": 11,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "k3_min_cx_ratio",
+      "artifact": "results/baselines_k3_quest.json",
+      "json_pointer": "/min_cx_ratio_over_converged",
+      "development": 2.5,
+      "release": 2.5,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "k3_max_cx_ratio",
+      "artifact": "results/baselines_k3_quest.json",
+      "json_pointer": "/max_cx_ratio_over_converged",
+      "development": 135.55555555555554,
+      "release": 135.55555555555554,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "k3_depth_always_one",
+      "artifact": "results/baselines_k3_quest.json",
+      "json_pointer": "/covq_two_qubit_depth_is_always_one",
+      "development": true,
+      "release": true,
+      "relative_difference": null,
+      "verdict": "same"
+    },
+    {
+      "label": "noisy_pricing_worst_gap",
+      "artifact": "results/noise/noisy_pricing_oracle.json",
+      "json_pointer": "/worst_gap",
+      "development": 8.881784197001252e-16,
+      "release": 8.881784197001252e-16,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "noisy_pricing_cases",
+      "artifact": "results/noise/noisy_pricing_oracle.json",
+      "json_pointer": "/n_cases",
+      "development": 12,
+      "release": 12,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "floor_worst_optimality_gap",
+      "artifact": "results/noise/noise_aware_floor_compiler.json",
+      "json_pointer": "/worst_optimality_gap",
+      "development": 2.0954757928848256e-16,
+      "release": 2.0954757928848256e-16,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "entanglement_threshold",
+      "artifact": "results/noise/noise_aware_floor_compiler.json",
+      "json_pointer": "/entanglement_threshold_between",
+      "development": [
+        0.15,
+        0.2
+      ],
+      "release": [
+        0.15,
+        0.2
+      ],
+      "relative_difference": null,
+      "verdict": "same"
+    },
+    {
+      "label": "worst_setting_crossover_1e4",
+      "artifact": "results/noise/setting_cost_phase_diagram.json",
+      "json_pointer": "/worst_crossover_at_c_setup_1e4",
+      "development": 13046.859631079658,
+      "release": 13046.859631079658,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "greedy_worst_excess_percent",
+      "artifact": "results/noise/fixed_setting_cost_solver.json",
+      "json_pointer": "/worst_greedy_excess_percent",
+      "development": 7.240561920959548,
+      "release": 7.240561920959548,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "greedy_status",
+      "artifact": "results/noise/fixed_setting_cost_solver.json",
+      "json_pointer": "/status",
+      "development": "FAILS",
+      "release": "FAILS",
+      "relative_difference": null,
+      "verdict": "same"
+    },
+    {
+      "label": "n7_clean_best_ratio",
+      "artifact": "results/noise/adaptive_readout_performance.json",
+      "json_pointer": "/arms/0/best_ratio",
+      "development": 1.0000000000000002,
+      "release": 1.0000000000000002,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "n7_heavy_best_ratio",
+      "artifact": "results/noise/adaptive_readout_performance.json",
+      "json_pointer": "/arms/2/best_ratio",
+      "development": 0.9766612320619459,
+      "release": 0.9766612320619459,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "n10_noiseless_covq",
+      "artifact": "results/noise/quest_operational_comparison.json",
+      "json_pointer": "/rows/0/covq_deployable_fixed_pilot_exposure",
+      "development": 1.7854844662521132,
+      "release": 1.7854844662521132,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "n10_noiseless_quest",
+      "artifact": "results/noise/quest_operational_comparison.json",
+      "json_pointer": "/rows/0/quest_shots_noisy_qfi_upper_bound",
+      "development": 1.6260855073181055,
+      "release": 1.6260855073181055,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "n10_primary_field",
+      "artifact": "results/noise/quest_operational_comparison.json",
+      "json_pointer": "/primary_covq_field",
+      "development": "covq_deployable_fixed_pilot_exposure",
+      "release": "covq_deployable_fixed_pilot_exposure",
+      "relative_difference": null,
+      "verdict": "same"
+    },
+    {
+      "label": "quest_two_qubit_rotations",
+      "artifact": "results/noise/quest_operational_comparison.json",
+      "json_pointer": "/quest_preparation/two_qubit_rotations",
+      "development": 44,
+      "release": 44,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    },
+    {
+      "label": "sparse_preparation_cx",
+      "artifact": "results/noise/quest_operational_comparison.json",
+      "json_pointer": "/sparse_caratheodory_preparation/cx_count",
+      "development": 232,
+      "release": 232,
+      "relative_difference": 0.0,
+      "verdict": "same"
+    }
+  ],
+  "submission_gate": "PASS"
+}

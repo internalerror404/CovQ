@@ -1,7 +1,7 @@
 {
   "schema_version": "covq.measurement.record/0.1",
-  "source_commit": "1c8cc6817a04ab18c9be07890358c8ea002cf6bd",
-  "dirty": true,
+  "source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+  "dirty": false,
   "dirty_scope": [
     "prototype/src",
     "prototype/tests",
@@ -171,5 +171,5 @@
   "n_prose_absent_from_source": 0,
   "note": "the N10 table gains a deployable column: the frozen f=0.02 fixed-pilot exposure is the primary CovQ figure and the matched-analyzer value is retained as a diagnostic ceiling, so a cell-count difference there is expected and intended",
   "status": "DONE",
-  "record_hash": "e15c871b8caf9a7181125510cccfc197468614c20fb9c4d837d45d3399dabfa0"
+  "record_hash": "3c1d0871016021ac8cf41f0f82d35ad4ff2289e5e60dfc6eeef6dd5a41258330"
 }

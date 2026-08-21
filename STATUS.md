@@ -17,12 +17,12 @@ information-floor compiler is the reason anyone needs the engine.
 | `J0` scope freeze | `DONE` | `REGISTRATION.md`; targets, seeds, tolerances, grids, restart rules, cost models and baseline rules all pinned. |
 | `J1` independent SLD regression | `DONE` | `prototype/tests/test_mixed_qfim_sld_regression.py`. Lyapunov solve vs spectral Eq (110): `1.33e-15` on 30 full-rank complex states, against the registered `1e-10`. Rank-deficient states are singular by construction and are checked as a linearly convergent limit instead. |
 | `J2` frozen-pilot N10 | `DONE` | `f = 0.02`, phases `{0, π/2}`, pilot retained, globally fixed. Deployable overhead `1.10 %` → `1.44 %`; never below the oracle ceiling. |
-| `J3` clean pipeline | see below | Every canonical record regenerated from a clean tree. |
-| `J4` reproduction diff | see below | `results/reproduction_diff.json`, `docs/audits/JOURNAL_RELEASE_REPRODUCTION_v0.4.md`. |
+| `J3` clean pipeline | `PASS` | All 14 canonical records regenerated from a clean tree: `dirty=false`, `source_commit=dc22135`, 0 non-conforming. Took three passes — the first two were dirtied by my own concurrent edits, which is what the flag is for. |
+| `J4` reproduction diff | `PASS` | 27 headline quantities compared, **0 changed, 0 absent**. Also a determinism check: two independent reruns of the same tree agree exactly. `docs/audits/JOURNAL_RELEASE_REPRODUCTION_v0.4.md`. |
 | `J5` documentation | `DONE` | `prototype/README.md` rewritten (it described an 85-test tree with no noise, estimator or QUEST work), `REGISTRATION.md` added, `STATUS.md` refreshed. |
-| `J6` machine-generated paper | `PARTIAL / BLOCKED` | `results/table_manifest.json` binds every headline quantity to artifact, JSON pointer, record hash and source commit — the input a deterministic generator consumes. **The manuscript LaTeX source is not in this repository**, so the paper itself cannot be regenerated here. |
+| `J6` machine-generated paper | `PASS / FIGURES_ABSENT` | LaTeX source vendored at `paper/CovQ_Paper_v0.4.tex`. All five result tables regenerate from records into `paper/generated/`; four **MATCH** the source to 0.5 % relative and N10 is `EXPECTED_CHANGE` (it gains the deployable column). Seven prose-quoted figures also bound and matching. 27/27 quantities resolved, all records clean, single source commit. **`make_figures.py` and the `.bib` never arrived**, so Figures 3–4 cannot be regenerated or checksummed. |
 | `J7` proof and citation audit | `PARTIAL` | `docs/audits/J7_PROOF_AUDIT_v0.4.md`. Self-audit only — it does not discharge the requirement for an independent reader. Four items flagged. Citations **not verifiable**: `arxiv.org` is blocked by the egress proxy. |
-| `J8` archive | `PARTIAL` | `results/RELEASE_MANIFEST.json` (SHA-256 over source and results, environment lock) and a release tag. **DOI minting is external.** PDF checksums need the PDF in-repo. |
+| `J8` archive | `PARTIAL` | `results/RELEASE_MANIFEST.json`: SHA-256 over every source and result file plus an environment lock. **DOI minting is external**; figure and PDF checksums need those artifacts in-repo. |
 
 ## Disposition
 

@@ -1,7 +1,16 @@
 {
   "schema_version": "covq.measurement.record/0.1",
-  "source_commit": "c13e1ee954d539ccd0838bf7980d330be9893c87",
-  "dirty": true,
+  "source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+  "dirty": false,
+  "dirty_scope": [
+    "prototype/src",
+    "prototype/tests",
+    "prototype/scripts",
+    "STATUS.md",
+    "REGISTRATION.md",
+    "docs",
+    "charter"
+  ],
   "tolerances": {
     "attainment_abs": 1e-09,
     "closed_form_abs": 1e-09,
@@ -18,144 +27,144 @@
       "artifact": "results/measurements/ideal_block_readout.json",
       "json_pointer": "/worst_attainment_gap",
       "value": 3.108624468950438e-15,
-      "record_hash": "4d1ff35b721618bbd03f768761d860503da99f768fb1f67d56ddf8917583398c",
-      "record_source_commit": "c13e1ee954d539ccd0838bf7980d330be9893c87",
-      "record_dirty": true
+      "record_hash": "863a5eb321fc211915031ab58ab8ff21175c8040f4040a63762ea76c1fd31014",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "schedule_worst_cfi_gap",
       "artifact": "results/measurements/schedule_attainability.json",
       "json_pointer": "/worst_schedule_gap",
       "value": 1.5667258001043705e-15,
-      "record_hash": "4dad7b8b407a6a8256f2ea31736328993ff50b24a6e43d9ac1b4e72161a25a1d",
-      "record_source_commit": "c13e1ee954d539ccd0838bf7980d330be9893c87",
-      "record_dirty": true
+      "record_hash": "8246acc89ac5f487b8ff8f1d0138a6f514fbadbfab63bf2fe59895855f87d853",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "fixed_readout_information_at_origin",
       "artifact": "results/measurements/readout_singularities.json",
       "json_pointer": "/cases/0/fixed_all_x_trace",
       "value": 0.0,
-      "record_hash": "93ffe39da7d8b8712bccfcf400989038093bd9e8ef0ae80817d98a57104cf253",
-      "record_source_commit": "c13e1ee954d539ccd0838bf7980d330be9893c87",
-      "record_dirty": true
+      "record_hash": "06965d9cc671303ad316ce3601e3063d2da629a1bd4ae8357379a5091019195c",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "matched_readout_information_at_origin",
       "artifact": "results/measurements/readout_singularities.json",
       "json_pointer": "/cases/0/matched_readout_trace",
       "value": 3.9999999999999964,
-      "record_hash": "93ffe39da7d8b8712bccfcf400989038093bd9e8ef0ae80817d98a57104cf253",
-      "record_source_commit": "c13e1ee954d539ccd0838bf7980d330be9893c87",
-      "record_dirty": true
+      "record_hash": "06965d9cc671303ad316ce3601e3063d2da629a1bd4ae8357379a5091019195c",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "dephasing_covariance_max_drift",
       "artifact": "results/noise/qfi_covariance_separation.json",
       "json_pointer": "/dephasing_covariance_max_drift",
       "value": 1.1102230246251565e-16,
-      "record_hash": "1e4753d5b429bf60af70eec148a40074ae769194cc71d20714c53843236ee982",
-      "record_source_commit": "c13e1ee954d539ccd0838bf7980d330be9893c87",
-      "record_dirty": true
+      "record_hash": "4e9e3e309a2b897145e82597c02f571711a291cc7f181596df5b1fcef535bfa2",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "dephasing_cfi_minus_qfim_max",
       "artifact": "results/noise/qfi_covariance_separation.json",
       "json_pointer": "/dephasing_cfi_minus_qfim_max",
       "value": 6.661338147750939e-16,
-      "record_hash": "1e4753d5b429bf60af70eec148a40074ae769194cc71d20714c53843236ee982",
-      "record_source_commit": "c13e1ee954d539ccd0838bf7980d330be9893c87",
-      "record_dirty": true
+      "record_hash": "4e9e3e309a2b897145e82597c02f571711a291cc7f181596df5b1fcef535bfa2",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "estimator_status",
       "artifact": "results/measurements/estimator_efficiency.json",
       "json_pointer": "/status",
       "value": "DONE",
-      "record_hash": "2aac6b5a875fcf8c7808ebe00812e6e889383b5b3a8e13769a22ad442d621368",
-      "record_source_commit": "c13e1ee954d539ccd0838bf7980d330be9893c87",
-      "record_dirty": true
+      "record_hash": "f7dfcb9e515ec759f1a48cac912abccd1799e76ba7fba6288d15846ddc3af740",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "adaptive_status",
       "artifact": "results/measurements/adaptive_recentering.json",
       "json_pointer": "/status",
       "value": "DONE",
-      "record_hash": "10e35dc6769f738db044af3690f55ad89dd51f0347f5556a53262e7f2f8e6d51",
-      "record_source_commit": "c13e1ee954d539ccd0838bf7980d330be9893c87",
-      "record_dirty": true
+      "record_hash": "dd42005f134ac29e9d3b715e1b74255ff0e095e271804a0258376f80d86b58f6",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "k3_converged",
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/n_converged",
       "value": 10,
-      "record_hash": "1e98aec1b755f5abaea87c2afdd1541211699e884ac173d65eb0555fe1ed53f8",
-      "record_source_commit": "26ed00e3d2f16576be88427690b1be79dea14026",
-      "record_dirty": true
+      "record_hash": "b9cba1652ae887c2272dc82b10e13a53b150ac3c444f6a95d3e0221cc32670da",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "k3_total",
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/n_total",
       "value": 11,
-      "record_hash": "1e98aec1b755f5abaea87c2afdd1541211699e884ac173d65eb0555fe1ed53f8",
-      "record_source_commit": "26ed00e3d2f16576be88427690b1be79dea14026",
-      "record_dirty": true
+      "record_hash": "b9cba1652ae887c2272dc82b10e13a53b150ac3c444f6a95d3e0221cc32670da",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "k3_min_cx_ratio",
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/min_cx_ratio_over_converged",
       "value": 2.5,
-      "record_hash": "1e98aec1b755f5abaea87c2afdd1541211699e884ac173d65eb0555fe1ed53f8",
-      "record_source_commit": "26ed00e3d2f16576be88427690b1be79dea14026",
-      "record_dirty": true
+      "record_hash": "b9cba1652ae887c2272dc82b10e13a53b150ac3c444f6a95d3e0221cc32670da",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "k3_max_cx_ratio",
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/max_cx_ratio_over_converged",
       "value": 135.55555555555554,
-      "record_hash": "1e98aec1b755f5abaea87c2afdd1541211699e884ac173d65eb0555fe1ed53f8",
-      "record_source_commit": "26ed00e3d2f16576be88427690b1be79dea14026",
-      "record_dirty": true
+      "record_hash": "b9cba1652ae887c2272dc82b10e13a53b150ac3c444f6a95d3e0221cc32670da",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "k3_depth_always_one",
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/covq_two_qubit_depth_is_always_one",
       "value": true,
-      "record_hash": "1e98aec1b755f5abaea87c2afdd1541211699e884ac173d65eb0555fe1ed53f8",
-      "record_source_commit": "26ed00e3d2f16576be88427690b1be79dea14026",
-      "record_dirty": true
+      "record_hash": "b9cba1652ae887c2272dc82b10e13a53b150ac3c444f6a95d3e0221cc32670da",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "noisy_pricing_worst_gap",
       "artifact": "results/noise/noisy_pricing_oracle.json",
       "json_pointer": "/worst_gap",
       "value": 8.881784197001252e-16,
-      "record_hash": "1263a240f9aa54a1684dbe690fd35413d3ed2ef948db79abe222cff57d8a8a4c",
-      "record_source_commit": "72fe4e3f1fe56d3d7b0fb1da64139662628a016a",
-      "record_dirty": true
+      "record_hash": "63e5e1eb55f8b714f43faef20ec0dfde130565af3c2c20328931d7c1c2386083",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "noisy_pricing_cases",
       "artifact": "results/noise/noisy_pricing_oracle.json",
       "json_pointer": "/n_cases",
       "value": 12,
-      "record_hash": "1263a240f9aa54a1684dbe690fd35413d3ed2ef948db79abe222cff57d8a8a4c",
-      "record_source_commit": "72fe4e3f1fe56d3d7b0fb1da64139662628a016a",
-      "record_dirty": true
+      "record_hash": "63e5e1eb55f8b714f43faef20ec0dfde130565af3c2c20328931d7c1c2386083",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "floor_worst_optimality_gap",
       "artifact": "results/noise/noise_aware_floor_compiler.json",
       "json_pointer": "/worst_optimality_gap",
       "value": 2.0954757928848256e-16,
-      "record_hash": "2331a422d5c8118e908e3f6897265009a0c2cefa79b7bd973ab10bf2a7c9e7a0",
-      "record_source_commit": "72fe4e3f1fe56d3d7b0fb1da64139662628a016a",
-      "record_dirty": true
+      "record_hash": "6602a16be707708b20337b267e9839430680d5fcad9f262d930920754155a339",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "entanglement_threshold",
@@ -165,107 +174,109 @@
         0.15,
         0.2
       ],
-      "record_hash": "2331a422d5c8118e908e3f6897265009a0c2cefa79b7bd973ab10bf2a7c9e7a0",
-      "record_source_commit": "72fe4e3f1fe56d3d7b0fb1da64139662628a016a",
-      "record_dirty": true
+      "record_hash": "6602a16be707708b20337b267e9839430680d5fcad9f262d930920754155a339",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "worst_setting_crossover_1e4",
       "artifact": "results/noise/setting_cost_phase_diagram.json",
       "json_pointer": "/worst_crossover_at_c_setup_1e4",
       "value": 13046.859631079658,
-      "record_hash": "3ee13c515aa41522e818d011d3189a062f98590db860cf924d2e1bfb5b2546c5",
-      "record_source_commit": "72fe4e3f1fe56d3d7b0fb1da64139662628a016a",
-      "record_dirty": true
+      "record_hash": "d0171afd573bdc25368d2541db9fcec9d74ff34f04181d17e758c0501b29ff5a",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "greedy_worst_excess_percent",
       "artifact": "results/noise/fixed_setting_cost_solver.json",
       "json_pointer": "/worst_greedy_excess_percent",
       "value": 7.240561920959548,
-      "record_hash": "de96f034252afcb24dac3388b3ff1d83f5f01f80c727f74ed882f00f1757741f",
-      "record_source_commit": "517e73f8d488af19a40c777155b5d0db48027bcb",
-      "record_dirty": true
+      "record_hash": "95461ab27334193f8798d0c91d54f830a3f4518374897d83e5b04bb553d3fad8",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "greedy_status",
       "artifact": "results/noise/fixed_setting_cost_solver.json",
       "json_pointer": "/status",
       "value": "FAILS",
-      "record_hash": "de96f034252afcb24dac3388b3ff1d83f5f01f80c727f74ed882f00f1757741f",
-      "record_source_commit": "517e73f8d488af19a40c777155b5d0db48027bcb",
-      "record_dirty": true
+      "record_hash": "95461ab27334193f8798d0c91d54f830a3f4518374897d83e5b04bb553d3fad8",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "n7_clean_best_ratio",
       "artifact": "results/noise/adaptive_readout_performance.json",
       "json_pointer": "/arms/0/best_ratio",
       "value": 1.0000000000000002,
-      "record_hash": "954c6dd35f10eed06c7cb4b058321c5b6345c8c6712211e9b658070d50a81e9a",
-      "record_source_commit": "517e73f8d488af19a40c777155b5d0db48027bcb",
-      "record_dirty": true
+      "record_hash": "65bfc35f7b90bc5adaef3e5dab363f6f7edf010808758bf4afacb5289047f450",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "n7_heavy_best_ratio",
       "artifact": "results/noise/adaptive_readout_performance.json",
       "json_pointer": "/arms/2/best_ratio",
       "value": 0.9766612320619459,
-      "record_hash": "954c6dd35f10eed06c7cb4b058321c5b6345c8c6712211e9b658070d50a81e9a",
-      "record_source_commit": "517e73f8d488af19a40c777155b5d0db48027bcb",
-      "record_dirty": true
+      "record_hash": "65bfc35f7b90bc5adaef3e5dab363f6f7edf010808758bf4afacb5289047f450",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
+    },
+    {
+      "label": "n10_noiseless_covq",
+      "artifact": "results/noise/quest_operational_comparison.json",
+      "json_pointer": "/rows/0/covq_deployable_fixed_pilot_exposure",
+      "value": 1.7854844662521132,
+      "record_hash": "f3e7624b1b94ebcc190ba4ae512f410005d082ee88dd41f16002617c950b9f76",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "n10_noiseless_quest",
       "artifact": "results/noise/quest_operational_comparison.json",
       "json_pointer": "/rows/0/quest_shots_noisy_qfi_upper_bound",
       "value": 1.6260855073181055,
-      "record_hash": "1ca1d63d32276c3e2fc7066bbcfb856949597478dd01aa5acc794f8f654a4dcd",
-      "record_source_commit": "517e73f8d488af19a40c777155b5d0db48027bcb",
-      "record_dirty": true
+      "record_hash": "f3e7624b1b94ebcc190ba4ae512f410005d082ee88dd41f16002617c950b9f76",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
+    },
+    {
+      "label": "n10_primary_field",
+      "artifact": "results/noise/quest_operational_comparison.json",
+      "json_pointer": "/primary_covq_field",
+      "value": "covq_deployable_fixed_pilot_exposure",
+      "record_hash": "f3e7624b1b94ebcc190ba4ae512f410005d082ee88dd41f16002617c950b9f76",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "quest_two_qubit_rotations",
       "artifact": "results/noise/quest_operational_comparison.json",
       "json_pointer": "/quest_preparation/two_qubit_rotations",
       "value": 44,
-      "record_hash": "1ca1d63d32276c3e2fc7066bbcfb856949597478dd01aa5acc794f8f654a4dcd",
-      "record_source_commit": "517e73f8d488af19a40c777155b5d0db48027bcb",
-      "record_dirty": true
+      "record_hash": "f3e7624b1b94ebcc190ba4ae512f410005d082ee88dd41f16002617c950b9f76",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     },
     {
       "label": "sparse_preparation_cx",
       "artifact": "results/noise/quest_operational_comparison.json",
       "json_pointer": "/sparse_caratheodory_preparation/cx_count",
       "value": 232,
-      "record_hash": "1ca1d63d32276c3e2fc7066bbcfb856949597478dd01aa5acc794f8f654a4dcd",
-      "record_source_commit": "517e73f8d488af19a40c777155b5d0db48027bcb",
-      "record_dirty": true
+      "record_hash": "f3e7624b1b94ebcc190ba4ae512f410005d082ee88dd41f16002617c950b9f76",
+      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_dirty": false
     }
   ],
-  "unresolved": [
-    {
-      "label": "n10_noiseless_covq",
-      "artifact": "results/noise/quest_operational_comparison.json",
-      "pointer": "/rows/0/covq_deployable_fixed_pilot_exposure",
-      "reason": "KeyError: 'covq_deployable_fixed_pilot_exposure'"
-    },
-    {
-      "label": "n10_primary_field",
-      "artifact": "results/noise/quest_operational_comparison.json",
-      "pointer": "/primary_covq_field",
-      "reason": "KeyError: 'primary_covq_field'"
-    }
-  ],
-  "n_bound": 25,
-  "n_unresolved": 2,
-  "all_records_clean": false,
-  "single_source_commit": false,
+  "unresolved": [],
+  "n_bound": 27,
+  "n_unresolved": 0,
+  "all_records_clean": true,
+  "single_source_commit": true,
   "source_commits": [
-    "26ed00e3d2f16576be88427690b1be79dea14026",
-    "517e73f8d488af19a40c777155b5d0db48027bcb",
-    "72fe4e3f1fe56d3d7b0fb1da64139662628a016a",
-    "c13e1ee954d539ccd0838bf7980d330be9893c87"
+    "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3"
   ],
-  "status": "FAILS",
-  "record_hash": "31da7e77d61edfd08dae583c710fd318d4d2c6a947d9859a491f0ff8a1919172"
+  "status": "DONE",
+  "record_hash": "9f7a3a87f3525f25531941cfd7d5c64cb9fe0271569f804cadf8bcbb9fde32b3"
 }
