@@ -104,6 +104,8 @@ def tab_fixed_setting(n9):
 
 NUM = re.compile(r"-?\d+\.?\d*(?:[eE][-+]?\d+)?")
 
+_WORDS = {8: "eight", 9: "nine", 10: "ten", 11: "eleven", 12: "twelve"}
+
 
 def audit(name: str, generated: list[str], tex: str) -> dict:
     """Locate the table in the manuscript by its first data row and diff cells."""
@@ -151,7 +153,7 @@ PROSE_CLAIMS = [
     ("k3_max_ratio", "135.6", "results/baselines_k3_quest.json",
      "/max_cx_ratio_over_converged", lambda v: f"{v:.1f}"),
     ("k3_converged", "ten converged", "results/baselines_k3_quest.json",
-     "/n_converged", lambda v: {10: "ten converged"}.get(int(v), f"{int(v)} converged")),
+     "/n_converged", lambda v: f"{_WORDS.get(int(v), str(int(v)))} converged"),
     ("quest_two_qubit", "44 two-qubit rotations",
      "results/noise/quest_operational_comparison.json",
      "/quest_preparation/two_qubit_rotations", lambda v: f"{int(v)} two-qubit rotations"),

@@ -1,6 +1,6 @@
 {
   "schema_version": "covq.measurement.record/0.1",
-  "source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+  "source_commit": "fb921c38680153c8323e11011887edf10526e365",
   "dirty": false,
   "dirty_scope": [
     "prototype/src",
@@ -31,9 +31,129 @@
     {
       "table": "quest_exact",
       "n_rows": 11,
-      "n_diffs": 0,
-      "diffs": [],
-      "verdict": "MATCH"
+      "n_diffs": 17,
+      "diffs": [
+        {
+          "row": 1,
+          "cell": 3,
+          "generated": 4.0,
+          "manuscript": 122.0,
+          "relative_difference": 0.9672131147540983
+        },
+        {
+          "row": 1,
+          "cell": 4,
+          "generated": 4.0,
+          "manuscript": 122.0,
+          "relative_difference": 0.9672131147540983
+        },
+        {
+          "row": 1,
+          "cell": 5,
+          "generated": 4.44,
+          "manuscript": 135.56,
+          "relative_difference": 0.9672469755089997
+        },
+        {
+          "row": 4,
+          "cell": 3,
+          "generated": 24.0,
+          "manuscript": 158.0,
+          "relative_difference": 0.8481012658227848
+        },
+        {
+          "row": 4,
+          "cell": 4,
+          "generated": 20.0,
+          "manuscript": 142.0,
+          "relative_difference": 0.8591549295774648
+        },
+        {
+          "row": 4,
+          "cell": 5,
+          "generated": 17.78,
+          "manuscript": 117.04,
+          "relative_difference": 0.8480861244019139
+        },
+        {
+          "row": 5,
+          "cell": 4,
+          "generated": 6.0,
+          "manuscript": 4.0,
+          "relative_difference": 0.3333333333333333
+        },
+        {
+          "row": 7,
+          "cell": 3,
+          "generated": 46.0,
+          "manuscript": 356.0,
+          "relative_difference": 0.8707865168539326
+        },
+        {
+          "row": 7,
+          "cell": 4,
+          "generated": 36.0,
+          "manuscript": 296.0,
+          "relative_difference": 0.8783783783783784
+        },
+        {
+          "row": 7,
+          "cell": 5,
+          "generated": 25.56,
+          "manuscript": 197.78,
+          "relative_difference": 0.8707654970168874
+        },
+        {
+          "row": 8,
+          "cell": 4,
+          "generated": 8.0,
+          "manuscript": 6.0,
+          "relative_difference": 0.25
+        },
+        {
+          "row": 9,
+          "cell": 3,
+          "generated": 8.0,
+          "manuscript": 112.0,
+          "relative_difference": 0.9285714285714286
+        },
+        {
+          "row": 9,
+          "cell": 4,
+          "generated": 8.0,
+          "manuscript": 94.0,
+          "relative_difference": 0.9148936170212766
+        },
+        {
+          "row": 9,
+          "cell": 5,
+          "generated": 8.89,
+          "manuscript": 124.44,
+          "relative_difference": 0.9285599485695918
+        },
+        {
+          "row": 10,
+          "cell": 3,
+          "generated": 48.0,
+          "manuscript": 118.0,
+          "relative_difference": 0.5932203389830508
+        },
+        {
+          "row": 10,
+          "cell": 4,
+          "generated": 36.0,
+          "manuscript": 80.0,
+          "relative_difference": 0.55
+        },
+        {
+          "row": 10,
+          "cell": 5,
+          "generated": 32.65,
+          "manuscript": 80.27,
+          "relative_difference": 0.5932477887130934
+        }
+      ],
+      "verdict": "MISMATCH"
     },
     {
       "table": "pilot",
@@ -63,31 +183,31 @@
         {
           "row": 1,
           "issue": "cell count differs",
-          "generated": "0.01 & 1.822 & 1.802 & 3.255 & 2.876 & 7.802\\\\",
+          "generated": "0.01 & 1.822 & 1.802 & 3.255 & 1.697 & 7.802\\\\",
           "manuscript": "0.05 & 2.3482 & 3 & 3\\\\"
         },
         {
           "row": 2,
           "issue": "cell count differs",
-          "generated": "0.02 & 1.860 & 1.839 & 3.255 & 5.122 & 46.890\\\\",
+          "generated": "0.02 & 1.860 & 1.839 & 3.255 & 1.769 & 46.890\\\\",
           "manuscript": "0.10 & 2.6164 & 3 & 3\\\\"
         },
         {
           "row": 3,
           "issue": "cell count differs",
-          "generated": "0.05 & 1.980 & 1.957 & 3.255 & 32.804 & 31102.752\\\\",
+          "generated": "0.05 & 1.980 & 1.957 & 3.255 & 2.001 & 31102.752\\\\",
           "manuscript": "0.15 & 2.9333 & 3 & 3\\\\"
         },
         {
           "row": 4,
           "issue": "cell count differs",
-          "generated": "0.10 & 2.207 & 2.180 & 3.255 & 835.764 & 5200690140.045\\\\",
+          "generated": "0.10 & 2.207 & 2.180 & 3.255 & 2.469 & 5200690140.045\\\\",
           "manuscript": "0.20 & 3.2552 & 1 & 0\\\\"
         },
         {
           "row": 5,
           "issue": "missing in manuscript",
-          "generated": "0.20 & 2.799 & 2.759 & 3.255 & 351088.951 & {infinite}\\\\"
+          "generated": "0.20 & 2.799 & 2.759 & 3.255 & 3.893 & {infinite}\\\\"
         }
       ],
       "verdict": "EXPECTED_CHANGE",
@@ -101,7 +221,7 @@
       "verdict": "MATCH"
     }
   ],
-  "n_mismatched_tables": 0,
+  "n_mismatched_tables": 1,
   "prose_claims": [
     {
       "claim": "noisy_pricing_cases",
@@ -133,28 +253,28 @@
     {
       "claim": "k3_max_ratio",
       "quoted_in_source": "135.6",
-      "from_record": "135.6",
+      "from_record": "32.7",
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/max_cx_ratio_over_converged",
-      "verdict": "MATCH",
+      "verdict": "MISMATCH",
       "present_in_source": true
     },
     {
       "claim": "k3_converged",
       "quoted_in_source": "ten converged",
-      "from_record": "ten converged",
+      "from_record": "11 converged",
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/n_converged",
-      "verdict": "MATCH",
+      "verdict": "MISMATCH",
       "present_in_source": true
     },
     {
       "claim": "quest_two_qubit",
       "quoted_in_source": "44 two-qubit rotations",
-      "from_record": "44 two-qubit rotations",
+      "from_record": "3 two-qubit rotations",
       "artifact": "results/noise/quest_operational_comparison.json",
       "json_pointer": "/quest_preparation/two_qubit_rotations",
-      "verdict": "MATCH",
+      "verdict": "MISMATCH",
       "present_in_source": true
     },
     {
@@ -167,9 +287,9 @@
       "present_in_source": true
     }
   ],
-  "n_prose_mismatch": 0,
+  "n_prose_mismatch": 3,
   "n_prose_absent_from_source": 0,
   "note": "the N10 table gains a deployable column: the frozen f=0.02 fixed-pilot exposure is the primary CovQ figure and the matched-analyzer value is retained as a diagnostic ceiling, so a cell-count difference there is expected and intended",
-  "status": "DONE",
-  "record_hash": "3c1d0871016021ac8cf41f0f82d35ad4ff2289e5e60dfc6eeef6dd5a41258330"
+  "status": "FAILS",
+  "record_hash": "67a0e9807df32866078a870f55ffa558abbc0564484c0e697c2b05d07311c265"
 }

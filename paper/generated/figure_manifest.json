@@ -1,0 +1,139 @@
+{
+  "figures": [
+    {
+      "figure": "operational_results",
+      "panels": {
+        "a": {
+          "artifact": "results/noise/adaptive_readout_performance.json",
+          "json_pointers": [
+            "/arms/0/sweep/0",
+            "/arms/0/sweep/1",
+            "/arms/0/sweep/2",
+            "/arms/0/sweep/3",
+            "/arms/0/sweep/4",
+            "/arms/0/sweep/5",
+            "/arms/0/sweep/6",
+            "/arms/0/sweep/7",
+            "/arms/1/sweep/0",
+            "/arms/1/sweep/1",
+            "/arms/1/sweep/2",
+            "/arms/1/sweep/3",
+            "/arms/1/sweep/4",
+            "/arms/1/sweep/5",
+            "/arms/1/sweep/6",
+            "/arms/1/sweep/7",
+            "/arms/2/sweep/0",
+            "/arms/2/sweep/1",
+            "/arms/2/sweep/2",
+            "/arms/2/sweep/3",
+            "/arms/2/sweep/4",
+            "/arms/2/sweep/5",
+            "/arms/2/sweep/6",
+            "/arms/2/sweep/7"
+          ]
+        },
+        "b": {
+          "artifact": "results/noise/quest_operational_comparison.json",
+          "covq_primary_field": "covq_deployable_fixed_pilot_exposure",
+          "json_pointers": [
+            "/rows/0",
+            "/rows/1",
+            "/rows/2",
+            "/rows/3",
+            "/rows/4",
+            "/rows/5"
+          ]
+        },
+        "c": {
+          "artifact": "results/noise/noise_aware_floor_compiler.json",
+          "json_pointers": [
+            "/sweep/0",
+            "/sweep/1",
+            "/sweep/2",
+            "/sweep/3",
+            "/sweep/4",
+            "/sweep/5",
+            "/sweep/6",
+            "/sweep/7",
+            "/sweep/8"
+          ]
+        },
+        "d": {
+          "artifact": "results/baselines_k3_quest.json",
+          "json_pointers": [
+            "/cases/0",
+            "/cases/1",
+            "/cases/2",
+            "/cases/3",
+            "/cases/4",
+            "/cases/5",
+            "/cases/6",
+            "/cases/7",
+            "/cases/8",
+            "/cases/9",
+            "/cases/10"
+          ]
+        }
+      }
+    },
+    {
+      "artifact": "results/noise/fixed_setting_cost_solver.json",
+      "figure": "fixed_setting_failure",
+      "json_pointers": [
+        "/rows/0",
+        "/rows/1",
+        "/rows/2",
+        "/rows/3",
+        "/rows/4"
+      ]
+    }
+  ],
+  "generator": "make_figures.py",
+  "inputs": {
+    "k3": {
+      "path": "results/baselines_k3_quest.json",
+      "record_hash": "4aa949048de0a4c09f493381b858bb4ed96701a0ebdaef2e9e020115c01ca70d",
+      "sha256": "44f79db800c37c8dffd4fff7378f27bdffb6108399ef603a3ce4d9095699e503"
+    },
+    "n10": {
+      "path": "results/noise/quest_operational_comparison.json",
+      "record_hash": "d4539c38e7e8cc0e515fafbf4b0a97ca88860ff5b9bd17970b2c93c4d65e5ac5",
+      "sha256": "3711b46ced1a92c77b1b5e70ffd9a6b3adc0a092ba188ae858de8ead2665e10d"
+    },
+    "n6": {
+      "path": "results/noise/noise_aware_floor_compiler.json",
+      "record_hash": "734071c398b89581ed0fdba341078bc93a134cc1d3c59c65f6243ff82e22623f",
+      "sha256": "38be3b2413b2efa647fd62bf460f1a94417e561fb9f91e90c6f56de335f6349e"
+    },
+    "n7": {
+      "path": "results/noise/adaptive_readout_performance.json",
+      "record_hash": "c106f1e0f428f0e9b8eb39e86d66184cad0923294008a26b32bbee441a8d5a44",
+      "sha256": "14b1e4c696038fe4a413b39d799b08c7dac81beb9cf1e1cd82f21149e9719fd2"
+    },
+    "n9": {
+      "path": "results/noise/fixed_setting_cost_solver.json",
+      "record_hash": "03194bc243dcd7e1e5c2c6635fb8e3e744fee1378cacfab053314e7ba34550e0",
+      "sha256": "b1c49b8adbb2614079257449c604ef42d3ad97a184b3060d7c8c3d84a9841ec1"
+    }
+  },
+  "outputs": [
+    {
+      "path": "paper/figures/operational_results.pdf",
+      "sha256": "778a7600b88d3ef9472af3458a7bcb296cf2dfa0a2580f89bb5a6e29315f00fd"
+    },
+    {
+      "path": "paper/figures/operational_results.png",
+      "sha256": "2cc01efe8d6d0d153245e9ee1adbe6bdfee792dd8e5b6c80e6ce65993fd51dc0"
+    },
+    {
+      "path": "paper/figures/fixed_setting_failure.pdf",
+      "sha256": "6248fa21ac1df1a006f514f72ab7684a588cfd1eb6e91658ead775e0f2d842d9"
+    },
+    {
+      "path": "paper/figures/fixed_setting_failure.png",
+      "sha256": "840c1b794c5c18c83c5c80c488df0f3d0acab11f8a2a76754bc906dd1a7e5674"
+    }
+  ],
+  "schema_version": "covq.figure_manifest/0.4",
+  "source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194"
+}

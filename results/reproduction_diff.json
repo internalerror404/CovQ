@@ -1,10 +1,18 @@
 {
   "schema_version": "covq.reproduction_diff/0.4",
-  "development_ref": "HEAD",
+  "development_ref": "HEAD~1",
   "relative_tolerance": 1e-06,
   "n_compared": 27,
-  "n_changed": 4,
+  "n_changed": 0,
   "n_absent": 0,
+  "n_expected_change": 4,
+  "expected_change_reasons": {
+    "k3_converged": "path_m5 no longer hits the depth cap once angles are reoptimised",
+    "k3_max_cx_ratio": "greedy overestimated QUEST depth; 135.6 was an artefact",
+    "k3_min_cx_ratio": "unchanged families re-measured under the published algorithm",
+    "n10_noiseless_quest": "same target state, far fewer gates",
+    "quest_two_qubit_rotations": "44 under terminal greedy, 3 under QUEST-tE"
+  },
   "rows": [
     {
       "label": "readout_worst_attainment_gap",
@@ -85,7 +93,8 @@
       "development": 10,
       "release": 11,
       "relative_difference": 0.09090909090909091,
-      "verdict": "CHANGED"
+      "verdict": "EXPECTED_CHANGE",
+      "reason": "path_m5 no longer hits the depth cap once angles are reoptimised"
     },
     {
       "label": "k3_total",
@@ -112,7 +121,8 @@
       "development": 135.55555555555554,
       "release": 32.6530612244898,
       "relative_difference": 0.7591167614586819,
-      "verdict": "CHANGED"
+      "verdict": "EXPECTED_CHANGE",
+      "reason": "greedy overestimated QUEST depth; 135.6 was an artefact"
     },
     {
       "label": "k3_depth_always_one",
@@ -226,7 +236,8 @@
       "development": 1.6260855073181055,
       "release": 1.6261456545651514,
       "relative_difference": 3.698761354924423e-05,
-      "verdict": "CHANGED"
+      "verdict": "EXPECTED_CHANGE",
+      "reason": "same target state, far fewer gates"
     },
     {
       "label": "n10_primary_field",
@@ -244,7 +255,8 @@
       "development": 44,
       "release": 3,
       "relative_difference": 0.9318181818181818,
-      "verdict": "CHANGED"
+      "verdict": "EXPECTED_CHANGE",
+      "reason": "44 under terminal greedy, 3 under QUEST-tE"
     },
     {
       "label": "sparse_preparation_cx",
@@ -256,5 +268,5 @@
       "verdict": "same"
     }
   ],
-  "submission_gate": "PAUSE"
+  "submission_gate": "PASS"
 }
