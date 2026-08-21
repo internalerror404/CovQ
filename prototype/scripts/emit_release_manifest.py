@@ -39,7 +39,8 @@ def main() -> int:
             files.append(base)
         elif base.is_dir():
             files.extend(p for p in sorted(base.rglob("*"))
-                         if p.is_file() and "__pycache__" not in p.parts)
+                         if p.is_file() and "__pycache__" not in p.parts
+                         and p.name != "RELEASE_MANIFEST.json")
     entries = [{"path": str(p.relative_to(ROOT)), "bytes": p.stat().st_size,
                 "sha256": sha256(p)} for p in sorted(files)]
 
@@ -79,13 +80,19 @@ def main() -> int:
     # Record the tag here rather than patching it in afterwards: this generator
     # rebuilds the manifest from scratch, so anything added to the JSON by hand
     # is silently dropped on the next run.
-    tag = git("describe", "--tags", "--exact-match", default="")
+    # The tag is recorded by name only.  It necessarily points at the commit
+    # that *contains* this manifest, so storing a target SHA here could never be
+    # written correctly -- the SHA does not exist until after the file is
+    # committed.  The manifest also excludes itself from the file list above,
+    # since a manifest that hashes its own previous contents can never be
+    # regenerated to a fixed point.
     manifest["release_tag"] = {
-        "name": tag or None,
-        "target_commit": git("rev-list", "-n", "1", tag) if tag else None,
+        "name": "covq-journal-v0.5",
+        "target": "the commit containing this manifest",
         "pushed": False,
         "reason": "this environment's git proxy refuses refs/tags; branch refs "
                   "push normally, so the commit SHA is the durable identifier",
+        "recreate": "git tag -a covq-journal-v0.5 <commit containing this file>",
     }
     manifest["manifest_sha256"] = hashlib.sha256(
         json.dumps(entries, sort_keys=True).encode()).hexdigest()

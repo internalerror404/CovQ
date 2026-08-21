@@ -3,16 +3,16 @@
   "evidence_source_commit": [
     "daa5587ee9e6a9d4791ea0855b8f38a68ccff336"
   ],
-  "release_packaging_commit": "42ab6d4c7407873318f72be5728c06f04a29aef1",
-  "release_commit": "42ab6d4c7407873318f72be5728c06f04a29aef1",
-  "source_dirty": false,
+  "release_packaging_commit": "fd2e81eb2e1e0fc9e82ed25b09f1f635592531e9",
+  "release_commit": "fd2e81eb2e1e0fc9e82ed25b09f1f635592531e9",
+  "source_dirty": true,
   "environment": {
     "python": "3.11.15",
     "numpy": "2.4.6",
     "scipy": "1.17.1",
     "platform": "Linux-6.18.44-fc-v21-x86_64-with-glibc2.39"
   },
-  "n_files": 73,
+  "n_files": 72,
   "files": [
     {
       "path": "README.md",
@@ -161,8 +161,8 @@
     },
     {
       "path": "prototype/scripts/emit_release_manifest.py",
-      "bytes": 4056,
-      "sha256": "ea94759122ab2be3c3ca09622274eb3d076c89b33ef3d0e0e57d82bc212aa7c2"
+      "bytes": 4546,
+      "sha256": "a4e8abe232f51aa62ec9e4a91ded2438a3e03c7b76e0ac2fa67ed8b196ed225a"
     },
     {
       "path": "prototype/scripts/emit_table_manifest.py",
@@ -285,11 +285,6 @@
       "sha256": "443d5d62d72a5367fedfee89b92f4c4951ae98d4bfd7bfb165d153a63cbbaa8d"
     },
     {
-      "path": "results/RELEASE_MANIFEST.json",
-      "bytes": 13401,
-      "sha256": "91314fd6b898d604178339a273e664c15cf2129fd7c3f85eafa5be4ab5723e6d"
-    },
-    {
       "path": "results/baselines_k3_quest.json",
       "bytes": 15440,
       "sha256": "003182b8ca6f146daee3670bd58b8b4ce380fc63fa812738f5ae5fa463072674"
@@ -381,10 +376,11 @@
     }
   ],
   "release_tag": {
-    "name": null,
-    "target_commit": null,
+    "name": "covq-journal-v0.5",
+    "target": "the commit containing this manifest",
     "pushed": false,
-    "reason": "this environment's git proxy refuses refs/tags; branch refs push normally, so the commit SHA is the durable identifier"
+    "reason": "this environment's git proxy refuses refs/tags; branch refs push normally, so the commit SHA is the durable identifier",
+    "recreate": "git tag -a covq-journal-v0.5 <commit containing this file>"
   },
-  "manifest_sha256": "22822e51384f52ebc4aecf4651626394f6aa7d23372ec7e918ba4b9e70bb8e80"
+  "manifest_sha256": "f7bd0ef3a4b6d7ff3e8b1e2aefb75326df4c2cf04bbdcfe010b34a4e5b4abea9"
 }
