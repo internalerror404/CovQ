@@ -157,6 +157,12 @@ could settle: a cheaper windowed search beat the registered arm there. So the up
 `2.50 – 32.65` is an **upper bound on the separation, not a measured one**, and the
 manuscript must say "up to".
 
+> **Relation to manuscript v0.11.** `paper/revision_v0.11/REVISION_NOTES.md` splits the
+> exact-target claim into `2.50–8.89×` (cross-validated, `tE = bE`) and `17.78/25.56/32.65×`
+> (tE only, stated as upper bounds). That framing is correct, and the study below supplies
+> the evidence for *why* it is necessary rather than merely cautious: one of the three
+> tE-only values is demonstrably beatable.
+
 ## Strengthening study on the three uncovered instances
 
 `bE` could not be afforded on `path_m4`, `path_m5` or `banded_m5` — exactly the three

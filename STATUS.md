@@ -10,6 +10,27 @@ Current documents: `charter/*_v0.3.*`. Proof of record:
 program → hardware-native Bell-pair schedule. The `k = 2` theorem is the engine; the
 information-floor compiler is the reason anyone needs the engine.
 
+## Concurrent work — manuscript v0.10 / v0.11
+
+Another session, anchored on `8cca6ef`, carried the manuscript to **v0.11** while this one
+was running. Its `paper/revision_v0.11/REVISION_NOTES.md` already resolves the bE-coverage
+problem editorially, with a two-tier claim hierarchy:
+
+1. fully cross-validated, `tE = bE` on 8 instances: **`2.50–8.89×`**;
+2. tE-only on `path_m4`, `path_m5`, `banded_m5`: **`17.78×`, `25.56×`, `32.65×`**, stated as
+   upper bounds on the separation from bE.
+
+It has also already absorbed the two-channel deployable result (`512×`, `3.09 %`, `3.20×`).
+Merged, not force-pushed; the merge was additive with zero conflicts.
+
+**One refinement this session adds on top of v0.11.** Its item 3 says the tE-only values
+are "upper bounds on the separation from bE" — an argument. The strengthening study turns
+that into a measurement: on `path_m4`, windowed best-position search **actually finds 20
+emitted CX against tE's 24**, so `17.78×` is demonstrably not tight and the true figure is
+at most `14.81×`. The upper-bound framing is therefore not merely prudent but required,
+and tier 2 should be read as "at most", never as an estimate. See
+`docs/audits/K3_QUEST_BASELINE_v0.2.md`.
+
 ## Journal release gates (v0.4)
 
 | gate | status | note |
@@ -22,7 +43,7 @@ information-floor compiler is the reason anyone needs the engine.
 | `J5` documentation | `DONE` | `prototype/README.md` rewritten (it described an 85-test tree with no noise, estimator or QUEST work), `REGISTRATION.md` added, `STATUS.md` refreshed. |
 | `J6` machine-generated paper | `PASS / MANUSCRIPT_EDITS_PENDING` | LaTeX source vendored at `paper/CovQ_Paper_v0.4.tex`. All five result tables regenerate from records into `paper/generated/`; four **MATCH** the source to 0.5 % relative and N10 is `EXPECTED_CHANGE` (it gains the deployable column). After the QUEST correction the audit correctly flags **17 stale cells in the exact-target table and 3 stale prose numbers** (`135.6`→`32.7`, `ten converged`→`eleven`, `44`→`3 two-qubit rotations`) — that is the audit doing its job. Figures regenerate from `make_figures.py` with release-clean provenance; `paper/generated/figure_manifest.json` binds every plotted series. **The `.bib` never arrived**, so citations remain unverified. |
 | `J7` proof and citation audit | `PARTIAL` | `docs/audits/J7_PROOF_AUDIT_v0.4.md`. Self-audit only — it does not discharge the requirement for an independent reader. Four items flagged. Citations **not verifiable**: `arxiv.org` is blocked by the egress proxy. |
-| `J8` archive | `PARTIAL / RETAG_REQUIRED` | `results/RELEASE_MANIFEST.json`: SHA-256 over every source and result file plus an environment lock (70 files, `6f2b2a45896c6826…`). Tag `covq-v0.4-journal-release` created locally at `455965e8ef23` but **the git proxy in this environment refuses tag refs** — branch pushes succeed, `refs/tags/*` does not. Recreate it after clone with `git tag -a covq-v0.4-journal-release 455965e8ef23`. **DOI minting is external**; figure and PDF checksums need those artifacts in-repo. |
+| `J8` archive | `SUPERSEDED_BY_v0.11` | `results/RELEASE_MANIFEST.json`: SHA-256 over every source and result file plus an environment lock. **The manuscript line has moved to v0.10/v0.11 in `paper/revision_v0.1*/`, so the `covq-journal-v0.5` tag I cut has been deleted rather than pushed** — versioning belongs to that line. Historical note: an earlier tag was created locally at `455965e8ef23` but **the git proxy in this environment refuses tag refs** — branch pushes succeed, `refs/tags/*` does not. Recreate it after clone with `git tag -a covq-v0.4-journal-release 455965e8ef23`. **DOI minting is external**; figure and PDF checksums need those artifacts in-repo. |
 
 ## Disposition
 
