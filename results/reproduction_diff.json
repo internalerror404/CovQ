@@ -5,18 +5,19 @@
   "n_compared": 30,
   "n_changed": 0,
   "n_absent": 0,
-  "n_expected_change": 0,
+  "n_expected_change": 1,
   "expected_change_reasons": {
     "k3_converged": "path_m5 no longer hits the depth cap once angles are reoptimised",
     "k3_max_cx_ratio": "greedy overestimated QUEST depth; 135.6 was an artefact",
     "k3_min_cx_ratio": "unchanged families re-measured under the published algorithm",
     "n10_noiseless_quest": "same target state, far fewer gates",
-    "quest_two_qubit_rotations": "44 under terminal greedy, 3 under QUEST-tE"
+    "quest_two_qubit_rotations": "44 under terminal greedy, 3 under QUEST-tE",
+    "n10_noiseless_covq": "deployable template switched from the sampled to the exact binomial channel; the two agree to 7.8e-6 here"
   },
   "expected_renamed": {
     "quest_two_qubit_rotations": "two_qubit_rotations -> quest_two_qubit_pauli_rotations, to stop rotations being read as emitted gates"
   },
-  "n_renamed": 1,
+  "n_renamed": 0,
   "rows": [
     {
       "label": "readout_worst_attainment_gap",
@@ -227,17 +228,18 @@
       "artifact": "results/noise/quest_operational_comparison.json",
       "json_pointer": "/rows/0/covq_deployable_fixed_pilot_exposure",
       "development": 1.7854844662521132,
-      "release": 1.7854844662521132,
-      "relative_difference": 0.0,
-      "verdict": "same"
+      "release": 1.7854705518721636,
+      "relative_difference": 7.79305572945311e-06,
+      "verdict": "EXPECTED_CHANGE",
+      "reason": "deployable template switched from the sampled to the exact binomial channel; the two agree to 7.8e-6 here"
     },
     {
       "label": "n10_noiseless_quest",
       "artifact": "results/noise/quest_operational_comparison.json",
       "json_pointer": "/rows/0/quest_shots_noisy_qfi_upper_bound",
-      "development": 1.6261456545651514,
+      "development": 1.6261456545651511,
       "release": 1.6261456545651511,
-      "relative_difference": 1.3654656598667872e-16,
+      "relative_difference": 0.0,
       "verdict": "same"
     },
     {
@@ -252,34 +254,38 @@
     {
       "label": "quest_two_qubit_rotations",
       "artifact": "results/noise/quest_operational_comparison.json",
-      "verdict": "RENAMED",
-      "development": null,
+      "json_pointer": "/quest_preparation/quest_two_qubit_pauli_rotations",
+      "development": 3,
       "release": 3,
-      "reason": "two_qubit_rotations -> quest_two_qubit_pauli_rotations, to stop rotations being read as emitted gates"
+      "relative_difference": 0.0,
+      "verdict": "same"
     },
     {
       "label": "quest_emitted_cx",
       "artifact": "results/noise/quest_operational_comparison.json",
-      "verdict": "NEW",
-      "development": null,
+      "json_pointer": "/quest_preparation/quest_emitted_cx_count",
+      "development": 6,
       "release": 6,
-      "reason": null
+      "relative_difference": 0.0,
+      "verdict": "same"
     },
     {
       "label": "k3_bE_coverage",
       "artifact": "results/baselines_k3_quest.json",
-      "verdict": "NEW",
-      "development": null,
+      "json_pointer": "/cross_check_coverage",
+      "development": "8/11 converged instances",
       "release": "8/11 converged instances",
-      "reason": null
+      "relative_difference": null,
+      "verdict": "same"
     },
     {
       "label": "k3_variants_agree",
       "artifact": "results/baselines_k3_quest.json",
-      "verdict": "NEW",
-      "development": null,
+      "json_pointer": "/variants_agree",
+      "development": true,
       "release": true,
-      "reason": null
+      "relative_difference": null,
+      "verdict": "same"
     },
     {
       "label": "sparse_preparation_cx",

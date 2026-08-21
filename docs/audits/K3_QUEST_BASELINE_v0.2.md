@@ -120,18 +120,26 @@ matched-quadrature matrix.
 | 0.01 | 1.821954 | 1.821938 | `8.8e-6` |
 | 0.02 | 1.859557 | 1.859537 | `1.1e-5` |
 | 0.05 | 1.979638 | 1.979607 | `1.6e-5` |
+| 0.10 | 2.207358 | 2.207303 | `2.5e-5` |
+| 0.20 | 2.799148 | 2.798979 | `6.0e-5` |
 
 The exact channel's only free parameter is its angle grid, and it is converged: `4096`
 versus `16384` points shift `κ` by at most `1.5e-6`, an order below the channel
 disagreement. Sampling noise therefore dominates the residual, which is what one wants —
 the deterministic channel is the reported value and the sampled one is the cross-check.
 
-**Total uncertainty on the deployable exposure is `1.6e-5` relative.** The narrowest
-crossing margin, `3.1 %` at `q_edge = 0.02`, exceeds it by roughly `1900×`. The QUEST arm
-is a density-matrix simulation with no sampling at all, so it contributes none. The
-crossover is a measured feature of the registered instance, not a numerical artefact, and
-"CovQ requires less exposure at every tested point from 2 % onward" is a claim the numbers
-support.
+**Total uncertainty on the deployable exposure is `6.0e-5` relative**, the worst value on
+the grid, reached at `q_edge = 0.20` where the exposure is largest. Two ratios are worth
+distinguishing, and the conservative one is the headline:
+
+- pairing the narrowest margin with the **worst** disagreement anywhere on the grid:
+  `0.0309 / 6.0e-5 ≈ 512×`;
+- pairing it with the disagreement **at that point**, `1.1e-5`: `≈ 2800×`.
+
+The first is reported. The QUEST arm is a density-matrix simulation with no sampling at
+all, so it contributes no uncertainty. The crossover is therefore a measured feature of
+the registered instance rather than a numerical artefact, and "CovQ requires less exposure
+at every tested point from 2 % onward" is a claim the numbers support.
 
 ## bE coverage — a real limitation on the upper ratio
 

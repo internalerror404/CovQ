@@ -55,6 +55,9 @@ EXPECTED_CHANGED = {
     "k3_min_cx_ratio": "unchanged families re-measured under the published algorithm",
     "n10_noiseless_quest": "same target state, far fewer gates",
     "quest_two_qubit_rotations": "44 under terminal greedy, 3 under QUEST-tE",
+    "n10_noiseless_covq":
+        "deployable template switched from the sampled to the exact binomial "
+        "channel; the two agree to 7.8e-6 here",
 }
 
 

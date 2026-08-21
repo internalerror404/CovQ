@@ -1,6 +1,6 @@
 {
   "schema_version": "covq.measurement.record/0.1",
-  "source_commit": "daa5587ee9e6a9d4791ea0855b8f38a68ccff336",
+  "source_commit": "9b7f970153443263c16617788ae79784b9fe233c",
   "dirty": false,
   "dirty_scope": [
     "prototype/src",
@@ -19,6 +19,17 @@
   "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
   "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
   "gate": "N10",
+  "deployable_uncertainty": {
+    "channels": [
+      "exact binomial enumeration",
+      "Monte-Carlo pilot draws"
+    ],
+    "max_relative_disagreement": 6.032309551469048e-05,
+    "exact_channel_grid_discretisation": 1.5e-06,
+    "narrowest_crossing_margin": 0.03089458519765298,
+    "margin_over_uncertainty": 512.151853847242,
+    "note": "pilot-seed spread alone measures only sampler noise; the deterministic channel is what bounds bias in the expectation"
+  },
   "frozen_deployable_policy": {
     "pilot_fraction": 0.02,
     "pilot_phases": [
@@ -61,11 +72,14 @@
   "rows": [
     {
       "edge_depolarizing": 0.0,
-      "covq_deployable_fixed_pilot_exposure": 1.7854844662521132,
+      "covq_deployable_fixed_pilot_exposure": 1.7854705518721636,
       "covq_oracle_angle_exposure": 1.766063548900464,
-      "deployable_over_oracle": 1.0109967262297783,
-      "deployable_floor_slack_min_eig": -4.3144123181310885e-08,
+      "deployable_over_oracle": 1.0109888474759485,
+      "deployable_floor_slack_min_eig": -2.6408901675470707e-17,
       "deployable_status": "solved",
+      "covq_deployable_channel": "exact (binomial enumeration, no sampling)",
+      "covq_deployable_monte_carlo_crosscheck": 1.7854844662521132,
+      "covq_deployable_channel_disagreement_relative": 7.793116461644004e-06,
       "covq_shots_emitted_readout_cfi": 1.766063548900464,
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 3.532127097800928,
@@ -76,11 +90,14 @@
     },
     {
       "edge_depolarizing": 0.01,
-      "covq_deployable_fixed_pilot_exposure": 1.8219543336327084,
+      "covq_deployable_fixed_pilot_exposure": 1.8219383719178408,
       "covq_oracle_angle_exposure": 1.801921792572661,
-      "deployable_over_oracle": 1.0111173199317638,
-      "deployable_floor_slack_min_eig": -4.1448677691373334e-08,
+      "deployable_over_oracle": 1.0111084617699204,
+      "deployable_floor_slack_min_eig": 4.4444037051078156e-17,
       "deployable_status": "solved",
+      "covq_deployable_channel": "exact (binomial enumeration, no sampling)",
+      "covq_deployable_monte_carlo_crosscheck": 1.8219543336327084,
+      "covq_deployable_channel_disagreement_relative": 8.760842360884263e-06,
       "covq_shots_emitted_readout_cfi": 1.801921792572661,
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 3.603843585145322,
@@ -91,11 +108,14 @@
     },
     {
       "edge_depolarizing": 0.02,
-      "covq_deployable_fixed_pilot_exposure": 1.859557084169793,
+      "covq_deployable_fixed_pilot_exposure": 1.859537183049635,
       "covq_oracle_angle_exposure": 1.8388833287176847,
-      "deployable_over_oracle": 1.011242559617159,
-      "deployable_floor_slack_min_eig": -8.94257480361896e-08,
+      "deployable_over_oracle": 1.0112317372230206,
+      "deployable_floor_slack_min_eig": 1.1645506129626233e-16,
       "deployable_status": "solved",
+      "covq_deployable_channel": "exact (binomial enumeration, no sampling)",
+      "covq_deployable_monte_carlo_crosscheck": 1.859557084169793,
+      "covq_deployable_channel_disagreement_relative": 1.0702189953201821e-05,
       "covq_shots_emitted_readout_cfi": 1.8388833287176847,
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 3.6777666574353693,
@@ -106,11 +126,14 @@
     },
     {
       "edge_depolarizing": 0.05,
-      "covq_deployable_fixed_pilot_exposure": 1.9796381987912088,
+      "covq_deployable_fixed_pilot_exposure": 1.9796065481628338,
       "covq_oracle_angle_exposure": 1.956857117895252,
-      "deployable_over_oracle": 1.0116416680030575,
-      "deployable_floor_slack_min_eig": -7.684824672673802e-08,
+      "deployable_over_oracle": 1.0116254937877378,
+      "deployable_floor_slack_min_eig": -4.0144279816315665e-17,
       "deployable_status": "solved",
+      "covq_deployable_channel": "exact (binomial enumeration, no sampling)",
+      "covq_deployable_monte_carlo_crosscheck": 1.9796381987912088,
+      "covq_deployable_channel_disagreement_relative": 1.598834293836905e-05,
       "covq_shots_emitted_readout_cfi": 1.956857117895252,
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 3.913714235790504,
@@ -121,11 +144,14 @@
     },
     {
       "edge_depolarizing": 0.1,
-      "covq_deployable_fixed_pilot_exposure": 2.207357593902785,
+      "covq_deployable_fixed_pilot_exposure": 2.2073030987704687,
       "covq_oracle_angle_exposure": 2.180325369012919,
-      "deployable_over_oracle": 1.0123982526984512,
-      "deployable_floor_slack_min_eig": -3.616997898282379e-08,
+      "deployable_over_oracle": 1.0123732586617396,
+      "deployable_floor_slack_min_eig": -2.0356749555199517e-16,
       "deployable_status": "solved",
+      "covq_deployable_channel": "exact (binomial enumeration, no sampling)",
+      "covq_deployable_monte_carlo_crosscheck": 2.207357593902785,
+      "covq_deployable_channel_disagreement_relative": 2.468855878779593e-05,
       "covq_shots_emitted_readout_cfi": 2.180325369012919,
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 4.360650738025838,
@@ -136,11 +162,14 @@
     },
     {
       "edge_depolarizing": 0.2,
-      "covq_deployable_fixed_pilot_exposure": 2.7991476027280737,
+      "covq_deployable_fixed_pilot_exposure": 2.798978759665011,
       "covq_oracle_angle_exposure": 2.759474295156976,
-      "deployable_over_oracle": 1.0143771252519824,
-      "deployable_floor_slack_min_eig": -7.259718833314686e-08,
+      "deployable_over_oracle": 1.0143159385747376,
+      "deployable_floor_slack_min_eig": -6.850550012194795e-17,
       "deployable_status": "solved",
+      "covq_deployable_channel": "exact (binomial enumeration, no sampling)",
+      "covq_deployable_monte_carlo_crosscheck": 2.7991476027280737,
+      "covq_deployable_channel_disagreement_relative": 6.032309551469048e-05,
       "covq_shots_emitted_readout_cfi": 2.759474295156976,
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 5.518948590313952,
@@ -151,5 +180,5 @@
     }
   ],
   "status": "DONE",
-  "record_hash": "c02af931071a0dfe025fe8a1bcca709abcb8c1a0401707dbe40b5c3724c47e67"
+  "record_hash": "75b117af24a9ddb3a849f22631c00c16bcfe282cebe617d361ad0aaf5e90a695"
 }
