@@ -1,7 +1,16 @@
 {
   "schema_version": "covq.measurement.record/0.1",
-  "source_commit": "c13e1ee954d539ccd0838bf7980d330be9893c87",
-  "dirty": true,
+  "source_commit": "1c8cc6817a04ab18c9be07890358c8ea002cf6bd",
+  "dirty": false,
+  "dirty_scope": [
+    "prototype/src",
+    "prototype/tests",
+    "prototype/scripts",
+    "STATUS.md",
+    "REGISTRATION.md",
+    "docs",
+    "charter"
+  ],
   "tolerances": {
     "attainment_abs": 1e-09,
     "closed_form_abs": 1e-09,
@@ -651,5 +660,5 @@
   ],
   "worst_schedule_gap": 1.5667258001043705e-15,
   "status": "DONE",
-  "record_hash": "4dad7b8b407a6a8256f2ea31736328993ff50b24a6e43d9ac1b4e72161a25a1d"
+  "record_hash": "25bae95171d4b96280525e9b3b77a5aec5871e4700e6bd6478ecd443f6bd69da"
 }

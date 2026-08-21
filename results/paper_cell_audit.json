@@ -1,0 +1,175 @@
+{
+  "schema_version": "covq.measurement.record/0.1",
+  "source_commit": "1c8cc6817a04ab18c9be07890358c8ea002cf6bd",
+  "dirty": true,
+  "dirty_scope": [
+    "prototype/src",
+    "prototype/tests",
+    "prototype/scripts",
+    "STATUS.md",
+    "REGISTRATION.md",
+    "docs",
+    "charter"
+  ],
+  "tolerances": {
+    "attainment_abs": 1e-09,
+    "closed_form_abs": 1e-09,
+    "pinching_abs": 1e-10
+  },
+  "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
+  "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
+  "generated_fragments": [
+    "paper/generated/tab_fixed_setting.tex",
+    "paper/generated/tab_n10.tex",
+    "paper/generated/tab_noise_transition.tex",
+    "paper/generated/tab_pilot.tex",
+    "paper/generated/tab_quest_exact.tex"
+  ],
+  "manuscript_source": "paper/CovQ_Paper_v0.4.tex",
+  "cell_relative_tolerance": 0.005,
+  "audits": [
+    {
+      "table": "quest_exact",
+      "n_rows": 11,
+      "n_diffs": 0,
+      "diffs": [],
+      "verdict": "MATCH"
+    },
+    {
+      "table": "pilot",
+      "n_rows": 8,
+      "n_diffs": 0,
+      "diffs": [],
+      "verdict": "MATCH"
+    },
+    {
+      "table": "noise_transition",
+      "n_rows": 5,
+      "n_diffs": 0,
+      "diffs": [],
+      "verdict": "MATCH"
+    },
+    {
+      "table": "n10",
+      "n_rows": 6,
+      "n_diffs": 6,
+      "diffs": [
+        {
+          "row": 0,
+          "issue": "cell count differs",
+          "generated": "0.00 & 1.785 & 1.766 & 3.255 & 1.626 & 1.627\\\\",
+          "manuscript": "0.00 & 2.1193 & 3 & 3\\\\"
+        },
+        {
+          "row": 1,
+          "issue": "cell count differs",
+          "generated": "0.01 & 1.822 & 1.802 & 3.255 & 2.876 & 7.802\\\\",
+          "manuscript": "0.05 & 2.3482 & 3 & 3\\\\"
+        },
+        {
+          "row": 2,
+          "issue": "cell count differs",
+          "generated": "0.02 & 1.860 & 1.839 & 3.255 & 5.122 & 46.890\\\\",
+          "manuscript": "0.10 & 2.6164 & 3 & 3\\\\"
+        },
+        {
+          "row": 3,
+          "issue": "cell count differs",
+          "generated": "0.05 & 1.980 & 1.957 & 3.255 & 32.804 & 31102.752\\\\",
+          "manuscript": "0.15 & 2.9333 & 3 & 3\\\\"
+        },
+        {
+          "row": 4,
+          "issue": "cell count differs",
+          "generated": "0.10 & 2.207 & 2.180 & 3.255 & 835.764 & 5200690140.045\\\\",
+          "manuscript": "0.20 & 3.2552 & 1 & 0\\\\"
+        },
+        {
+          "row": 5,
+          "issue": "missing in manuscript",
+          "generated": "0.20 & 2.799 & 2.759 & 3.255 & 351088.951 & {infinite}\\\\"
+        }
+      ],
+      "verdict": "EXPECTED_CHANGE",
+      "reason": "deployable fixed-pilot column added as the primary CovQ figure; oracle retained as a diagnostic ceiling"
+    },
+    {
+      "table": "fixed_setting",
+      "n_rows": 5,
+      "n_diffs": 0,
+      "diffs": [],
+      "verdict": "MATCH"
+    }
+  ],
+  "n_mismatched_tables": 0,
+  "prose_claims": [
+    {
+      "claim": "noisy_pricing_cases",
+      "quoted_in_source": "12",
+      "from_record": "12",
+      "artifact": "results/noise/noisy_pricing_oracle.json",
+      "json_pointer": "/n_cases",
+      "verdict": "MATCH",
+      "present_in_source": true
+    },
+    {
+      "claim": "greedy_excess",
+      "quoted_in_source": "7.24",
+      "from_record": "7.24",
+      "artifact": "results/noise/fixed_setting_cost_solver.json",
+      "json_pointer": "/worst_greedy_excess_percent",
+      "verdict": "MATCH",
+      "present_in_source": true
+    },
+    {
+      "claim": "k3_min_ratio",
+      "quoted_in_source": "2.5",
+      "from_record": "2.5",
+      "artifact": "results/baselines_k3_quest.json",
+      "json_pointer": "/min_cx_ratio_over_converged",
+      "verdict": "MATCH",
+      "present_in_source": true
+    },
+    {
+      "claim": "k3_max_ratio",
+      "quoted_in_source": "135.6",
+      "from_record": "135.6",
+      "artifact": "results/baselines_k3_quest.json",
+      "json_pointer": "/max_cx_ratio_over_converged",
+      "verdict": "MATCH",
+      "present_in_source": true
+    },
+    {
+      "claim": "k3_converged",
+      "quoted_in_source": "ten converged",
+      "from_record": "ten converged",
+      "artifact": "results/baselines_k3_quest.json",
+      "json_pointer": "/n_converged",
+      "verdict": "MATCH",
+      "present_in_source": true
+    },
+    {
+      "claim": "quest_two_qubit",
+      "quoted_in_source": "44 two-qubit rotations",
+      "from_record": "44 two-qubit rotations",
+      "artifact": "results/noise/quest_operational_comparison.json",
+      "json_pointer": "/quest_preparation/two_qubit_rotations",
+      "verdict": "MATCH",
+      "present_in_source": true
+    },
+    {
+      "claim": "sparse_cx",
+      "quoted_in_source": "232-CX",
+      "from_record": "232-CX",
+      "artifact": "results/noise/quest_operational_comparison.json",
+      "json_pointer": "/sparse_caratheodory_preparation/cx_count",
+      "verdict": "MATCH",
+      "present_in_source": true
+    }
+  ],
+  "n_prose_mismatch": 0,
+  "n_prose_absent_from_source": 0,
+  "note": "the N10 table gains a deployable column: the frozen f=0.02 fixed-pilot exposure is the primary CovQ figure and the matched-analyzer value is retained as a diagnostic ceiling, so a cell-count difference there is expected and intended",
+  "status": "DONE",
+  "record_hash": "e15c871b8caf9a7181125510cccfc197468614c20fb9c4d837d45d3399dabfa0"
+}
