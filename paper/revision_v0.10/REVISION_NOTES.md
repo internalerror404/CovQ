@@ -11,6 +11,10 @@ This revision implements the high-leverage protection pass and two research addi
 - leads the abstract and introduction with the resource phase diagram;
 - states the pair-width spectral envelope `0 <= F <= 2 I` in the abstract.
 
+## Headline hardening already incorporated
+
+The deployable readout template is no longer defended only by variation across Monte Carlo pilot seeds. It is evaluated through two independent channels: exact enumeration of the full binomial pilot support and Monte Carlo pilot draws. Their largest relative disagreement across the registered noise grid is `6.0e-5`; the narrowest `3.09%` crossover margin is more than `512x` larger. This controls expectation bias that seed-to-seed spread alone could not reveal.
+
 ## Gain 1 — compiler-only scale
 
 Adds a state-simulation-free campaign at `m = {50,100,200,300,500}` on rectangular grids and a connected heavy-hex-family construction. The solver uses a restricted LP master, minimum-eigenvector Loewner cuts, and exact maximum-weight-matching pricing. It reports wall clock, column count, oracle calls, gap, and contract slack. All 30 runs terminated with optimal status.
@@ -37,4 +41,4 @@ The refined `q_CX` grid and amplitude-damping replication were not run in this r
 
 ## Source notes
 
-`covq_replacement_pages.tex` contains the fully typeset replacement pages. `assemble_covq_v010.py` assembles them with the cleaned v0.8 PDF, updates page numbers, metadata, and bookmarks, and inserts the compiler-scale page. The final rendered PDF is distributed separately because this repository interface stores the text revision sources and machine-readable evidence.
+`covq_replacement_pages.tex` contains the fully typeset replacement pages. `assemble_covq_v010.py` assembles them with the cleaned v0.8 PDF, updates page numbers, metadata, and bookmarks, and inserts the compiler-scale page. `patch_two_channel_evidence.py` replaces the N10 discussion with the exact-versus-Monte-Carlo validation. The final rendered PDF is distributed separately because this repository interface stores the text revision sources and machine-readable evidence.
