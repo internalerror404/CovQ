@@ -1,0 +1,56 @@
+{
+  "schema_version": "covq.revision_summary/0.12",
+  "status": "DONE",
+  "scope": "Targeted major revision; no remaining bE runs",
+  "methods": {
+    "covq_readout": "frozen f=0.02 two-quadrature pilot with deterministic binomial evaluation",
+    "quest": "published QUEST-tE for the one-state comparator; no new bE run",
+    "depolarizing": "two-qubit depolarization after each emitted CX",
+    "amplitude_damping": "independent amplitude damping on both CX participants after each emitted CX",
+    "cost": "per-use branch price c0 + ce |M|"
+  },
+  "universal_pair_width_result": {
+    "spectral_envelope": "0 <= F <= 2I",
+    "ideal_exposure_ceiling": "T_CovQ >= n_product / 2"
+  },
+  "registered_contract": {
+    "exposure_table_cost_model": {"c0": 1.0, "ce": 0.0},
+    "product_over_covq_at_q0": 1.8231624824088384,
+    "depolarizing_crossing_bracket": "(0.0125, 0.015]",
+    "amplitude_damping_crossing_bracket": "(0.015, 0.0175]",
+    "pair_price_ce_over_c0_where_cost_advantage_ends": {
+      "q0": 0.4136712707706292,
+      "q0.02": 0.37571180817661254,
+      "q0.20": 0.0878817444861547
+    }
+  },
+  "refined_grid_2048": [
+    {"channel": "depolarizing", "q": 0.0125, "covq": 1.8312297651746743, "quest_ceiling": 1.8046716414202166, "ratio": 0.9854971100516573},
+    {"channel": "depolarizing", "q": 0.0150, "covq": 1.8405930256109242, "quest_ceiling": 1.8414579202513652, "ratio": 1.0004698999878878},
+    {"channel": "depolarizing", "q": 0.0175, "covq": 1.8500284253698644, "quest_ceiling": 1.8788782092634606, "ratio": 1.0155942381738423},
+    {"channel": "amplitude_damping", "q": 0.0125, "covq": 1.8312297651657594, "quest_ceiling": 1.7880445470351956, "ratio": 0.9764173677426793},
+    {"channel": "amplitude_damping", "q": 0.0150, "covq": 1.8405930256696090, "quest_ceiling": 1.8208779706982507, "ratio": 0.9892887484107542},
+    {"channel": "amplitude_damping", "q": 0.0175, "covq": 1.8500284253377546, "quest_ceiling": 1.8540602430265856, "ratio": 1.0021793274274122}
+  ],
+  "multidirectional_contract": {
+    "A_columns": ["(1,-1,0,0)/sqrt(2)", "(1,1,1,0)/sqrt(3)"],
+    "G_req": "1.4 I2",
+    "product_over_covq_at_q0": 1.199114338393288,
+    "pair_price_ce_over_c0_where_cost_advantage_ends_at_q0": 0.1991143383932881,
+    "q0.20_selected_support": "pairless branch"
+  },
+  "specification_matched_comparator": {
+    "construction": "same branches, labels, and probabilities as CovQ; one weight-two Pauli rotation per active pair",
+    "emitted_cx_ratio_to_covq": 2.0
+  },
+  "quest_one_state_comparator": {
+    "fully_cross_validated_ratio_range": [2.50, 8.89],
+    "te_only_ratios_are_upper_bounds": [17.78, 25.56, 32.65]
+  },
+  "validation": {
+    "quest_te_converged": true,
+    "quest_total_rotations": 4,
+    "quest_weight_two_rotations": 3,
+    "refined_angle_grids": [1024, 2048]
+  }
+}
