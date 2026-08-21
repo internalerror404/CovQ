@@ -77,6 +77,15 @@ information-floor compiler is the reason anyone needs the engine.
 | `NOISE_AWARE_OBJECTIVE_EQ_111` | `ABSENT` | M3 supplies the measuring stick; no compiler optimises it. |
 | `ADAPTIVE_RECENTERING_POLICY` | `DONE` | Two-stage protocol; pilot split between `A = 0` and `A = π/2` fixes each block phase including sign. Efficiency `1.06–1.11` against the **oracle** `F⁺/N` at every pilot fraction from 0.05 to 0.40, far below the `1/(1−f)` discard penalty, because the pilot enters the final likelihood. Gate alias `C10e` / `M5`. |
 | `LIKELIHOOD_MULTIMODALITY` | `NEW / VERIFIED` | The periodic likelihood is genuinely multimodal: an arbitrarily seeded MLE inflates the variance ratio to 10–2400×. Seeded from the pilot it is efficient. The pilot stage is therefore what makes `θ` identifiable at all — a second, independent reason `Readout` cannot be optional. |
+| `EQ_111_NOISE_AWARE_COMPILER` | `DONE / SCOPED` | `docs/audits/EQ_111_NOISE_AWARE_COMPILER_v0.1.md`. Implemented as the noisy operational floor `min C s.t. AᵀF_C^𝒩A ⪰ G_req`, not a norm-to-target penalty. Convex; primal/dual gap `< 1e-15` at every noise level. |
+| `BLOCK_LOCAL_PRICING_THEOREM` | `PROVED + VERIFIED` | Block-local noise reweights edges but preserves the max-weight matching oracle. Edge additivity exact (`0.0`); oracle vs brute force 12 cases, 0 disagreements. **Scope: excludes crosstalk, correlated branch noise, route collisions, coherent inter-block errors.** |
+| `PAIRLESS_BRANCH_IS_A_SEPARATE_COLUMN` | `NEW / STRUCTURAL` | It activates no pair, so it never idles, so it sits on a different reference template. Using the idle-free reference inside pricing broke N5 in 15/18 cases (errors to `0.71`). Collapses to one matching problem iff `idle_dephasing = 0`. |
+| `NOISE_KILLS_ENTANGLEMENT_ABOVE_THRESHOLD` | `NEW / VERIFIED` | Between edge depolarization `0.15` and `0.20` the compiler abandons pairs entirely and the cost plateaus. The noise-aware objective genuinely changes the answer. |
+| `SETTING_COST_AMORTIZATION` | `DONE` | `N* = (q_C−q_Q)c_setup/(c_Q−c̄_C)`. Worst crossover `13 047` shots at `c_setup = 10⁴` gate-equivalents; easy families cross at a few hundred. The K3 unpriced-settings hedge is replaced by this boundary. Cardinality cost kept **out** of the conic program. |
+| `ZERO_CONTRAST_EDGE_CASE` | `FIXED` | `atan2(−c,d)` is undefined at zero contrast; now reported as `arbitrary_zero_information` with a null margin instead of a spurious `η_ro = 1`. |
+| `ASYMMETRIC_READOUT_THREE_POINT` | `DONE` | Outcome-dependent confusion offsets the fringe; two points misread it. Three-point fit at `0, 2π/3, 4π/3` separates offset from harmonic. Gate N8. |
+| `NOISE_GATES_N7_N9_N10` | `ABSENT` | Deployable pilot arm inside the noisy compiler; fixed-setting-cost solver; single equal-accounting campaign across all arms. |
+| `QUEST_UNDER_NOISE` | `ABSENT` | Fair form: QUEST gets its noisy QFI as an optimistic bound, CovQ reports emitted-readout CFI. Not run. |
 | `PROTOTYPE` | `PARTIAL` | `prototype/`. Built before this decision arrived; retained as the audit's evidence, not as Task 0C. See `prototype/README.md`. |
 
 ## Corrections carried into v0.2

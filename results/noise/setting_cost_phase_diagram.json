@@ -1,0 +1,152 @@
+{
+  "schema_version": "covq.measurement.record/0.1",
+  "source_commit": "72fe4e3f1fe56d3d7b0fb1da64139662628a016a",
+  "dirty": true,
+  "tolerances": {
+    "attainment_abs": 1e-09,
+    "closed_form_abs": 1e-09,
+    "pinching_abs": 1e-10
+  },
+  "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
+  "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
+  "gate": "K3-amortization",
+  "cost_unit": "one two-qubit gate; c_setup quoted in the same unit",
+  "switching_policy": "batched execution, N_switch = q - 1",
+  "formula": "N* = (q_C - q_Q) c_setup / (c_Q - cbar_C)",
+  "caveat": "a fixed charge per distinct setting is a cardinality cost; pricing it turns the compiler into a mixed-integer conic program and voids the oracle-polynomial claim, so it is reported here as a boundary rather than folded into the convex objective",
+  "rows": [
+    {
+      "instance": "matching_m3",
+      "q_covq": 2,
+      "expected_cx_covq": 0.8,
+      "q_quest": 1,
+      "cx_quest": 2,
+      "crossover": {
+        "10": 8.333333333333334,
+        "100": 83.33333333333334,
+        "1000": 833.3333333333334,
+        "10000": 8333.333333333334
+      }
+    },
+    {
+      "instance": "path_m3",
+      "q_covq": 3,
+      "expected_cx_covq": 0.9,
+      "q_quest": 1,
+      "cx_quest": 122,
+      "crossover": {
+        "10": 0.16515276630883569,
+        "100": 1.6515276630883569,
+        "1000": 16.51527663088357,
+        "10000": 165.15276630883568
+      }
+    },
+    {
+      "instance": "toeplitz_m3",
+      "q_covq": 4,
+      "expected_cx_covq": 0.8225,
+      "q_quest": 1,
+      "cx_quest": 4,
+      "crossover": {
+        "10": 9.44138473642801,
+        "100": 94.41384736428009,
+        "1000": 944.1384736428009,
+        "10000": 9441.384736428008
+      }
+    },
+    {
+      "instance": "matching_m4",
+      "q_covq": 2,
+      "expected_cx_covq": 1.6,
+      "q_quest": 1,
+      "cx_quest": 4,
+      "crossover": {
+        "10": 4.166666666666667,
+        "100": 41.66666666666667,
+        "1000": 416.6666666666667,
+        "10000": 4166.666666666667
+      }
+    },
+    {
+      "instance": "path_m4",
+      "q_covq": 3,
+      "expected_cx_covq": 1.35,
+      "q_quest": 1,
+      "cx_quest": 158,
+      "crossover": {
+        "10": 0.12767315671879986,
+        "100": 1.2767315671879986,
+        "1000": 12.767315671879986,
+        "10000": 127.67315671879987
+      }
+    },
+    {
+      "instance": "toeplitz_m4",
+      "q_covq": 5,
+      "expected_cx_covq": 1.337875,
+      "q_quest": 1,
+      "cx_quest": 6,
+      "crossover": {
+        "10": 8.57977853446658,
+        "100": 85.7977853446658,
+        "1000": 857.977853446658,
+        "10000": 8579.778534466579
+      }
+    },
+    {
+      "instance": "matching_m5",
+      "q_covq": 2,
+      "expected_cx_covq": 1.6,
+      "q_quest": 1,
+      "cx_quest": 4,
+      "crossover": {
+        "10": 4.166666666666667,
+        "100": 41.66666666666667,
+        "1000": 416.6666666666667,
+        "10000": 4166.666666666667
+      }
+    },
+    {
+      "instance": "toeplitz_m5",
+      "q_covq": 9,
+      "expected_cx_covq": 1.8682562499999995,
+      "q_quest": 1,
+      "cx_quest": 8,
+      "crossover": {
+        "10": 13.046859631079657,
+        "100": 130.46859631079658,
+        "1000": 1304.6859631079658,
+        "10000": 13046.859631079658
+      }
+    },
+    {
+      "instance": "star_m4",
+      "q_covq": 4,
+      "expected_cx_covq": 0.8999999999999999,
+      "q_quest": 1,
+      "cx_quest": 112,
+      "crossover": {
+        "10": 0.27002700270027,
+        "100": 2.7002700270027002,
+        "1000": 27.002700270027002,
+        "10000": 270.02700270027003
+      }
+    },
+    {
+      "instance": "banded_m5",
+      "q_covq": 5,
+      "expected_cx_covq": 1.47,
+      "q_quest": 1,
+      "cx_quest": 118,
+      "crossover": {
+        "10": 0.34325924654595386,
+        "100": 3.432592465459538,
+        "1000": 34.32592465459538,
+        "10000": 343.25924654595383
+      }
+    }
+  ],
+  "worst_crossover_at_c_setup_1e4": 13046.859631079658,
+  "status": "DONE",
+  "record_hash": "3ee13c515aa41522e818d011d3189a062f98590db860cf924d2e1bfb5b2546c5"
+}

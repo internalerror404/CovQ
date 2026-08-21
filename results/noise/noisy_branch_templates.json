@@ -1,0 +1,247 @@
+{
+  "schema_version": "covq.measurement.record/0.1",
+  "source_commit": "72fe4e3f1fe56d3d7b0fb1da64139662628a016a",
+  "dirty": true,
+  "tolerances": {
+    "attainment_abs": 1e-09,
+    "closed_form_abs": 1e-09,
+    "pinching_abs": 1e-10
+  },
+  "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
+  "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
+  "gates": [
+    "N1",
+    "N2",
+    "N3",
+    "N4"
+  ],
+  "cases": [
+    {
+      "m": 3,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.09031718109148605,
+          "1": 0.0067678262361633105,
+          "2": 0.06727308141003642
+        },
+        "depolarizing": {
+          "0": 0.02362723529896183,
+          "1": 0.03387138884694068,
+          "2": 0.001982902755230731
+        },
+        "idle_dephasing": 0.015107921366647199,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.0061453096620187565,
+        "(0, 2)": 0.021183616707945756,
+        "(1, 2)": 0.11744035902124657
+      },
+      "operating_point": [
+        0.18055604319197172,
+        0.9676609681078661,
+        0.4101716815796792
+      ],
+      "symmetric_readout": true,
+      "matching": [
+        [
+          0,
+          1
+        ]
+      ],
+      "edge_additivity_residual": 0.0
+    },
+    {
+      "m": 4,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.021003376555502995,
+          "1": 0.04243913579890771,
+          "2": 0.010374287484520118,
+          "3": 0.028485709883907764
+        },
+        "depolarizing": {
+          "0": 0.01511134692706313,
+          "1": 0.0009659555214076633,
+          "2": 0.04212346113881005,
+          "3": 0.044845303275542515
+        },
+        "idle_dephasing": 0.007094075546837653,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.06211223252629165,
+        "(0, 2)": 0.07624879989702325,
+        "(0, 3)": 0.07143885006307292,
+        "(1, 2)": 0.07934466394378466,
+        "(1, 3)": 0.11932907975842982,
+        "(2, 3)": 0.06932316982050282
+      },
+      "operating_point": [
+        0.38565525868517714,
+        0.3809736508763828,
+        0.7083745481978108,
+        0.3597916432960613
+      ],
+      "symmetric_readout": true,
+      "matching": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "edge_additivity_residual": 0.0
+    },
+    {
+      "m": 5,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.032346770356978714,
+          "1": 0.004078120444058542,
+          "2": 0.044800312477058825,
+          "3": 0.06282201441514852,
+          "4": 0.07341494969994608
+        },
+        "depolarizing": {
+          "0": 0.03355781032876392,
+          "1": 0.029897566863725602,
+          "2": 0.03023504252184503,
+          "3": 0.011665955459066558,
+          "4": 0.01963099623494374
+        },
+        "idle_dephasing": 0.001560413652131859,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.05012782089376392,
+        "(0, 2)": 0.00499860904183067,
+        "(0, 3)": 0.11428614183211404,
+        "(0, 4)": 0.010036157152331615,
+        "(1, 2)": 0.11643041327800714,
+        "(1, 3)": 0.09510994574620518,
+        "(1, 4)": 0.02667299284826514,
+        "(2, 3)": 0.04353633856931235,
+        "(2, 4)": 0.02974787731161439,
+        "(3, 4)": 0.07427193019216725
+      },
+      "operating_point": [
+        -0.1503504506944744,
+        0.507031500618351,
+        -0.08914116439532127,
+        0.2553715847920288,
+        -0.14378721556122187
+      ],
+      "symmetric_readout": true,
+      "matching": [
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          3
+        ]
+      ],
+      "edge_additivity_residual": 0.0
+    }
+  ],
+  "n1_noiseless_template_residual": 4.440892098500626e-16,
+  "n2_dephased_quadrature": [
+    {
+      "p": 0.0,
+      "visibility": 1.0,
+      "declared_readout_cfi": [
+        [
+          0.9999999999999997,
+          0.9999999999999997
+        ],
+        [
+          0.9999999999999997,
+          0.9999999999999997
+        ]
+      ],
+      "analytic_v_squared": 1.0,
+      "residual": 3.3306690738754696e-16
+    },
+    {
+      "p": 0.05,
+      "visibility": 0.81,
+      "declared_readout_cfi": [
+        [
+          0.6560999999999994,
+          0.6560999999999994
+        ],
+        [
+          0.6560999999999994,
+          0.6560999999999994
+        ]
+      ],
+      "analytic_v_squared": 0.6561000000000001,
+      "residual": 7.771561172376096e-16
+    },
+    {
+      "p": 0.15,
+      "visibility": 0.48999999999999994,
+      "declared_readout_cfi": [
+        [
+          0.24009999999999992,
+          0.24009999999999992
+        ],
+        [
+          0.24009999999999992,
+          0.24009999999999992
+        ]
+      ],
+      "analytic_v_squared": 0.24009999999999992,
+      "residual": 0.0
+    },
+    {
+      "p": 0.3,
+      "visibility": 0.16000000000000003,
+      "declared_readout_cfi": [
+        [
+          0.025599999999999984,
+          0.025599999999999984
+        ],
+        [
+          0.025599999999999984,
+          0.025599999999999984
+        ]
+      ],
+      "analytic_v_squared": 0.02560000000000001,
+      "residual": 2.7755575615628914e-17
+    }
+  ],
+  "n3_pinching": {
+    "covariance_drift": 0.0,
+    "mixed_state_qfim_max": 0.0,
+    "declared_readout_cfi_max": 1.6536667212725877e-34
+  },
+  "status": "DONE",
+  "record_hash": "1471ceebfe6d5b3fe4492449d2c22468981249ea3da03097f33cf7f7efffd41c"
+}

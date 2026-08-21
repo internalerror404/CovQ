@@ -1,0 +1,480 @@
+{
+  "schema_version": "covq.measurement.record/0.1",
+  "source_commit": "72fe4e3f1fe56d3d7b0fb1da64139662628a016a",
+  "dirty": true,
+  "tolerances": {
+    "attainment_abs": 1e-09,
+    "closed_form_abs": 1e-09,
+    "pinching_abs": 1e-10
+  },
+  "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
+  "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
+  "gate": "N6",
+  "target": [
+    [
+      1.2,
+      0.6,
+      0.6,
+      0.6
+    ],
+    [
+      0.6,
+      1.2,
+      0.6,
+      0.6
+    ],
+    [
+      0.6,
+      0.6,
+      1.2,
+      0.6
+    ],
+    [
+      0.6,
+      0.6,
+      0.6,
+      1.2
+    ]
+  ],
+  "sweep": [
+    {
+      "edge_depolarizing": 0.0,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.02,
+          "1": 0.02,
+          "2": 0.02,
+          "3": 0.02
+        },
+        "depolarizing": {
+          "0": 0.0,
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0
+        },
+        "idle_dephasing": 0.01,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.0,
+        "(0, 2)": 0.0,
+        "(0, 3)": 0.0,
+        "(1, 2)": 0.0,
+        "(1, 3)": 0.0,
+        "(2, 3)": 0.0
+      },
+      "operating_point": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "symmetric_readout": true,
+      "primal_cost": 2.1192762586805567,
+      "dual_bound": 2.119276258680557,
+      "optimality_gap": 2.0954757928848256e-16,
+      "downstream_floor_margin": -4.151197383741578e-17,
+      "settings": 3,
+      "entangled_settings": 3,
+      "status": "solved"
+    },
+    {
+      "edge_depolarizing": 0.02,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.02,
+          "1": 0.02,
+          "2": 0.02,
+          "3": 0.02
+        },
+        "depolarizing": {
+          "0": 0.0,
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0
+        },
+        "idle_dephasing": 0.01,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.02,
+        "(0, 2)": 0.02,
+        "(0, 3)": 0.02,
+        "(1, 2)": 0.02,
+        "(1, 3)": 0.02,
+        "(2, 3)": 0.02
+      },
+      "operating_point": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "symmetric_readout": true,
+      "primal_cost": 2.2066599944612215,
+      "dual_bound": 2.206659994461222,
+      "optimality_gap": 2.012494951486586e-16,
+      "downstream_floor_margin": -2.552391248596522e-16,
+      "settings": 3,
+      "entangled_settings": 3,
+      "status": "solved"
+    },
+    {
+      "edge_depolarizing": 0.05,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.02,
+          "1": 0.02,
+          "2": 0.02,
+          "3": 0.02
+        },
+        "depolarizing": {
+          "0": 0.0,
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0
+        },
+        "idle_dephasing": 0.01,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.05,
+        "(0, 2)": 0.05,
+        "(0, 3)": 0.05,
+        "(1, 2)": 0.05,
+        "(1, 3)": 0.05,
+        "(2, 3)": 0.05
+      },
+      "operating_point": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "symmetric_readout": true,
+      "primal_cost": 2.3482285414743025,
+      "dual_bound": 2.3482285414743025,
+      "optimality_gap": 0.0,
+      "downstream_floor_margin": -3.0196505110065863e-16,
+      "settings": 3,
+      "entangled_settings": 3,
+      "status": "solved"
+    },
+    {
+      "edge_depolarizing": 0.08,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.02,
+          "1": 0.02,
+          "2": 0.02,
+          "3": 0.02
+        },
+        "depolarizing": {
+          "0": 0.0,
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0
+        },
+        "idle_dephasing": 0.01,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.08,
+        "(0, 2)": 0.08,
+        "(0, 3)": 0.08,
+        "(1, 2)": 0.08,
+        "(1, 3)": 0.08,
+        "(2, 3)": 0.08
+      },
+      "operating_point": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "symmetric_readout": true,
+      "primal_cost": 2.503870816021452,
+      "dual_bound": 2.503870816021452,
+      "optimality_gap": 0.0,
+      "downstream_floor_margin": -4.151197383741578e-17,
+      "settings": 3,
+      "entangled_settings": 3,
+      "status": "solved"
+    },
+    {
+      "edge_depolarizing": 0.1,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.02,
+          "1": 0.02,
+          "2": 0.02,
+          "3": 0.02
+        },
+        "depolarizing": {
+          "0": 0.0,
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0
+        },
+        "idle_dephasing": 0.01,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.1,
+        "(0, 2)": 0.1,
+        "(0, 3)": 0.1,
+        "(1, 2)": 0.1,
+        "(1, 3)": 0.1,
+        "(2, 3)": 0.1
+      },
+      "operating_point": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "symmetric_readout": true,
+      "primal_cost": 2.6163904428155025,
+      "dual_bound": 2.616390442815502,
+      "optimality_gap": 1.6973353922367084e-16,
+      "downstream_floor_margin": -1.9277462426373292e-16,
+      "settings": 3,
+      "entangled_settings": 3,
+      "status": "solved"
+    },
+    {
+      "edge_depolarizing": 0.12,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.02,
+          "1": 0.02,
+          "2": 0.02,
+          "3": 0.02
+        },
+        "depolarizing": {
+          "0": 0.0,
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0
+        },
+        "idle_dephasing": 0.01,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.12,
+        "(0, 2)": 0.12,
+        "(0, 3)": 0.12,
+        "(1, 2)": 0.12,
+        "(1, 3)": 0.12,
+        "(2, 3)": 0.12
+      },
+      "operating_point": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "symmetric_readout": true,
+      "primal_cost": 2.736668722469728,
+      "dual_bound": 2.736668722469728,
+      "optimality_gap": 0.0,
+      "downstream_floor_margin": -4.151197383741578e-17,
+      "settings": 3,
+      "entangled_settings": 3,
+      "status": "solved"
+    },
+    {
+      "edge_depolarizing": 0.15,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.02,
+          "1": 0.02,
+          "2": 0.02,
+          "3": 0.02
+        },
+        "depolarizing": {
+          "0": 0.0,
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0
+        },
+        "idle_dephasing": 0.01,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.15,
+        "(0, 2)": 0.15,
+        "(0, 3)": 0.15,
+        "(1, 2)": 0.15,
+        "(1, 3)": 0.15,
+        "(2, 3)": 0.15
+      },
+      "operating_point": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "symmetric_readout": true,
+      "primal_cost": 2.933254337274128,
+      "dual_bound": 2.9332543372741275,
+      "optimality_gap": 1.513981260359286e-16,
+      "downstream_floor_margin": -2.2541706265368476e-16,
+      "settings": 3,
+      "entangled_settings": 3,
+      "status": "solved"
+    },
+    {
+      "edge_depolarizing": 0.2,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.02,
+          "1": 0.02,
+          "2": 0.02,
+          "3": 0.02
+        },
+        "depolarizing": {
+          "0": 0.0,
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0
+        },
+        "idle_dephasing": 0.01,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.2,
+        "(0, 2)": 0.2,
+        "(0, 3)": 0.2,
+        "(1, 2)": 0.2,
+        "(1, 3)": 0.2,
+        "(2, 3)": 0.2
+      },
+      "operating_point": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "symmetric_readout": true,
+      "primal_cost": 3.255208333333337,
+      "dual_bound": 3.2552083333333366,
+      "optimality_gap": 1.3642420526593908e-16,
+      "downstream_floor_margin": 8.04911692853238e-16,
+      "settings": 1,
+      "entangled_settings": 0,
+      "status": "solved"
+    },
+    {
+      "edge_depolarizing": 0.3,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.02,
+          "1": 0.02,
+          "2": 0.02,
+          "3": 0.02
+        },
+        "depolarizing": {
+          "0": 0.0,
+          "1": 0.0,
+          "2": 0.0,
+          "3": 0.0
+        },
+        "idle_dephasing": 0.01,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.3,
+        "(0, 2)": 0.3,
+        "(0, 3)": 0.3,
+        "(1, 2)": 0.3,
+        "(1, 3)": 0.3,
+        "(2, 3)": 0.3
+      },
+      "operating_point": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "symmetric_readout": true,
+      "primal_cost": 3.255208333333337,
+      "dual_bound": 3.2552083333333366,
+      "optimality_gap": 1.3642420526593908e-16,
+      "downstream_floor_margin": 8.04911692853238e-16,
+      "settings": 1,
+      "entangled_settings": 0,
+      "status": "solved"
+    }
+  ],
+  "entanglement_threshold_between": [
+    0.15,
+    0.2
+  ],
+  "worst_optimality_gap": 2.0954757928848256e-16,
+  "status": "DONE",
+  "record_hash": "2331a422d5c8118e908e3f6897265009a0c2cefa79b7bd973ab10bf2a7c9e7a0"
+}

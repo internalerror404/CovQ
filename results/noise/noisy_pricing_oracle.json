@@ -1,0 +1,632 @@
+{
+  "schema_version": "covq.measurement.record/0.1",
+  "source_commit": "72fe4e3f1fe56d3d7b0fb1da64139662628a016a",
+  "dirty": true,
+  "tolerances": {
+    "attainment_abs": 1e-09,
+    "closed_form_abs": 1e-09,
+    "pinching_abs": 1e-10
+  },
+  "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
+  "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
+  "gate": "N5",
+  "theorem": "block-local noise reweights edges but preserves the maximum-weight matching oracle; the pairless branch is a separate column because it activates no pair and so carries no idle dephasing",
+  "scope_excluded": [
+    "crosstalk",
+    "correlated branch noise",
+    "route collisions",
+    "coherent errors coupling distinct blocks"
+  ],
+  "cases": [
+    {
+      "m": 3,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.02702486279887102,
+          "1": 0.03601995418934705,
+          "2": 0.10482641344755142
+        },
+        "depolarizing": {
+          "0": 0.00026326522827873624,
+          "1": 0.041061420919138315,
+          "2": 0.03985347143760232
+        },
+        "idle_dephasing": 0.015292175259247476,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.07019024292655811,
+        "(0, 2)": 0.04545486402289703,
+        "(1, 2)": 0.041763841815116
+      },
+      "operating_point": [
+        0.25019093320933394,
+        0.794427601939151,
+        0.551371380490387
+      ],
+      "symmetric_readout": true,
+      "oracle_value": 2.8005132139715925,
+      "brute_value": 2.8005132139715925,
+      "gap": 0.0,
+      "winning_branch_kind": "pairless_idle_free",
+      "oracle_matching": [],
+      "brute_matching": []
+    },
+    {
+      "m": 3,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.07550715053892125,
+          "1": 0.06169411759194166,
+          "2": 0.05962481224722051
+        },
+        "depolarizing": {
+          "0": 0.012375746101366542,
+          "1": 0.000589701277125293,
+          "2": 0.009620107199265532
+        },
+        "idle_dephasing": 0.0002240545231245572,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.10380481813227588,
+        "(0, 2)": 0.03009100859804928,
+        "(1, 2)": 0.05543044659033101
+      },
+      "operating_point": [
+        0.02977764054274057,
+        -0.0675879493494218,
+        0.8343355463857045
+      ],
+      "symmetric_readout": true,
+      "oracle_value": 1.7216770573076767,
+      "brute_value": 1.7216770573076767,
+      "gap": 0.0,
+      "winning_branch_kind": "pairless_idle_free",
+      "oracle_matching": [],
+      "brute_matching": []
+    },
+    {
+      "m": 3,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.046515816133287445,
+          "1": 0.0387643615509848,
+          "2": 0.018023967488454223
+        },
+        "depolarizing": {
+          "0": 0.04081690519095379,
+          "1": 0.018972308577515626,
+          "2": 0.048937394220561085
+        },
+        "idle_dephasing": 0.04058701462876729,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.08849875395159154,
+        "(0, 2)": 0.09075843807447768,
+        "(1, 2)": 0.09569948711824983
+      },
+      "operating_point": [
+        -0.2774718819716848,
+        0.19636813441442613,
+        -0.8814967153089928
+      ],
+      "symmetric_readout": true,
+      "oracle_value": 1.7714999527467663,
+      "brute_value": 1.7714999527467663,
+      "gap": 0.0,
+      "winning_branch_kind": "pairless_idle_free",
+      "oracle_matching": [],
+      "brute_matching": []
+    },
+    {
+      "m": 3,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.06836629774311327,
+          "1": 0.017455194451311228,
+          "2": 0.023095619396199883
+        },
+        "depolarizing": {
+          "0": 0.04639528423722622,
+          "1": 0.02761632438336319,
+          "2": 0.009027624922445581
+        },
+        "idle_dephasing": 0.022577270167795205,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.1326085341294705,
+        "(0, 2)": 0.09623575578337211,
+        "(1, 2)": 0.08545414117107118
+      },
+      "operating_point": [
+        0.6901486417491058,
+        0.8898963422899591,
+        0.8078335763918536
+      ],
+      "symmetric_readout": true,
+      "oracle_value": 1.024078618014866,
+      "brute_value": 1.024078618014866,
+      "gap": 0.0,
+      "winning_branch_kind": "pairless_idle_free",
+      "oracle_matching": [],
+      "brute_matching": []
+    },
+    {
+      "m": 4,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.10473710502777292,
+          "1": 0.04130528003952314,
+          "2": 0.07083491787476576,
+          "3": 0.08204212480074524
+        },
+        "depolarizing": {
+          "0": 0.017770688851175605,
+          "1": 0.025954924324799507,
+          "2": 0.038262369163926134,
+          "3": 0.04545896569952751
+        },
+        "idle_dephasing": 0.02513421905479111,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.022659341711522323,
+        "(0, 2)": 0.14001290884611428,
+        "(0, 3)": 0.0007768298723148214,
+        "(1, 2)": 0.11294662553966309,
+        "(1, 3)": 0.12157902454758676,
+        "(2, 3)": 0.02051460773138723
+      },
+      "operating_point": [
+        0.9342964707947354,
+        0.31552146007702886,
+        -0.14355950722103739,
+        0.047480215820960625
+      ],
+      "symmetric_readout": true,
+      "oracle_value": 3.303215139955806,
+      "brute_value": 3.303215139955806,
+      "gap": 0.0,
+      "winning_branch_kind": "pairless_idle_free",
+      "oracle_matching": [],
+      "brute_matching": []
+    },
+    {
+      "m": 4,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.11073114914021609,
+          "1": 0.008245842254623383,
+          "2": 0.05159962342813956,
+          "3": 0.06234177838534308
+        },
+        "depolarizing": {
+          "0": 0.04754690977909249,
+          "1": 0.012549962333237907,
+          "2": 0.04030195736310544,
+          "3": 0.03382355999992967
+        },
+        "idle_dephasing": 0.0030422433163362307,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.10756288564216844,
+        "(0, 2)": 0.09444332742603052,
+        "(0, 3)": 0.145734106269237,
+        "(1, 2)": 0.049902218881698726,
+        "(1, 3)": 0.05974133395190558,
+        "(2, 3)": 0.03043676283202743
+      },
+      "operating_point": [
+        0.1613057277056451,
+        -0.14670099232748335,
+        0.756375718836561,
+        -0.17670770018622317
+      ],
+      "symmetric_readout": true,
+      "oracle_value": 2.7785505813493354,
+      "brute_value": 2.7785505813493354,
+      "gap": 0.0,
+      "winning_branch_kind": "matching_from_idling_reference",
+      "oracle_matching": [
+        [
+          1,
+          2
+        ]
+      ],
+      "brute_matching": [
+        [
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "m": 4,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.002425868802737625,
+          "1": 0.030332241354294767,
+          "2": 0.029828372785077946,
+          "3": 0.022500400122715987
+        },
+        "depolarizing": {
+          "0": 0.028352790919269785,
+          "1": 0.0019492920516522684,
+          "2": 0.029519393391742588,
+          "3": 0.008300557652360851
+        },
+        "idle_dephasing": 0.03948156489670355,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.10168105628509641,
+        "(0, 2)": 0.003161303166583662,
+        "(0, 3)": 0.04658552955797923,
+        "(1, 2)": 0.14075119302969208,
+        "(1, 3)": 0.0807594569815867,
+        "(2, 3)": 0.12173811041201262
+      },
+      "operating_point": [
+        0.04660830595035459,
+        0.8312708702014648,
+        -0.9066955240922256,
+        -0.939422332136796
+      ],
+      "symmetric_readout": true,
+      "oracle_value": 7.4479085455972,
+      "brute_value": 7.447908545597199,
+      "gap": 8.881784197001252e-16,
+      "winning_branch_kind": "matching_from_idling_reference",
+      "oracle_matching": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          3
+        ]
+      ],
+      "brute_matching": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          3
+        ]
+      ]
+    },
+    {
+      "m": 4,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.09886625868024171,
+          "1": 0.09642152389563939,
+          "2": 0.03926018495191868,
+          "3": 0.08664567995118647
+        },
+        "depolarizing": {
+          "0": 0.0433636693786178,
+          "1": 0.04464738790953948,
+          "2": 0.008075616347349962,
+          "3": 0.0013351175043142317
+        },
+        "idle_dephasing": 0.027390602997712163,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.09762111651333429,
+        "(0, 2)": 0.032201440911564495,
+        "(0, 3)": 0.08455645864006038,
+        "(1, 2)": 0.14172067947102612,
+        "(1, 3)": 0.056897943637885154,
+        "(2, 3)": 0.03791618255764601
+      },
+      "operating_point": [
+        0.21866851498519968,
+        -0.807508644743913,
+        0.3223829220298984,
+        0.26390944935903726
+      ],
+      "symmetric_readout": true,
+      "oracle_value": 4.859968659855982,
+      "brute_value": 4.859968659855982,
+      "gap": 0.0,
+      "winning_branch_kind": "pairless_idle_free",
+      "oracle_matching": [],
+      "brute_matching": []
+    },
+    {
+      "m": 5,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.02245720638488626,
+          "1": 0.052177609485190665,
+          "2": 0.10607069576665759,
+          "3": 0.04504488204233564,
+          "4": 0.08530578638358403
+        },
+        "depolarizing": {
+          "0": 0.004840385441823403,
+          "1": 0.036366238836927196,
+          "2": 0.038823676203262325,
+          "3": 0.04128833908510663,
+          "4": 0.033710049521760564
+        },
+        "idle_dephasing": 0.011056212771989794,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.05560991922393788,
+        "(0, 2)": 0.009631800024915543,
+        "(0, 3)": 0.07781643510904424,
+        "(0, 4)": 0.1136189859573303,
+        "(1, 2)": 0.028625730523451576,
+        "(1, 3)": 0.03993558399194153,
+        "(1, 4)": 0.08041800635690582,
+        "(2, 3)": 0.11224973443468789,
+        "(2, 4)": 0.1344880096138769,
+        "(3, 4)": 0.018861227630125377
+      },
+      "operating_point": [
+        0.812784730800514,
+        -0.46151140065321905,
+        -0.3871788415862796,
+        0.6655886200041352,
+        0.2398469194236028
+      ],
+      "symmetric_readout": true,
+      "oracle_value": 2.600628052760542,
+      "brute_value": 2.600628052760542,
+      "gap": 0.0,
+      "winning_branch_kind": "pairless_idle_free",
+      "oracle_matching": [],
+      "brute_matching": []
+    },
+    {
+      "m": 5,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.09004706295933995,
+          "1": 0.022866869778973602,
+          "2": 0.10973133138719034,
+          "3": 0.026063381556926692,
+          "4": 0.09229331882239676
+        },
+        "depolarizing": {
+          "0": 0.0033801762637030333,
+          "1": 0.02367012938785827,
+          "2": 0.0016279163322596491,
+          "3": 0.015690535319855148,
+          "4": 0.015611533708751452
+        },
+        "idle_dephasing": 0.00198143547994414,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.10796226587078633,
+        "(0, 2)": 0.06825262247285997,
+        "(0, 3)": 0.008516154358937517,
+        "(0, 4)": 0.14930424891434954,
+        "(1, 2)": 0.1333048960062499,
+        "(1, 3)": 0.13744859024601044,
+        "(1, 4)": 0.03698632951104581,
+        "(2, 3)": 0.05911653820874519,
+        "(2, 4)": 0.03407692513700301,
+        "(3, 4)": 0.018735957326649854
+      },
+      "operating_point": [
+        0.9757431636930671,
+        -0.7664870297968234,
+        -0.6463848817262079,
+        0.14990586765803804,
+        -0.10745392742073068
+      ],
+      "symmetric_readout": true,
+      "oracle_value": 3.1600382430252933,
+      "brute_value": 3.160038243025293,
+      "gap": 4.440892098500626e-16,
+      "winning_branch_kind": "matching_from_idling_reference",
+      "oracle_matching": [
+        [
+          3,
+          4
+        ]
+      ],
+      "brute_matching": [
+        [
+          3,
+          4
+        ]
+      ]
+    },
+    {
+      "m": 5,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.08828196711763213,
+          "1": 0.036197340330265705,
+          "2": 0.020116886747849,
+          "3": 0.0907829974986946,
+          "4": 0.019900475492239347
+        },
+        "depolarizing": {
+          "0": 0.045972792575998456,
+          "1": 0.02983214186780607,
+          "2": 0.016471705643591263,
+          "3": 0.046832157832617544,
+          "4": 0.00775651359689224
+        },
+        "idle_dephasing": 0.02600948028571458,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.07716995065428696,
+        "(0, 2)": 0.013733110982435414,
+        "(0, 3)": 0.14481415636268605,
+        "(0, 4)": 0.08630640927174434,
+        "(1, 2)": 0.1205499896700081,
+        "(1, 3)": 0.04228836279715543,
+        "(1, 4)": 0.1202694940002808,
+        "(2, 3)": 0.10542629483836469,
+        "(2, 4)": 0.09655222046890279,
+        "(3, 4)": 0.1425844222360548
+      },
+      "operating_point": [
+        0.6579609391234829,
+        0.5221395450586248,
+        0.415441552099566,
+        0.6993866852928934,
+        0.36295338147337763
+      ],
+      "symmetric_readout": true,
+      "oracle_value": 4.157687798593289,
+      "brute_value": 4.157687798593289,
+      "gap": 0.0,
+      "winning_branch_kind": "pairless_idle_free",
+      "oracle_matching": [],
+      "brute_matching": []
+    },
+    {
+      "m": 5,
+      "noise_channel_and_location": {
+        "local_dephasing": "per data qubit, before readout",
+        "local_depolarizing": "per data qubit",
+        "edge_depolarizing": "two-qubit, after each pair preparation",
+        "idle_dephasing": "unmatched qubits, during the single pair-prep layer",
+        "readout_confusion": "per qubit, asymmetric (e0, e1)"
+      },
+      "noise_parameters": {
+        "dephasing": {
+          "0": 0.0770194040048854,
+          "1": 0.04873544684845393,
+          "2": 0.06699881497120345,
+          "3": 0.047529919677160457,
+          "4": 0.08931507063565787
+        },
+        "depolarizing": {
+          "0": 0.019021507805712514,
+          "1": 0.02333105771597224,
+          "2": 0.03777285449989259,
+          "3": 0.02518278992363425,
+          "4": 0.01690162853409819
+        },
+        "idle_dephasing": 0.03346954957340387,
+        "readout_confusion": {}
+      },
+      "edge_error_map": {
+        "(0, 1)": 0.12402284083041348,
+        "(0, 2)": 0.05714438911993541,
+        "(0, 3)": 0.12670936510117325,
+        "(0, 4)": 0.1177860604048068,
+        "(1, 2)": 0.0670933235656372,
+        "(1, 3)": 0.10693364095947416,
+        "(1, 4)": 0.005158455037625747,
+        "(2, 3)": 0.05846976058227557,
+        "(2, 4)": 0.12905005292941107,
+        "(3, 4)": 0.08693090362775391
+      },
+      "operating_point": [
+        0.6140914938527808,
+        -0.0683676515920093,
+        0.24077086747886245,
+        0.6378332814378722,
+        0.35618327202592637
+      ],
+      "symmetric_readout": true,
+      "oracle_value": 3.647805922859743,
+      "brute_value": 3.647805922859743,
+      "gap": 0.0,
+      "winning_branch_kind": "pairless_idle_free",
+      "oracle_matching": [],
+      "brute_matching": []
+    }
+  ],
+  "n_cases": 12,
+  "worst_gap": 8.881784197001252e-16,
+  "status": "DONE",
+  "record_hash": "1263a240f9aa54a1684dbe690fd35413d3ed2ef948db79abe222cff57d8a8a4c"
+}

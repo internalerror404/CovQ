@@ -1178,3 +1178,207 @@ def test_adaptive_pilot_seed_is_what_makes_the_likelihood_tractable():
     assert np.abs(run["pilot_seed"] - theta).max() < 0.1
     assert np.abs(run["estimate"] - theta).max() < 0.02
     assert run["achieved_regularity_margin"] > 0.9
+
+
+# ----------------------------------------------------------------------
+# Eq (111): noise gates N1-N6, N8.
+# ----------------------------------------------------------------------
+
+def _all_edges(m):
+    return [(i, j) for i in range(m) for j in range(i + 1, m)]
+
+
+def test_n1_noiseless_limit_reproduces_the_ideal_signed_matching_template():
+    from covq.noise import BlockLocalNoise, branch_template
+
+    m, theta = 4, np.array([0.3, -0.2, 0.5, 0.1])
+    matching, signs = [(0, 1), (2, 3)], [1, -1]
+    ideal = np.zeros((m, m))
+    for (i, j), s in zip(matching, signs):
+        ideal[i, i] = ideal[j, j] = 1.0
+        ideal[i, j] = ideal[j, i] = s
+    got = branch_template(matching, signs, m, theta, BlockLocalNoise())
+    assert got == pytest.approx(ideal, abs=1e-12)
+
+
+def test_n2_dephased_signed_cat_attains_the_analytic_quadrature_value():
+    """``F_C = F_Q = v^2 s s^T`` at quadrature, for the noisy block template."""
+    from covq.noise import BlockLocalNoise, pair_template
+
+    for p in (0.0, 0.05, 0.15, 0.3):
+        noise = BlockLocalNoise(dephasing={0: p, 1: p})
+        block = pair_template((0.4, 0.0), (0, 1), 1, noise)
+        v = (1.0 - 2.0 * p) ** 2
+        assert block == pytest.approx(v * v * np.ones((2, 2)), abs=1e-9)
+
+
+def test_n3_complete_pinching_drives_both_information_measures_to_zero():
+    """Covariance survives untouched; the QFIM and the declared CFI do not."""
+    from covq.measurement import covariance_surrogate, mixed_state_qfim
+    from covq.noise import BlockLocalNoise, pair_channel, pair_template
+
+    clean = pair_channel((0.4, 0.0), (0, 1), 1, BlockLocalNoise())
+    dead = pair_channel((0.4, 0.0), (0, 1), 1, BlockLocalNoise(dephasing={0: 0.5, 1: 0.5}))
+    ps = z_generators(2)
+    assert covariance_surrogate(dead, ps) == pytest.approx(covariance_surrogate(clean, ps),
+                                                           abs=1e-10)
+    assert np.abs(mixed_state_qfim(dead, ps)).max() < 1e-12
+    assert np.abs(pair_template((0.4, 0.0), (0, 1), 1,
+                                BlockLocalNoise(dephasing={0: 0.5, 1: 0.5}))).max() < 1e-12
+
+
+def test_n4_noisy_branch_cfi_is_exactly_edge_additive():
+    """``F_{C,M,sigma} = F_0 + sum_e DeltaF_{e,sigma_e}`` against the idling reference."""
+    from covq.noise import BlockLocalNoise, branch_template, delta_edge, product_template
+
+    rng = np.random.default_rng(31)
+    for m in (3, 4, 5):
+        edges = _all_edges(m)
+        noise = BlockLocalNoise(
+            dephasing={q: float(rng.uniform(0, 0.1)) for q in range(m)},
+            depolarizing={q: float(rng.uniform(0, 0.05)) for q in range(m)},
+            edge_depolarizing={e: float(rng.uniform(0, 0.12)) for e in edges},
+            idle_dephasing=float(rng.uniform(0, 0.05)))
+        theta = rng.uniform(-1, 1, m)
+        matching = [(0, 1)] if m == 3 else [(0, 1), (2, 3)]
+        for signs in itertools.product((1, -1), repeat=len(matching)):
+            got = branch_template(matching, list(signs), m, theta, noise)
+            want = product_template(m, theta, noise, idle=True) + sum(
+                delta_edge(e, s, m, theta, noise) for e, s in zip(matching, signs))
+            assert got == pytest.approx(want, abs=1e-12)
+
+
+def test_n5_block_local_noise_preserves_matching_based_pricing():
+    """The theorem: noise reweights edges, it does not change the combinatorics.
+
+    One refinement the ideal case does not need -- the pairless branch is a
+    *separate* column, because it activates no pair and therefore never waits
+    through a pair preparation, so it does not carry idle dephasing.  Dropping
+    it loses the optimum whenever idling costs more than the best edge gains.
+    """
+    from covq.noise import BlockLocalNoise, price_branch_bruteforce, price_branch_noisy
+
+    rng = np.random.default_rng(7)
+    checked = 0
+    for m in (3, 4, 5):
+        edges = _all_edges(m)
+        for _ in range(4):
+            theta = rng.uniform(-1, 1, m)
+            noise = BlockLocalNoise(
+                dephasing={q: float(rng.uniform(0, 0.12)) for q in range(m)},
+                depolarizing={q: float(rng.uniform(0, 0.05)) for q in range(m)},
+                edge_depolarizing={e: float(rng.uniform(0, 0.15)) for e in edges},
+                idle_dephasing=float(rng.uniform(0, 0.06)))
+            a = rng.standard_normal((m, m))
+            Q = a @ a.T / m
+            costs = {e: float(rng.uniform(0.0, 0.35)) for e in edges}
+            oracle = price_branch_noisy(Q, m, edges, theta, noise, costs)
+            brute = price_branch_bruteforce(Q, m, edges, theta, noise, costs)
+            assert oracle["value"] == pytest.approx(brute["value"], abs=1e-9)
+            checked += 1
+    assert checked == 12
+
+
+def test_n6_noisy_floor_compiler_closes_its_duality_gap():
+    """Eq (111) stays convex under block-local noise, so the dual bound is tight."""
+    from covq.noise import BlockLocalNoise, noise_aware_floor_compile
+
+    m = 4
+    edges = _all_edges(m)
+    G = np.full((m, m), 0.6)
+    np.fill_diagonal(G, 1.2)
+    for noise in (BlockLocalNoise(),
+                  BlockLocalNoise(dephasing={q: 0.02 for q in range(m)},
+                                  edge_depolarizing={e: 0.02 for e in edges},
+                                  idle_dephasing=0.01)):
+        res = noise_aware_floor_compile(G, m, edges, np.zeros(m), noise,
+                                        costs={e: 0.1 for e in edges}, c0=1.0)
+        assert res["status"] == "solved"
+        assert res["relative_gap"] < 1e-9
+        assert res["floor_slack_min_eig"] > -1e-8
+
+
+def test_n6_noise_switches_entanglement_off_above_a_threshold():
+    """The optimizer does not merely return the ideal schedule everywhere.
+
+    Past an edge-noise threshold the pair primitive stops paying for itself and
+    the compiler abandons it, after which the cost is independent of edge noise
+    because no edge is used.  A noise-aware compiler that never changed its
+    answer would be evidence that the objective was not doing any work.
+    """
+    from covq.noise import BlockLocalNoise, noise_aware_floor_compile
+
+    m = 4
+    edges = _all_edges(m)
+    G = np.full((m, m), 0.6)
+    np.fill_diagonal(G, 1.2)
+
+    def run(q_edge):
+        noise = BlockLocalNoise(dephasing={q: 0.02 for q in range(m)},
+                                edge_depolarizing={e: q_edge for e in edges},
+                                idle_dephasing=0.01)
+        return noise_aware_floor_compile(G, m, edges, np.zeros(m), noise,
+                                         costs={e: 0.1 for e in edges}, c0=1.0)
+
+    low, high, higher = run(0.05), run(0.20), run(0.30)
+    assert low["n_entangled_settings_used"] > 0
+    assert high["n_entangled_settings_used"] == 0
+    assert high["cost"] == pytest.approx(higher["cost"], abs=1e-9)
+    assert low["cost"] < high["cost"]
+
+
+def test_n8_asymmetric_readout_needs_a_third_analyzer_point():
+    """Two points determine the fringe only when it has no offset.
+
+    Under independent outcome-dependent confusion with rates ``(e0, e1)`` per
+    qubit, the reported outcome satisfies ``E[x~|x] = a + b x`` with
+    ``a = e1 - e0`` and ``b = 1 - e0 - e1``.  For a zero-mean block the parity
+    expectation therefore becomes
+
+        <P~_B> = (prod_i a_i) + (prod_i b_i) <P_B>,
+
+    an *offset* first-harmonic fringe.  A two-point fit at ``0`` and ``pi/2``
+    silently attributes the offset to the harmonic and returns the wrong
+    quadrature angle; the three-point fit separates them.
+    """
+    from covq.noise import BlockLocalNoise
+
+    noise = BlockLocalNoise(readout_confusion={0: (0.10, 0.02), 1: (0.08, 0.01)})
+    assert not noise.is_symmetric_readout
+    a = [e1 - e0 for e0, e1 in (noise.confusion(0), noise.confusion(1))]
+    b = [1.0 - e0 - e1 for e0, e1 in (noise.confusion(0), noise.confusion(1))]
+    offset, gain = a[0] * a[1], b[0] * b[1]
+    assert abs(offset) > 1e-3, "fixture must actually be asymmetric"
+
+    phi = 0.4
+
+    def observed(alpha):
+        return offset + gain * math.cos(phi - alpha)
+
+    # Three-point fit recovers offset, harmonic, and hence the true quadrature.
+    angles = (0.0, 2 * math.pi / 3, 4 * math.pi / 3)
+    v = [observed(t) for t in angles]
+    b_fit = sum(v) / 3.0
+    c_fit = (2.0 / 3.0) * sum(vi * math.cos(t) for vi, t in zip(v, angles))
+    d_fit = (2.0 / 3.0) * sum(vi * math.sin(t) for vi, t in zip(v, angles))
+    assert b_fit == pytest.approx(offset, abs=1e-12)
+    alpha3 = math.atan2(-c_fit, d_fit)
+    assert observed(alpha3) == pytest.approx(offset, abs=1e-12)   # harmonic nulled
+
+    # Two-point fit mistakes the offset for signal and lands off quadrature.
+    c2, d2 = observed(0.0), observed(math.pi / 2)
+    alpha2 = math.atan2(-c2, d2)
+    assert abs(math.cos(phi - alpha2)) > 1e-3
+    assert abs(alpha2 - alpha3) > 1e-3
+
+
+def test_zero_contrast_is_reported_not_papered_over():
+    """``atan2(-c, d)`` is undefined at zero contrast; a library zero is not an answer."""
+    from covq.measurement import block_quadrature
+    from covq.noise import BlockLocalNoise, pair_channel
+
+    dead = pair_channel((0.4, 0.0), (0, 1), 1, BlockLocalNoise(dephasing={0: 0.5, 1: 0.5}))
+    rec = block_quadrature(dead, [0, 1], 2)
+    assert rec["analyzer_status"] == "arbitrary_zero_information"
+    assert rec["regularity_margin"] is None
+    assert rec["visibility"] == pytest.approx(0.0, abs=1e-12)

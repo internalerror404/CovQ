@@ -160,37 +160,78 @@ def block_parity_expectation(psi: np.ndarray, alphas, block) -> float:
     return float(np.dot(p, par))
 
 
-def block_quadrature(psi: np.ndarray, block, n: int) -> dict:
+def block_quadrature(psi_or_rho, block, n: int, tol: float = 1e-9,
+                     three_point: bool = False) -> dict:
     """Solve one block for the matched-quadrature analyzer angle.
 
     Writing ``A_B = s_B . alpha_B`` and ``delta = phi_B - A_B``, the parity
-    expectation of a signed-cat block is ``<P_B> = v cos(delta)`` with fringe
-    visibility ``v`` (one for a pure block).  Turning the pivot angle alone,
+    expectation of a signed-cat block is ``<P_B> = b + r cos(delta + psi)``.
+    For an unbiased first-harmonic fringe ``b = 0`` and two evaluations suffice:
 
-        <P_B>(alpha) = c cos(alpha) + d sin(alpha),
+        <P_B>(alpha) = c cos(alpha) + d sin(alpha),   alpha* = atan2(-c, d),
 
-    with ``c`` and ``d`` the parity expectations at ``alpha = 0`` and
-    ``alpha = pi/2``.  So two evaluations determine the whole fringe, and
-    matched quadrature is the exact root
+    giving ``|sin delta| = 1``.  This replaces a grid search: on a pure block
+    every non-degenerate angle ties at Fisher information one, so an argmax
+    tie-break returns an arbitrary detuning -- invisible on pure states and
+    costly the moment visibility drops.
 
-        alpha* = atan2(-c, d),      giving  |sin delta| = 1.
+    **Zero contrast.** When ``r = hypot(c, d)`` falls to zero the fringe has no
+    first harmonic, ``atan2(-c, d)`` is mathematically undefined (a library
+    returning 0.0 is not an answer), and *every* analyzer attains the same zero
+    information.  That case is reported as ``arbitrary_zero_information`` with a
+    null margin.  Reporting ``eta_ro = 1`` there would certify usable local
+    information that does not exist.
 
-    This replaces a grid search.  The grid was not merely slower: on a pure
-    block *every* non-degenerate angle ties at Fisher information one, so an
-    argmax tie-break returns an arbitrary detuning.  That is invisible on pure
-    states and costs real information the moment visibility drops below one --
-    which is exactly what the noisy readout column was measuring.
+    **Asymmetric readout.** Under outcome-dependent confusion the parity
+    expectation acquires an offset, ``<P_B> = b + c cos alpha + d sin alpha``
+    with ``b != 0``, and two points no longer determine the fringe.  Pass
+    ``three_point=True`` to fit ``(b, c, d)`` from analyzer angles
+    ``0, 2pi/3, 4pi/3``; the quadrature root is then taken on the oscillating
+    part.  The offset is reported so it can be calibrated rather than absorbed.
     """
-    zero = np.zeros(n)
-    c = block_parity_expectation(psi, zero, block)
-    probe = zero.copy()
-    probe[block[0]] = math.pi / 2.0
-    d = block_parity_expectation(psi, probe, block)
-    vis = math.hypot(c, d)
+    mixed = psi_or_rho.ndim == 2
+    expect = (block_parity_expectation_mixed if mixed else block_parity_expectation)
+
+    def at(angle: float) -> float:
+        a = np.zeros(n)
+        a[block[0]] = angle
+        return expect(psi_or_rho, a, block)
+
+    if three_point:
+        angles = (0.0, 2.0 * math.pi / 3.0, 4.0 * math.pi / 3.0)
+        v = np.array([at(a) for a in angles])
+        b = float(v.mean())
+        c = float((2.0 / 3.0) * sum(vi * math.cos(a) for vi, a in zip(v, angles)))
+        d = float((2.0 / 3.0) * sum(vi * math.sin(a) for vi, a in zip(v, angles)))
+    else:
+        b = 0.0
+        c = at(0.0)
+        d = at(math.pi / 2.0)
+
+    contrast = math.hypot(c, d)
+    if contrast <= tol:
+        return {"pivot": int(block[0]), "alpha": 0.0, "visibility": contrast,
+                "offset": b, "regularity_margin": None,
+                "analyzer_status": "arbitrary_zero_information"}
     alpha = math.atan2(-c, d)
-    margin = abs(d * math.cos(alpha) - c * math.sin(alpha)) / vis if vis > 1e-12 else 0.0
-    return {"pivot": int(block[0]), "alpha": float(alpha),
-            "visibility": float(vis), "regularity_margin": float(margin)}
+    margin = abs(d * math.cos(alpha) - c * math.sin(alpha)) / contrast
+    return {"pivot": int(block[0]), "alpha": float(alpha), "visibility": contrast,
+            "offset": b, "regularity_margin": float(margin),
+            "analyzer_status": "matched"}
+
+
+def block_parity_expectation_mixed(rho: np.ndarray, alphas, block) -> float:
+    """``<prod_{i in B} M(alpha_i)>`` on a density matrix."""
+    n = int(np.log2(rho.shape[0]))
+    basis = np.eye(rho.shape[0], dtype=complex)
+    b = np.column_stack([readout_amplitudes(basis[:, k], alphas)
+                         for k in range(basis.shape[1])])
+    p = np.real(np.diag(b @ rho @ b.conj().T))
+    idx = np.arange(p.size)
+    par = np.ones(p.size)
+    for q in block:
+        par *= 1.0 - 2.0 * ((idx >> q) & 1)
+    return float(np.dot(p, par))
 
 
 def compile_branch_readout(psi: np.ndarray, ps: PauliSet,
