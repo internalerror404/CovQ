@@ -1,6 +1,6 @@
 {
   "schema_version": "covq.release_manifest/0.4",
-  "release_commit": "f5c67d5a169c3c42084653450857046caaaa4313",
+  "release_commit": "0586b2db8cfb20ea59f94779e77748c9705c8986",
   "source_dirty": false,
   "environment": {
     "python": "3.11.15",
@@ -147,8 +147,8 @@
     },
     {
       "path": "prototype/scripts/emit_release_manifest.py",
-      "bytes": 2757,
-      "sha256": "faa6509fb4ac37324fecd0822b419934b5c5feea16f7b3ce1e0d08d08cfb17cc"
+      "bytes": 2771,
+      "sha256": "51944926f3cd6f81f2be2cae9c2e23daa8f90e1004d196cc3f74ba2f9debb474"
     },
     {
       "path": "prototype/scripts/emit_table_manifest.py",
@@ -267,8 +267,8 @@
     },
     {
       "path": "results/RELEASE_MANIFEST.json",
-      "bytes": 12330,
-      "sha256": "60fd1563345e62895fd71ba8aff62125ff31aab96f97d11935af4953eea5ab91"
+      "bytes": 12503,
+      "sha256": "a4971e039b0b295b60321a07928003493f6ce27a00d599713953f8f71d4cc509"
     },
     {
       "path": "results/baselines_k3_quest.json",
@@ -361,5 +361,5 @@
       "sha256": "5ec128ad9dd35259018459429c212c31263ea76ef83c17adb3f387a8a66f1efa"
     }
   ],
-  "manifest_sha256": "d8a61d5bb36d27e293abba4367ed0ec861942f615066464325c885a1561bc834"
+  "manifest_sha256": "6f2b2a45896c68269a45d6a9195347d62150b5deb446b473649032e696d67fb0"
 }
