@@ -1,0 +1,610 @@
+{
+  "schema_version": "covq.measurement.record/0.1",
+  "source_commit": "4a261a895b6ac2c62cb434c69760b9e1ca6c5901",
+  "dirty": true,
+  "tolerances": {
+    "attainment_abs": 1e-09,
+    "closed_form_abs": 1e-09,
+    "pinching_abs": 1e-10
+  },
+  "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
+  "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
+  "gate": [
+    "C15a",
+    "C15b",
+    "C15c"
+  ],
+  "alias": [
+    "M3_qfi",
+    "M3_sep",
+    "M3_dephase"
+  ],
+  "proposition": "Cov_{D(rho)}(P) = Cov_rho(P) and F_Q(D(rho)) = 0",
+  "dephasing_covariance_max_drift": 1.1102230246251565e-16,
+  "dephasing_cfi_minus_qfim_max": 6.661338147750939e-16,
+  "note": "the CFI column is the declared matched-quadrature readout, which attains the mixed-state QFIM at every visibility",
+  "rows": [
+    {
+      "noise_channel": "dephasing",
+      "noise_parameters": {
+        "p": 0.0
+      },
+      "state_hash": "075eeef5e5c52a447124762c133f991218a48af1c82f58b6f5e7772fcb17ab4b",
+      "generator_hash": "d499f95e12b8461c10a531b2cd116bdd985b560b2a767618a037771167090167",
+      "readout_hash": "e8b80cf4de996475d0bbab5407dacb9fdacac388b691a01221a61d12cd1e79ea",
+      "operating_point": [
+        0.4,
+        0.0
+      ],
+      "analyzer_angles": [
+        -1.1707963267948966,
+        0.0
+      ],
+      "regularity_margin": 1.0,
+      "ideal_qfim": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "noisy_generator_covariance": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "mixed_state_qfim": [
+        [
+          0.9999999999999993,
+          0.9999999999999994
+        ],
+        [
+          0.9999999999999994,
+          0.9999999999999993
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.9999999999999997,
+          0.9999999999999997
+        ],
+        [
+          0.9999999999999997,
+          0.9999999999999997
+        ]
+      ]
+    },
+    {
+      "noise_channel": "dephasing",
+      "noise_parameters": {
+        "p": 0.1
+      },
+      "state_hash": "99a6b3c1bcb15316b9463809e9845c56fcd6850e6cd53b106bff9f90dc551839",
+      "generator_hash": "d499f95e12b8461c10a531b2cd116bdd985b560b2a767618a037771167090167",
+      "readout_hash": "e8b80cf4de996475d0bbab5407dacb9fdacac388b691a01221a61d12cd1e79ea",
+      "operating_point": [
+        0.4,
+        0.0
+      ],
+      "analyzer_angles": [
+        -1.1707963267948966,
+        0.0
+      ],
+      "regularity_margin": 1.0,
+      "ideal_qfim": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "noisy_generator_covariance": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "mixed_state_qfim": [
+        [
+          0.40959999999999974,
+          0.40959999999999974
+        ],
+        [
+          0.40959999999999974,
+          0.40959999999999974
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.4095999999999998,
+          0.4095999999999998
+        ],
+        [
+          0.4095999999999998,
+          0.4095999999999998
+        ]
+      ]
+    },
+    {
+      "noise_channel": "dephasing",
+      "noise_parameters": {
+        "p": 0.2
+      },
+      "state_hash": "cb5bfe0f5b053eae5148e924e840c151b91ec20509b83079b83a26f539c6df16",
+      "generator_hash": "d499f95e12b8461c10a531b2cd116bdd985b560b2a767618a037771167090167",
+      "readout_hash": "e8b80cf4de996475d0bbab5407dacb9fdacac388b691a01221a61d12cd1e79ea",
+      "operating_point": [
+        0.4,
+        0.0
+      ],
+      "analyzer_angles": [
+        -1.1707963267948966,
+        0.0
+      ],
+      "regularity_margin": 1.0,
+      "ideal_qfim": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "noisy_generator_covariance": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "mixed_state_qfim": [
+        [
+          0.12959999999999966,
+          0.12959999999999966
+        ],
+        [
+          0.12959999999999966,
+          0.12959999999999966
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.12959999999999994,
+          0.12959999999999994
+        ],
+        [
+          0.12959999999999994,
+          0.12959999999999994
+        ]
+      ]
+    },
+    {
+      "noise_channel": "dephasing",
+      "noise_parameters": {
+        "p": 0.35
+      },
+      "state_hash": "9515957bf466fe383f4ec6c792388397e0b7f31b8e5d91d38b9993cfd5ec2816",
+      "generator_hash": "d499f95e12b8461c10a531b2cd116bdd985b560b2a767618a037771167090167",
+      "readout_hash": "e8b80cf4de996475d0bbab5407dacb9fdacac388b691a01221a61d12cd1e79ea",
+      "operating_point": [
+        0.4,
+        0.0
+      ],
+      "analyzer_angles": [
+        -1.1707963267948966,
+        0.0
+      ],
+      "regularity_margin": 1.0,
+      "ideal_qfim": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "noisy_generator_covariance": [
+        [
+          0.9999999999999998,
+          0.9999999999999998
+        ],
+        [
+          0.9999999999999998,
+          0.9999999999999998
+        ]
+      ],
+      "mixed_state_qfim": [
+        [
+          0.008100000000000012,
+          0.008100000000000012
+        ],
+        [
+          0.008100000000000012,
+          0.008100000000000012
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.008099999999999998,
+          0.008099999999999998
+        ],
+        [
+          0.008099999999999998,
+          0.008099999999999998
+        ]
+      ]
+    },
+    {
+      "noise_channel": "dephasing",
+      "noise_parameters": {
+        "p": 0.5
+      },
+      "state_hash": "badde7af9606f1c0650cb4fde35f19576cc3faed34ea4fdd4d9f80045c51d05e",
+      "generator_hash": "d499f95e12b8461c10a531b2cd116bdd985b560b2a767618a037771167090167",
+      "readout_hash": "e8b80cf4de996475d0bbab5407dacb9fdacac388b691a01221a61d12cd1e79ea",
+      "operating_point": [
+        0.4,
+        0.0
+      ],
+      "analyzer_angles": [
+        -1.1707963267948966,
+        0.0
+      ],
+      "regularity_margin": 1.0,
+      "ideal_qfim": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "noisy_generator_covariance": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "mixed_state_qfim": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ]
+    },
+    {
+      "noise_channel": "depolarizing",
+      "noise_parameters": {
+        "p": 0.0
+      },
+      "state_hash": "075eeef5e5c52a447124762c133f991218a48af1c82f58b6f5e7772fcb17ab4b",
+      "generator_hash": "d499f95e12b8461c10a531b2cd116bdd985b560b2a767618a037771167090167",
+      "readout_hash": "e8b80cf4de996475d0bbab5407dacb9fdacac388b691a01221a61d12cd1e79ea",
+      "operating_point": [
+        0.4,
+        0.0
+      ],
+      "analyzer_angles": [
+        -1.1707963267948966,
+        0.0
+      ],
+      "regularity_margin": 1.0,
+      "ideal_qfim": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "noisy_generator_covariance": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "mixed_state_qfim": [
+        [
+          0.9999999999999993,
+          0.9999999999999994
+        ],
+        [
+          0.9999999999999994,
+          0.9999999999999993
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.9999999999999997,
+          0.9999999999999997
+        ],
+        [
+          0.9999999999999997,
+          0.9999999999999997
+        ]
+      ]
+    },
+    {
+      "noise_channel": "depolarizing",
+      "noise_parameters": {
+        "p": 0.1
+      },
+      "state_hash": "2a747b6a7d0b531bb1d694508beee31b5dd8e33b91eb66599dcc6eb5d198e3ea",
+      "generator_hash": "d499f95e12b8461c10a531b2cd116bdd985b560b2a767618a037771167090167",
+      "readout_hash": "e8b80cf4de996475d0bbab5407dacb9fdacac388b691a01221a61d12cd1e79ea",
+      "operating_point": [
+        0.4,
+        0.0
+      ],
+      "analyzer_angles": [
+        -1.1707963267948966,
+        0.0
+      ],
+      "regularity_margin": 1.0,
+      "ideal_qfim": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "noisy_generator_covariance": [
+        [
+          1.0,
+          0.7511111111111111
+        ],
+        [
+          0.7511111111111111,
+          1.0
+        ]
+      ],
+      "mixed_state_qfim": [
+        [
+          0.644354201917654,
+          0.644354201917654
+        ],
+        [
+          0.644354201917654,
+          0.6443542019176539
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.5641679012345677,
+          0.5641679012345677
+        ],
+        [
+          0.5641679012345677,
+          0.5641679012345678
+        ]
+      ]
+    },
+    {
+      "noise_channel": "depolarizing",
+      "noise_parameters": {
+        "p": 0.2
+      },
+      "state_hash": "58c2c2a1a81397475b229b8007ab82eeea00064474ce725c50bf3ec6c66d2a8c",
+      "generator_hash": "d499f95e12b8461c10a531b2cd116bdd985b560b2a767618a037771167090167",
+      "readout_hash": "e8b80cf4de996475d0bbab5407dacb9fdacac388b691a01221a61d12cd1e79ea",
+      "operating_point": [
+        0.4,
+        0.0
+      ],
+      "analyzer_angles": [
+        -1.1707963267948966,
+        0.0
+      ],
+      "regularity_margin": 1.0,
+      "ideal_qfim": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "noisy_generator_covariance": [
+        [
+          0.9999999999999999,
+          0.5377777777777778
+        ],
+        [
+          0.5377777777777778,
+          0.9999999999999999
+        ]
+      ],
+      "mixed_state_qfim": [
+        [
+          0.3761335902376364,
+          0.3761335902376364
+        ],
+        [
+          0.3761335902376364,
+          0.3761335902376364
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.28920493827160487,
+          0.28920493827160487
+        ],
+        [
+          0.28920493827160487,
+          0.28920493827160487
+        ]
+      ]
+    },
+    {
+      "noise_channel": "depolarizing",
+      "noise_parameters": {
+        "p": 0.35
+      },
+      "state_hash": "b1a6264f79b7536de2d1aa49c9512cf30379661baa8bed7a76bac22074fe4340",
+      "generator_hash": "d499f95e12b8461c10a531b2cd116bdd985b560b2a767618a037771167090167",
+      "readout_hash": "e8b80cf4de996475d0bbab5407dacb9fdacac388b691a01221a61d12cd1e79ea",
+      "operating_point": [
+        0.4,
+        0.0
+      ],
+      "analyzer_angles": [
+        -1.1707963267948966,
+        0.0
+      ],
+      "regularity_margin": 1.0,
+      "ideal_qfim": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "noisy_generator_covariance": [
+        [
+          1.0,
+          0.28444444444444456
+        ],
+        [
+          0.28444444444444456,
+          1.0
+        ]
+      ],
+      "mixed_state_qfim": [
+        [
+          0.1259823144944252,
+          0.1259823144944252
+        ],
+        [
+          0.1259823144944252,
+          0.1259823144944252
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.08090864197530857,
+          0.08090864197530859
+        ],
+        [
+          0.08090864197530859,
+          0.08090864197530859
+        ]
+      ]
+    },
+    {
+      "noise_channel": "depolarizing",
+      "noise_parameters": {
+        "p": 0.5
+      },
+      "state_hash": "0474a16e2c81a853b2c79ba71cee16122bb8454d22c3934b6bbb5da2ef8007cb",
+      "generator_hash": "d499f95e12b8461c10a531b2cd116bdd985b560b2a767618a037771167090167",
+      "readout_hash": "e8b80cf4de996475d0bbab5407dacb9fdacac388b691a01221a61d12cd1e79ea",
+      "operating_point": [
+        0.4,
+        0.0
+      ],
+      "analyzer_angles": [
+        -1.1707963267948966,
+        0.0
+      ],
+      "regularity_margin": 1.0,
+      "ideal_qfim": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "noisy_generator_covariance": [
+        [
+          0.9999999999999996,
+          0.1111111111111111
+        ],
+        [
+          0.1111111111111111,
+          0.9999999999999996
+        ]
+      ],
+      "mixed_state_qfim": [
+        [
+          0.022222222222222244,
+          0.022222222222222244
+        ],
+        [
+          0.022222222222222244,
+          0.022222222222222244
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.012345679012345682,
+          0.012345679012345682
+        ],
+        [
+          0.012345679012345682,
+          0.012345679012345684
+        ]
+      ]
+    }
+  ],
+  "status": "DONE",
+  "record_hash": "d4c3e410ffed55100bfc5d4738fb568e2f2005d2bd13a089149a39b9b441e77a"
+}

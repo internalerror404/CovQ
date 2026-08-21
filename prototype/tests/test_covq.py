@@ -8,6 +8,7 @@ Each test corresponds to a statement in
 from __future__ import annotations
 
 import itertools
+import math
 
 import numpy as np
 import pytest
@@ -801,6 +802,13 @@ def test_m2_fixed_readout_collapses_on_a_hyperplane_that_contains_theta_zero():
     contains ``theta = 0``, and it contains *every* uniform operating point as
     soon as a branch carries a negatively signed edge.  Both are exactly where
     an experiment would choose to sit.
+
+    On those hyperplanes the outcome model is **nonregular**: the score
+    vanishes identically, so the first-order Fisher information the compiler
+    uses is zero and the signed local phase is not estimable in the regular
+    sense.  Probabilities still turn on quadratically, so nonregular
+    second-order distinguishability may survive; this test asserts the
+    first-order statement only, which is the one the compiler depends on.
     """
     from covq.measurement import compile_schedule_readout
 
@@ -886,6 +894,114 @@ def test_m3_z_correlators_are_blind_to_the_bell_primitive_s_own_dephasing():
         fq = mixed_state_qfim(rho, ps)
         cfi = cfi_of_readout_mixed(rho, ps, alphas)
         assert np.linalg.eigvalsh(fq - cfi).min() >= -1e-9, "CFI must not exceed the QFIM"
+        # Matched quadrature is optimal at every visibility, not just at v = 1:
+        # there is no measurement gap to explain away here.
+        assert np.trace(cfi) == pytest.approx(np.trace(fq), abs=1e-9)
         assert np.trace(fq) <= previous + 1e-12
         previous = float(np.trace(fq))
     assert previous == pytest.approx(0.0, abs=1e-10)
+
+
+def test_m1_readout_is_matched_quadrature_with_unit_regularity_margin():
+    """The analyzer phase is solved, not searched.
+
+    Two parity evaluations determine the whole fringe
+    ``<P_B>(alpha) = c cos alpha + d sin alpha``, so matched quadrature is the
+    exact root ``atan2(-c, d)`` and the regularity margin ``|sin delta|`` is
+    one by construction.  A grid argmax cannot do this: on a pure block every
+    non-degenerate angle ties at Fisher information one, so the tie-break
+    returns an arbitrary detuning that is free on pure states and expensive the
+    moment visibility drops.
+    """
+    from covq.measurement import _rotate, readout_contract
+
+    ps = z_generators(2)
+    for phi in (0.4, 1.1, -0.7):
+        psi = _rotate(data_statevector(prg.signed_cat_circuit(np.array([1, 1]), n_qubits=2)),
+                      ps, np.array([phi, 0.0]))
+        (rec,) = readout_contract(psi, [(0, 1)])
+        assert rec["regularity_margin"] == pytest.approx(1.0, abs=1e-12)
+        assert rec["visibility"] == pytest.approx(1.0, abs=1e-12)
+        assert math.cos(phi - rec["alpha"]) == pytest.approx(0.0, abs=1e-12)
+
+
+def test_m3_declared_readout_attains_the_mixed_state_qfim_under_dephasing():
+    """The noisy CFI column had no gap in it; the compiler had a tie-break bug.
+
+    Closed form for the dephased cat block at detuning ``delta`` and fringe
+    visibility ``v``:
+
+        F_C = v^2 sin^2(delta) / (1 - v^2 cos^2(delta)) * s s^T,
+
+    maximised at quadrature where it equals ``v^2 s s^T = F_Q``.  So local
+    parity readout is optimal at *every* visibility, and complete dephasing
+    gives zero information for every readout rather than for this one.
+    """
+    from covq.measurement import (cfi_of_readout_mixed, compile_branch_readout,
+                                  dephase, mixed_state_qfim, _rotate)
+
+    for k in (2, 3, 4):
+        ps = z_generators(k)
+        psi = _rotate(data_statevector(prg.signed_cat_circuit(np.ones(k, int), n_qubits=k)),
+                      ps, np.array([0.37] + [0.0] * (k - 1)))
+        alphas = compile_branch_readout(psi, ps, [tuple(range(k))])
+        rho0 = np.outer(psi, psi.conj())
+        for p in (0.0, 0.1, 0.25, 0.4):
+            rho = dephase(rho0, p)
+            cfi = cfi_of_readout_mixed(rho, ps, alphas)
+            assert np.trace(cfi) == pytest.approx(float(np.trace(mixed_state_qfim(rho, ps))),
+                                                  abs=1e-9)
+            v = (1.0 - 2.0 * p) ** k
+            assert np.trace(cfi) == pytest.approx(k * v * v, abs=1e-9)
+
+
+def test_m3_closed_form_fisher_for_a_detuned_noisy_analyzer():
+    """``F_C(v, delta)`` against numerics over visibility and detuning."""
+    from covq.measurement import cfi_of_readout_mixed, dephase, _rotate
+
+    for k in (2, 3):
+        ps = z_generators(k)
+        for p in (0.0, 0.15, 0.3, 0.45):
+            v = (1.0 - 2.0 * p) ** k
+            for phi in (0.0, 0.4, 1.3):
+                psi = _rotate(data_statevector(prg.signed_cat_circuit(np.ones(k, int), n_qubits=k)),
+                              ps, np.array([phi] + [0.0] * (k - 1)))
+                rho = dephase(np.outer(psi, psi.conj()), p)
+                for a in (0.2, 0.9, math.pi / 2, 2.5):
+                    alphas = np.zeros(k)
+                    alphas[0] = a
+                    d = phi - a
+                    den = 1.0 - v * v * math.cos(d) ** 2
+                    pred = v * v * math.sin(d) ** 2 / den if den > 1e-12 else 0.0
+                    assert cfi_of_readout_mixed(rho, ps, alphas)[0, 0] == pytest.approx(pred, abs=1e-9)
+
+
+def test_m3_generator_basis_pinching_preserves_covariance_and_kills_all_information():
+    """The general proposition, not the Bell instance.
+
+    For the pinching ``D`` onto the joint eigenbasis of the commuting family,
+    ``Cov_{D(rho)}(P) = Cov_rho(P)`` for every state, while ``[D(rho), P_i] = 0``
+    forces ``U_theta D(rho) U_theta^dagger = D(rho)`` and hence ``F_Q = 0``
+    identically.  Generator-basis covariance can therefore be exactly unchanged
+    while all parameter information is destroyed.
+    """
+    from covq.measurement import covariance_surrogate, mixed_state_qfim
+
+    rng = np.random.default_rng(101)
+    for m, n in ((2, 2), (3, 3), (3, 4)):
+        ps = random_commuting_paulis(m, rng, n=n)
+        dim = 1 << n
+        basis = np.eye(dim, dtype=complex)
+        mix = np.zeros((dim, dim), dtype=complex)
+        for i in range(m):
+            col = np.column_stack([apply_pauli(basis[:, k], ps, i) for k in range(dim)])
+            mix += rng.normal() * col
+        _, u = np.linalg.eigh(mix)
+        for _ in range(3):
+            a = rng.normal(size=(dim, dim)) + 1j * rng.normal(size=(dim, dim))
+            rho = a @ a.conj().T
+            rho /= np.trace(rho).real
+            pinched = u @ np.diag(np.diag(u.conj().T @ rho @ u)) @ u.conj().T
+            assert covariance_surrogate(pinched, ps) == pytest.approx(
+                covariance_surrogate(rho, ps), abs=1e-10)
+            assert np.abs(mixed_state_qfim(pinched, ps)).max() < 1e-18

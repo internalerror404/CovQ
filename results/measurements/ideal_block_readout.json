@@ -1,0 +1,580 @@
+{
+  "schema_version": "covq.measurement.record/0.1",
+  "source_commit": "4a261a895b6ac2c62cb434c69760b9e1ca6c5901",
+  "dirty": true,
+  "tolerances": {
+    "attainment_abs": 1e-09,
+    "closed_form_abs": 1e-09,
+    "pinching_abs": 1e-10
+  },
+  "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
+  "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
+  "gate": "C10a",
+  "alias": "M1",
+  "cases": [
+    {
+      "block_width": 2,
+      "operating_point": [
+        0.0,
+        0.0
+      ],
+      "block_sign_vector": [
+        1,
+        1
+      ],
+      "pivot": 0,
+      "local_analyzer_angles": [
+        -1.5707963267948966,
+        0.0
+      ],
+      "aggregate_analyzer_phase": -1.5707963267948966,
+      "readout_regularity_margin": 1.0,
+      "fringe_visibility": 0.9999999999999996,
+      "parity_postprocessing_map": "product of outcome signs over the block",
+      "readout_2q_gate_count": 0,
+      "readout_ancilla_count": 0,
+      "qfim": [
+        [
+          0.9999999999999998,
+          0.9999999999999998
+        ],
+        [
+          0.9999999999999998,
+          0.9999999999999998
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.9999999999999996,
+          0.9999999999999996
+        ],
+        [
+          0.9999999999999996,
+          0.9999999999999996
+        ]
+      ],
+      "attainment_gap": 4.440892098500626e-16,
+      "readout_hash": "3e89a597669333208c57818366738a4ee9f2b5c0301dff3164ddcacc853968e4"
+    },
+    {
+      "block_width": 2,
+      "operating_point": [
+        0.37,
+        0.0
+      ],
+      "block_sign_vector": [
+        1,
+        1
+      ],
+      "pivot": 0,
+      "local_analyzer_angles": [
+        -1.2007963267948965,
+        0.0
+      ],
+      "aggregate_analyzer_phase": -1.2007963267948965,
+      "readout_regularity_margin": 1.0,
+      "fringe_visibility": 0.9999999999999996,
+      "parity_postprocessing_map": "product of outcome signs over the block",
+      "readout_2q_gate_count": 0,
+      "readout_ancilla_count": 0,
+      "qfim": [
+        [
+          0.9999999999999998,
+          0.9999999999999998
+        ],
+        [
+          0.9999999999999998,
+          0.9999999999999998
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.9999999999999994,
+          0.9999999999999994
+        ],
+        [
+          0.9999999999999994,
+          0.9999999999999994
+        ]
+      ],
+      "attainment_gap": 6.66133814775094e-16,
+      "readout_hash": "34ef7bf1049bc8c14ca4e458a455565d86140b0a568d8a46264980b57d8ce537"
+    },
+    {
+      "block_width": 2,
+      "operating_point": [
+        1.3,
+        0.0
+      ],
+      "block_sign_vector": [
+        1,
+        1
+      ],
+      "pivot": 0,
+      "local_analyzer_angles": [
+        -0.2707963267948966,
+        0.0
+      ],
+      "aggregate_analyzer_phase": -0.2707963267948966,
+      "readout_regularity_margin": 1.0,
+      "fringe_visibility": 0.9999999999999997,
+      "parity_postprocessing_map": "product of outcome signs over the block",
+      "readout_2q_gate_count": 0,
+      "readout_ancilla_count": 0,
+      "qfim": [
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.9999999999999996,
+          0.9999999999999996
+        ],
+        [
+          0.9999999999999996,
+          0.9999999999999996
+        ]
+      ],
+      "attainment_gap": 6.66133814775094e-16,
+      "readout_hash": "e7304219fc4405dc37fae1dcf26c60ffc3c4fbfecb86fffa6196f0111738cd4e"
+    },
+    {
+      "block_width": 3,
+      "operating_point": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "block_sign_vector": [
+        1,
+        1,
+        1
+      ],
+      "pivot": 0,
+      "local_analyzer_angles": [
+        -1.5707963267948966,
+        0.0,
+        0.0
+      ],
+      "aggregate_analyzer_phase": -1.5707963267948966,
+      "readout_regularity_margin": 1.0,
+      "fringe_visibility": 0.9999999999999993,
+      "parity_postprocessing_map": "product of outcome signs over the block",
+      "readout_2q_gate_count": 0,
+      "readout_ancilla_count": 0,
+      "qfim": [
+        [
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998
+        ],
+        [
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998
+        ],
+        [
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.9999999999999992,
+          0.9999999999999992,
+          0.9999999999999992
+        ],
+        [
+          0.9999999999999992,
+          0.9999999999999992,
+          0.9999999999999992
+        ],
+        [
+          0.9999999999999992,
+          0.9999999999999992,
+          0.9999999999999992
+        ]
+      ],
+      "attainment_gap": 1.6653345369377348e-15,
+      "readout_hash": "8211b87cb2746f670c394d263288d5837d4d4a1ce647a307976cf30dc2cdae00"
+    },
+    {
+      "block_width": 3,
+      "operating_point": [
+        0.37,
+        0.0,
+        0.0
+      ],
+      "block_sign_vector": [
+        1,
+        1,
+        1
+      ],
+      "pivot": 0,
+      "local_analyzer_angles": [
+        -1.2007963267948965,
+        0.0,
+        0.0
+      ],
+      "aggregate_analyzer_phase": -1.2007963267948965,
+      "readout_regularity_margin": 1.0,
+      "fringe_visibility": 0.9999999999999994,
+      "parity_postprocessing_map": "product of outcome signs over the block",
+      "readout_2q_gate_count": 0,
+      "readout_ancilla_count": 0,
+      "qfim": [
+        [
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998
+        ],
+        [
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998
+        ],
+        [
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.9999999999999992,
+          0.9999999999999992,
+          0.9999999999999992
+        ],
+        [
+          0.9999999999999992,
+          0.9999999999999992,
+          0.9999999999999992
+        ],
+        [
+          0.9999999999999992,
+          0.9999999999999992,
+          0.9999999999999992
+        ]
+      ],
+      "attainment_gap": 1.6653345369377348e-15,
+      "readout_hash": "fead77f947ca7ad1e0a27e241b7c973ff2e0cda8fc4d4b3f41bb85afa0ba4b5d"
+    },
+    {
+      "block_width": 3,
+      "operating_point": [
+        1.3,
+        0.0,
+        0.0
+      ],
+      "block_sign_vector": [
+        1,
+        1,
+        1
+      ],
+      "pivot": 0,
+      "local_analyzer_angles": [
+        -0.2707963267948966,
+        0.0,
+        0.0
+      ],
+      "aggregate_analyzer_phase": -0.2707963267948966,
+      "readout_regularity_margin": 1.0,
+      "fringe_visibility": 0.9999999999999993,
+      "parity_postprocessing_map": "product of outcome signs over the block",
+      "readout_2q_gate_count": 0,
+      "readout_ancilla_count": 0,
+      "qfim": [
+        [
+          0.9999999999999999,
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.9999999999999992,
+          0.9999999999999992,
+          0.9999999999999992
+        ],
+        [
+          0.9999999999999992,
+          0.9999999999999992,
+          0.9999999999999992
+        ],
+        [
+          0.9999999999999992,
+          0.9999999999999992,
+          0.9999999999999992
+        ]
+      ],
+      "attainment_gap": 1.9984014443252826e-15,
+      "readout_hash": "fcf7ddb563e312bc12b831535de28f0e903b3843528e0b70dbc718282a04e5c6"
+    },
+    {
+      "block_width": 4,
+      "operating_point": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "block_sign_vector": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "pivot": 0,
+      "local_analyzer_angles": [
+        -1.5707963267948966,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "aggregate_analyzer_phase": -1.5707963267948966,
+      "readout_regularity_margin": 1.0,
+      "fringe_visibility": 0.9999999999999992,
+      "parity_postprocessing_map": "product of outcome signs over the block",
+      "readout_2q_gate_count": 0,
+      "readout_ancilla_count": 0,
+      "qfim": [
+        [
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998
+        ],
+        [
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998
+        ],
+        [
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998
+        ],
+        [
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.9999999999999996,
+          0.9999999999999996,
+          0.9999999999999996,
+          0.9999999999999996
+        ],
+        [
+          0.9999999999999996,
+          0.9999999999999996,
+          0.9999999999999996,
+          0.9999999999999996
+        ],
+        [
+          0.9999999999999996,
+          0.9999999999999996,
+          0.9999999999999996,
+          0.9999999999999996
+        ],
+        [
+          0.9999999999999996,
+          0.9999999999999996,
+          0.9999999999999996,
+          0.9999999999999996
+        ]
+      ],
+      "attainment_gap": 8.881784197001252e-16,
+      "readout_hash": "fd084c43f8dbce20d78e2399212db12cbf6b199581e57110ab50356550eec523"
+    },
+    {
+      "block_width": 4,
+      "operating_point": [
+        0.37,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "block_sign_vector": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "pivot": 0,
+      "local_analyzer_angles": [
+        -1.2007963267948965,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "aggregate_analyzer_phase": -1.2007963267948965,
+      "readout_regularity_margin": 1.0000000000000002,
+      "fringe_visibility": 0.9999999999999992,
+      "parity_postprocessing_map": "product of outcome signs over the block",
+      "readout_2q_gate_count": 0,
+      "readout_ancilla_count": 0,
+      "qfim": [
+        [
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998
+        ],
+        [
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998
+        ],
+        [
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998
+        ],
+        [
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998,
+          0.9999999999999998
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.9999999999999997,
+          0.9999999999999997,
+          0.9999999999999997,
+          0.9999999999999997
+        ],
+        [
+          0.9999999999999997,
+          0.9999999999999997,
+          0.9999999999999997,
+          0.9999999999999997
+        ],
+        [
+          0.9999999999999997,
+          0.9999999999999997,
+          0.9999999999999997,
+          0.9999999999999997
+        ],
+        [
+          0.9999999999999997,
+          0.9999999999999997,
+          0.9999999999999997,
+          0.9999999999999997
+        ]
+      ],
+      "attainment_gap": 4.440892098500626e-16,
+      "readout_hash": "3d2067250e4caaba53f7b979a74116dded99cea787585de6a67aa2c83c72b0cf"
+    },
+    {
+      "block_width": 4,
+      "operating_point": [
+        1.3,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "block_sign_vector": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "pivot": 0,
+      "local_analyzer_angles": [
+        -0.2707963267948968,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "aggregate_analyzer_phase": -0.2707963267948968,
+      "readout_regularity_margin": 1.0000000000000002,
+      "fringe_visibility": 0.999999999999999,
+      "parity_postprocessing_map": "product of outcome signs over the block",
+      "readout_2q_gate_count": 0,
+      "readout_ancilla_count": 0,
+      "qfim": [
+        [
+          0.9999999999999999,
+          0.9999999999999999,
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999,
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999,
+          0.9999999999999999,
+          0.9999999999999999
+        ],
+        [
+          0.9999999999999999,
+          0.9999999999999999,
+          0.9999999999999999,
+          0.9999999999999999
+        ]
+      ],
+      "declared_readout_cfi": [
+        [
+          0.9999999999999991,
+          0.9999999999999991,
+          0.9999999999999991,
+          0.9999999999999991
+        ],
+        [
+          0.9999999999999991,
+          0.9999999999999991,
+          0.9999999999999991,
+          0.9999999999999991
+        ],
+        [
+          0.9999999999999991,
+          0.9999999999999991,
+          0.9999999999999991,
+          0.9999999999999991
+        ],
+        [
+          0.9999999999999991,
+          0.9999999999999991,
+          0.9999999999999991,
+          0.9999999999999991
+        ]
+      ],
+      "attainment_gap": 3.108624468950438e-15,
+      "readout_hash": "75f97e7d05cb6d0c46e919d2b702260b2c2140a5af41bfd02b4ab150744d82c0"
+    }
+  ],
+  "worst_attainment_gap": 3.108624468950438e-15,
+  "status": "DONE",
+  "record_hash": "d6583890e7df7c28124bd5a444d7333f07e3730620fe9f243e33a8567f0393b5"
+}

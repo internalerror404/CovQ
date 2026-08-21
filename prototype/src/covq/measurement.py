@@ -20,24 +20,44 @@ M1  For every branch of a pair-width (indeed any cat-block) schedule, a
 
 M2  The attaining measurement **depends on the operating point**, and the
     dependence is not a technicality.  At ``theta = 0`` -- the natural place
-    to sit -- the fixed all-X readout returns *identically zero* Fisher
-    information on every branch.  Qualification (ii) of Section 11.1 is
-    therefore load-bearing: a compiler that emits a probe schedule without
-    emitting the matched readout has emitted nothing.
+    to sit -- the fixed all-X readout has *zero first-order score* on every
+    branch: the outcome model is nonregular there, so the local Fisher
+    information the compiler uses vanishes and the signed local phase is not
+    estimable in the regular sense.  (Probabilities turn on quadratically off
+    the hyperplane, so nonregular second-order distinguishability may survive;
+    the claim made here is the first-order one.)  Qualification (ii) of
+    Section 11.1 is therefore load-bearing: a compiler that emits a probe
+    schedule without emitting the matched readout has not emitted a working
+    experiment.
 
 M3  Equation (110) is implemented and checked against Equation (109).  They
-    agree on pure states (110 reduces to ``4 Cov``) and disagree on noisy
-    ones by a factor that is quantified here.  Reading a noisy covariance
-    table as a QFIM *inflates* the reported information.
+    agree on pure states (110 reduces to ``4 Cov``) and disagree on noisy ones
+    by a factor that is quantified here.  In its general form: pinching onto
+    the joint eigenbasis of the commuting generators leaves the generator
+    covariance matrix *exactly* invariant while sending the QFIM to zero, so
+    reading a covariance table as an information quantity is not merely loose
+    -- it can be maximally wrong.
 
 Conventions.  Generators are ``G_i = P_i / 2`` so that the pure-state QFIM is
 ``F_ij = <P_i P_j> - <P_i><P_j>``, matching :mod:`covq.qfim`.  Every Fisher
 matrix here is per shot.
 
-Naming.  These gates are labelled M1-M3 rather than continuing the C-series.
-The manuscript's contract declares gates C1-C16; the local prototype
-implements C1-C12 and the contract file that fixes the numbering has not been
-received.  Renumbering into the C-series is deferred rather than guessed.
+Naming.  These results were developed as M1-M3, before the v0.3 handoff fixed
+the C-series.  That handoff numbers the canonical stack through C14 and bundles
+readout into a single composite C10 ("compiled readout, downstream pullback,
+support/kernel, and inverse-stability controls").  The alias map, to be adopted
+by the next protocol revision, splits it:
+
+    M1          -> C10a   ideal block-local readout attainability
+    M1_schedule -> C10b   retained-label schedule CFI additivity
+    M2          -> C10c   readout singularity and matched-readout restoration
+    M3_qfi      -> C15a   mixed-state SLD QFIM implementation
+    M3_sep      -> C15b   covariance / QFI / declared-CFI separation
+    M3_dephase  -> C15c   generator-basis dephasing negative control
+
+Splitting C10 matters operationally: a readout failure must not ambiguously
+invalidate unrelated matrix-pullback code.  The M-names are retained here so
+that the artifacts of commit 4a261a8 are not retroactively renamed.
 """
 
 from __future__ import annotations
@@ -130,38 +150,78 @@ def cfi_of_readout(psi: np.ndarray, ps: PauliSet, alphas,
 # M1/M2: compiling the readout for one branch
 # ----------------------------------------------------------------------
 
+def block_parity_expectation(psi: np.ndarray, alphas, block) -> float:
+    """``<prod_{i in B} M(alpha_i)>`` read off the product outcome law."""
+    p = np.abs(readout_amplitudes(psi, alphas)) ** 2
+    idx = np.arange(p.size)
+    par = np.ones(p.size)
+    for q in block:
+        par *= 1.0 - 2.0 * ((idx >> q) & 1)
+    return float(np.dot(p, par))
+
+
+def block_quadrature(psi: np.ndarray, block, n: int) -> dict:
+    """Solve one block for the matched-quadrature analyzer angle.
+
+    Writing ``A_B = s_B . alpha_B`` and ``delta = phi_B - A_B``, the parity
+    expectation of a signed-cat block is ``<P_B> = v cos(delta)`` with fringe
+    visibility ``v`` (one for a pure block).  Turning the pivot angle alone,
+
+        <P_B>(alpha) = c cos(alpha) + d sin(alpha),
+
+    with ``c`` and ``d`` the parity expectations at ``alpha = 0`` and
+    ``alpha = pi/2``.  So two evaluations determine the whole fringe, and
+    matched quadrature is the exact root
+
+        alpha* = atan2(-c, d),      giving  |sin delta| = 1.
+
+    This replaces a grid search.  The grid was not merely slower: on a pure
+    block *every* non-degenerate angle ties at Fisher information one, so an
+    argmax tie-break returns an arbitrary detuning.  That is invisible on pure
+    states and costs real information the moment visibility drops below one --
+    which is exactly what the noisy readout column was measuring.
+    """
+    zero = np.zeros(n)
+    c = block_parity_expectation(psi, zero, block)
+    probe = zero.copy()
+    probe[block[0]] = math.pi / 2.0
+    d = block_parity_expectation(psi, probe, block)
+    vis = math.hypot(c, d)
+    alpha = math.atan2(-c, d)
+    margin = abs(d * math.cos(alpha) - c * math.sin(alpha)) / vis if vis > 1e-12 else 0.0
+    return {"pivot": int(block[0]), "alpha": float(alpha),
+            "visibility": float(vis), "regularity_margin": float(margin)}
+
+
 def compile_branch_readout(psi: np.ndarray, ps: PauliSet,
-                           blocks, n_grid: int = 24) -> np.ndarray:
-    """Choose per-qubit equatorial axes that attain the branch QFIM.
+                           blocks) -> np.ndarray:
+    """Per-qubit equatorial axes attaining the branch QFIM at matched quadrature.
 
-    For a cat block ``B`` with sign vector ``s`` the state is
-    ``(e^{-i phi/2}|s> + e^{i phi/2}|-s>)/sqrt(2)`` with
-    ``phi = sum_{i in B} s_i theta_i``, and the product readout gives block
-    parity law ``(1 + P cos(phi - A))/4...`` with ``A`` the summed axis angle.
-    Its Fisher information is *exactly* one for every ``A`` off the degenerate
-    set ``sin(phi - A) = 0``, so only one angle per block is a real degree of
-    freedom and a coarse scan lands on an exact optimum rather than near one.
-
-    Blocks are independent -- the state and the readout both factorize -- so
-    the scan is done blockwise, which keeps the cost linear in the number of
-    blocks instead of exponential in the number of qubits.
+    All but one qubit of each block is measured in ``X``; a single pivot qubit
+    carries the analyzer angle.  Readout cost is therefore zero two-qubit gates
+    and zero ancillas, which is optimal in both.
     """
     n = int(np.log2(psi.size))
     alphas = np.zeros(n)
-    grid = np.linspace(0.0, math.pi, n_grid, endpoint=False)
     for blk in blocks:
-        blk = list(blk)
-        idx = np.array(blk, dtype=int)
-        best, best_val = 0.0, -np.inf
-        for a in grid:
-            trial = alphas.copy()
-            trial[blk[0]] = a
-            sub = cfi_of_readout(psi, ps, trial)[np.ix_(idx, idx)]
-            val = float(np.trace(sub))
-            if val > best_val:
-                best, best_val = float(a), val
-        alphas[blk[0]] = best
+        alphas[list(blk)[0]] = block_quadrature(psi, list(blk), n)["alpha"]
     return alphas
+
+
+def readout_contract(psi: np.ndarray, blocks) -> list[dict]:
+    """Per-block analyzer record, including the regularity margin.
+
+    ``regularity_margin = |sin(phi_B - A_B)|`` is the quantity that must be
+    bounded away from zero for the first-order score to exist.  Matched
+    quadrature sets it to one; the unmatched all-X readout can set it to zero.
+    """
+    n = int(np.log2(psi.size))
+    out = []
+    for blk in blocks:
+        rec = block_quadrature(psi, list(blk), n)
+        rec["block"] = tuple(int(q) for q in blk)
+        out.append(rec)
+    return out
 
 
 @dataclass

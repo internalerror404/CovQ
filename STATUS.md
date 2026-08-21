@@ -45,7 +45,8 @@ information-floor compiler is the reason anyone needs the engine.
 | `K1_SPLIT` | `DONE` | K1a specification collision: **FIRED**. K1b end-to-end compiler collision: **NOT ESTABLISHED**. |
 | `QUEST_BASELINE` | `ABSENT` | Not run. No advantage over QUEST is claimable until it is. |
 | `SPARSE_PURE_STATE_BASELINE` | `IMPLEMENTED` | Carathéodory-sparse single state, plus three realisation-matched siblings. |
-| `MANUSCRIPT_INTEGRATION_MD` | `NOT_RECEIVED / BLOCKING` | The canonical v0.2 implementation contract (gates C1–C16, JSON record schema, status vocabulary, manifest and DONE rules, freeze-before-run) has not reached the repository. No manuscript table may be populated until it does. |
+| `MANUSCRIPT_INTEGRATION_MD` | `RECEIVED` | Arrived 2026-08-21 with `CovQ_Repository_Handoff_v0.3.md` and `CovQ_Experiment_Protocol_v0.3.yaml`. Unblocks the record schema, status vocabulary and freeze-before-run rules. The gate table is C1–C14 (v0.3), not C1–C16; `C2a/b/c` already match the prototype. |
+| `GATE_ALIAS_MAP` | `DECLARED` | `M1→C10a`, `M1_schedule→C10b`, `M2→C10c`, `M3_qfi→C15a`, `M3_sep→C15b`, `M3_dephase→C15c`. Composite `C10` is split so a readout failure cannot invalidate unrelated matrix-pullback code. Commit `4a261a8` artifacts are **not** retroactively renamed. |
 | `FROZEN_CONTROLS` | `FROZEN` | `F(+)_ij = 0.4` globally feasible / pair infeasible; `F(-)_ij = -0.4` PD / globally infeasible. Both verified with the three-way classifier. |
 | `SHOT_SCALED_EDGE_MODE` | `LIMITED` | Agrees with the branch form to 1e-15 when both converge, but stalls once entanglement activates. Needs an interior-point SDP backend. |
 | `MANUSCRIPT_V0_2` | `AUDITED` | `docs/audits/MANUSCRIPT_V0_2_NUMERICAL_AUDIT.md`. Thm 5.3, Cor 5.4/5.5, Thm 7.1, Eq (65), Thm 8.2, Eq (63) all verified numerically. |
@@ -60,6 +61,21 @@ information-floor compiler is the reason anyone needs the engine.
 | `Z_CORRELATORS_BLIND_TO_DEPHASING` | `NEW / VERIFIED` | All generators are `Z`-diagonal, so `Z` dephasing leaves the whole covariance matrix bit-for-bit invariant while the SLD QFIM decays to zero. At `p = 0.5` a Bell block reports `4 Cov = 2` and carries no information at all. Strengthens the §11.3(a) warning into a concrete statement. |
 | `MEASUREMENT_GATE_NUMBERING` | `DEFERRED` | New gates are `M1`–`M3`, not `C13`–`C16`. The contract that fixes the C-series numbering has not been received; renumbering is deferred rather than guessed. |
 | `MIN_COST_MEASUREMENT_SYNTHESIS` | `OPEN` | M1 exhibits *an* attaining readout, not the cheapest under a declared setting cost. Eq (112)'s estimator layer and §11.4's noisy objective (111) are also unimplemented. |
+| `DIRECT_Z_BLOCK_READOUT_EXISTENCE` | `DONE` | General-`k` proof + `k = 2,3,4` validation. |
+| `DIRECT_Z_READOUT_2Q_GATE_COST` | `OPTIMAL_ZERO` | All but one qubit per block in `X`; one pivot carries the analyzer angle. |
+| `DIRECT_Z_READOUT_ANCILLA_COST` | `OPTIMAL_ZERO` | No ancilla, no joint Bell measurement, no entangling readout. |
+| `SCHEDULE_LEVEL_CFI_EQUALS_QFIM` | `DONE` | `F_C^schedule = F_Π`; worst gap `2.2e-15` over 48 cases. |
+| `READOUT_SINGULARITY_CONTROL` | `DONE` | Failure set `φ_B − A_B ∈ πZ`; zero **first-order score**, model nonregular there — not distinguishability-free. |
+| `MATCHED_QUADRATURE_READOUT` | `DONE` | Exact root `α* = atan2(−c, d)` from two parity evaluations; regularity margin `η_ro = 1` by construction. Replaced a grid argmax that returned an arbitrary detuning. |
+| `MIXED_STATE_QFIM_IMPLEMENTATION` | `DONE` | Eq (110); reduces to `4 Cov` on pure states to `4.4e-16`; reproduces `F_Q = v²` exactly. |
+| `COVARIANCE_AS_NOISY_QFI` | `REFUTED` | Pinching onto the generator eigenbasis preserves `Cov(P)` exactly (`4.9e-15`) while `F_Q ≡ 0` (`4.7e-28`). General proposition, verified on random commuting families. |
+| `NOISY_READOUT_GAP_AT_P_0_2` | `RETRACTED` | Was a grid tie-break artefact of this prototype, not physics. `F_C(v,δ) = v²sin²δ/(1−v²cos²δ)` reproduces the erroneous value to 15 digits; quadrature attains `F_Q` at every visibility. |
+| `GENERAL_MIN_COST_MEASUREMENT_SYNTHESIS` | `PARTIAL` | Optimal in 2q-gate and ancilla count. Unpriced: local basis changes, setting changes, calibration, robustness, Clifford unwrapping, coherent-flag joint readout. |
+| `CLIFFORD_FRAME_READOUT_COST` | `ABSENT` | |
+| `COHERENT_FLAG_JOINT_READOUT` | `ABSENT` | |
+| `ESTIMATOR_LAYER_EQ_112` | `ABSENT` | Block-parity likelihood is explicit; branch-conditioned MLE is the natural next object. |
+| `NOISE_AWARE_OBJECTIVE_EQ_111` | `ABSENT` | M3 supplies the measuring stick; no compiler optimises it. |
+| `ADAPTIVE_RECENTERING_POLICY` | `ABSENT` | Backend needs a nominal operating point or a coarse-estimate-then-recentre rule. |
 | `PROTOTYPE` | `PARTIAL` | `prototype/`. Built before this decision arrived; retained as the audit's evidence, not as Task 0C. See `prototype/README.md`. |
 
 ## Corrections carried into v0.2

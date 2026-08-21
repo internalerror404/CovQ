@@ -1,0 +1,76 @@
+{
+  "schema_version": "covq.measurement.record/0.1",
+  "source_commit": "4a261a895b6ac2c62cb434c69760b9e1ca6c5901",
+  "dirty": true,
+  "tolerances": {
+    "attainment_abs": 1e-09,
+    "closed_form_abs": 1e-09,
+    "pinching_abs": 1e-10
+  },
+  "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
+  "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
+  "gate": "C10c",
+  "alias": "M2",
+  "branch_sign_vectors": [
+    [
+      1,
+      1,
+      1,
+      1
+    ],
+    [
+      1,
+      1,
+      1,
+      -1
+    ]
+  ],
+  "singular_set": "phi_B(theta) - A_B in pi Z",
+  "regularity_claim": "zero first-order score; nonregular, not distinguishability-free",
+  "cases": [
+    {
+      "operating_point_name": "origin",
+      "operating_point": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "matched_readout_gap": 1.1103328944445054e-15,
+      "matched_readout_trace": 3.9999999999999964,
+      "fixed_all_x_trace": 0.0,
+      "fixed_all_x_gap": 1.799999999999999,
+      "qfim_trace": 3.9999999999999982
+    },
+    {
+      "operating_point_name": "uniform_ray",
+      "operating_point": [
+        0.3,
+        0.3,
+        0.3,
+        0.3
+      ],
+      "matched_readout_gap": 1.6195468613213612e-15,
+      "matched_readout_trace": 3.999999999999993,
+      "fixed_all_x_trace": 2.399999999999996,
+      "fixed_all_x_gap": 1.5999999999999985,
+      "qfim_trace": 3.9999999999999964
+    },
+    {
+      "operating_point_name": "generic",
+      "operating_point": [
+        0.7,
+        -0.35,
+        1.1,
+        0.2
+      ],
+      "matched_readout_gap": 8.331164778975682e-16,
+      "matched_readout_trace": 3.9999999999999956,
+      "fixed_all_x_trace": 3.9999999999999956,
+      "fixed_all_x_gap": 1.1868313700599861e-15,
+      "qfim_trace": 3.9999999999999973
+    }
+  ],
+  "status": "DONE",
+  "record_hash": "036e271fd7c3c9141d21badef432c24f5488e60101821f8a5c6cdc1242e7950d"
+}

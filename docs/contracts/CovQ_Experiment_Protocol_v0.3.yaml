@@ -1,0 +1,624 @@
+schema_version: covq-experiment-v0.3
+project: CovQ
+paper_title: "CovQ: Certified Fisher-Information Contract Compilation for Commuting Pauli Programs"
+subtitle: "Exact Pair-Width Geometry and Minimum-Cost Hardware-Native Bell Schedules"
+status: theory_complete_results_pending
+supersedes:
+  - covq-experiment-v0.2
+  - exact_target_as_primary_semantics
+
+paper_decision:
+  primary_claim: >-
+    Given a downstream Fisher-information floor, a native hardware graph, and a
+    declared cost model, CovQ emits a least-cost retained-label pair-entangled
+    quantum program together with feasibility, cost, and circuit certificates.
+  mathematical_engine: exact_hardware_matching_characterization_of_pair_width_qfims
+  exact_matching_role: secondary_compiler_mode_and_verification_benchmark
+  width_three_role: attributed_complexity_boundary_not_headline_novelty
+  spacetime_role: late_removable_application_benchmark
+
+compiler_contract:
+  map: "(G, H, A, G_req, C) -> (Pi, certificate, circuits, readout)"
+  primary_optimization: >-
+    minimize Cost_C(Pi) subject to A^T F_Pi A >=_Loewner G_req,
+    with Pi a retained-label direct pair-width program on H
+  normalized_primal:
+    variables:
+      - F: symmetric_qfim
+      - t: nonnegative_native_edge_magnitudes
+    objective: "sum_{e in E} c_e t_e"
+    constraints:
+      - "A^T F A - G_req is positive semidefinite"
+      - "diag(F) = 1"
+      - "F_ij = 0 for ij not in E"
+      - "-t_ij <= F_ij <= t_ij for ij in E"
+      - "t belongs to MATCH(H)"
+    optimum_identity: "for nonnegative costs an optimum may be chosen with t_e = |F_e|"
+    circuit_meaning: "sum_e c_e |F_e| is expected native Bell-pair preparation cost per shot"
+  branch_master:
+    variables: retained_label_probabilities_over_signed_matchings
+    normalization: "sum_b p_b = 1"
+    information_constraint: "sum_b p_b A^T B_b A >=_Loewner G_req"
+    objective: "sum_b p_b c(b)"
+  dual:
+    variables:
+      - "Y >= 0 in downstream parameter space"
+      - "beta in R"
+    objective: "<G_req,Y> - beta"
+    branch_constraints: "<A Y A^T, B_b> - beta <= c(b) for every signed matching branch b"
+    separation_oracle: >-
+      Let Q=A Y A^T. The most violated branch is found from
+      tr(Q)-beta + max_M sum_{e in M}(2|Q_e|-c_e), a maximum-weight matching problem.
+  infeasibility_witness:
+    condition: "find Y >= 0 such that <G_req,Y> > h_H(A Y A^T)"
+    support_function: "h_H(Q)=tr(Q)+2 max_{M in Match(H)} sum_{e in M}|Q_e|"
+  schedule_bound: "at most |E|+1 positive-weight branches by Caratheodory"
+
+semantics:
+  generator_normalization: "U_theta=exp[-i/2 sum_i theta_i P_i], P_i^2=I"
+  main_generator_frame: physical_z
+  main_program_backend: retained_label_direct_pair_width
+  branch_qfim:
+    diagonal: unit
+    off_diagonal: signed_matching_correlations
+  primary_realized_body: Q_H_2_lab
+  exact_body_theorem: >-
+    F is in Q_H_2_lab iff diag(F)=1, F_ij=0 on hardware nonedges,
+    and (|F_ij|)_{ij in E} belongs to MATCH(H).
+  sign_handling: independent_signed_bell_choice_per_active_edge
+  coherent_flags:
+    role: semantic_control_and_separate_resource_model
+    formula: "F_coh=sum_r p_r F_r + Cov_p(mu_r)"
+    dephased_formula: "F_dephased=sum_r p_r F_r"
+    conditional_data_width_is_not_global_resource: true
+  frames:
+    physical_z:
+      theorem_bearing: true
+      width_name: physical_branch_width
+    clifford_normalized:
+      theorem_bearing: false
+      width_name: logical_branch_width
+      report_normalization_clifford_cost_separately: true
+  hardware_modes:
+    direct_native:
+      theorem_bearing: true
+      routing_allowed: false
+    routed:
+      theorem_bearing: false
+      routing_allowed: true
+      report_separately: true
+  exact_target_mode:
+    constraint: "F_Pi=F_target"
+    role:
+      - theorem_canary
+      - achievable_set_verification
+      - nearest_projection_control
+      - state_preparation_baseline_interface
+
+nontriviality_policy:
+  product_program_qfim: identity
+  product_contract_slack: "lambda_min(A^T A - G_req)"
+  primary_instance_rule: >-
+    Except for explicitly labeled product controls, every primary contract must have
+    product_contract_slack < -product_nontriviality_margin.
+  product_nontriviality_margin: 1.0e-6
+  trivial_primary_instance_action: fail_generation_and_do_not_run_solver
+
+frozen_tolerances:
+  primitive_qfim_relative: 1.0e-12
+  labeled_additivity_frobenius: 1.0e-12
+  coherent_formula_frobenius: 1.0e-12
+  dephased_formula_frobenius: 1.0e-12
+  matching_membership_residual: 1.0e-10
+  exact_reconstruction_frobenius: 1.0e-10
+  cost_identity_absolute: 1.0e-10
+  clifford_mapping_frobenius: 1.0e-10
+  measurement_fisher_frobenius: 1.0e-10
+  floor_primal_psd_residual: 1.0e-8
+  floor_dual_residual: 1.0e-8
+  floor_separation_residual: 1.0e-8
+  floor_relative_duality_gap: 1.0e-7
+  formulation_objective_agreement: 1.0e-7
+  common_mode_objective_absolute: 1.0e-8
+  common_mode_contract_residual: 1.0e-8
+  infeasibility_witness_margin: 1.0e-8
+  product_nontriviality_margin: 1.0e-6
+  topology_illegal_gate_count: 0
+  runtime_tolerance_mutation_forbidden: true
+
+correctness_gates:
+  C1:
+    name: primitive_qfim_semantics
+    requirement: signed_bell_and_signed_cat_statevector_qfim
+    threshold: primitive_qfim_relative
+    failure_invalidates: [all_campaigns]
+  C2a:
+    name: retained_label_additivity
+    requirement: "F_program=sum_r p_r F_r"
+    threshold: labeled_additivity_frobenius
+    failure_invalidates: [all_labeled_program_results]
+  C2b:
+    name: coherent_flag_full_formula
+    requirement: "F_coh=sum_r p_r F_r+Cov_p(mu_r)"
+    include_nonzero_mean_branches: true
+    threshold: coherent_formula_frobenius
+    failure_invalidates: [coherent_flag_controls]
+  C2c:
+    name: dephased_flag_control
+    requirement: dephasing_removes_cross_branch_mean_covariance
+    threshold: dephased_formula_frobenius
+    failure_invalidates: [coherent_flag_controls]
+  C3:
+    name: exact_pair_width_geometry
+    requirement: >-
+      Edmonds inequalities, explicit matching-column LP, exhaustive small-instance
+      enumeration, and emitted schedule reconstruction agree.
+    threshold: matching_membership_residual
+    failure_invalidates: [primary_floor_compiler, exact_target_controls, hardware]
+  C4:
+    name: sector_separation_canaries
+    requirement: >-
+      Distinguish PSD, full sign-correlation feasibility, and pair-width feasibility
+      on the three fixed K3 examples.
+    failure_invalidates: [exact_target_controls, baselines]
+  C5:
+    name: exact_target_reconstruction
+    requirement: exact_feasible_target_reconstructed_by_emitted_schedule
+    threshold: exact_reconstruction_frobenius
+    failure_invalidates: [exact_target_controls]
+  C6:
+    name: branch_width_and_cost_identity
+    requirements:
+      - every_width_two_branch_is_a_matching_of_disjoint_blocks
+      - "expected parsed native Bell cost equals sum_e c_e |F_e|"
+      - positive_weight_branch_count_at_most_E_plus_1_when_support_reduction_requested
+    threshold: cost_identity_absolute
+    failure_invalidates: [primary_floor_compiler, hardware, cost_claims]
+  C7:
+    name: clifford_frame_integrity
+    requirement: qfim_invariance_under_declared_simultaneous_clifford_map
+    threshold: clifford_mapping_frobenius
+    failure_invalidates: [clifford_controls]
+  C8:
+    name: hardware_legality
+    requirement: every_direct_backend_entangler_uses_a_declared_native_edge
+    threshold: topology_illegal_gate_count
+    failure_invalidates: [hardware, direct_backend_claims]
+  C9:
+    name: circuit_derived_resources
+    requirement: >-
+      settings, two-qubit gates, depth, SWAPs, ancillas, branch probabilities,
+      and expected costs are parsed from emitted circuits rather than inferred only from formulas.
+    failure_invalidates: [hardware, cost_claims, baseline_resource_claims]
+  C10:
+    name: operational_information_consistency
+    requirements:
+      - local_branch_measurement_attains_branch_qfim
+      - downstream_pullback_matches_A_transpose_F_A
+      - kernel_and_identifiable_support_are_reported
+      - pseudoinverse_stability_bound_holds_when_margin_assumptions_hold
+    threshold: measurement_fisher_frobenius
+    failure_invalidates: [operational_precision_claims, application]
+  C11:
+    name: floor_primal_certificate
+    requirements:
+      - primal_matrix_constraints_hold
+      - downstream_surplus_is_psd_within_tolerance
+      - t_belongs_to_matching_polytope
+      - emitted_schedule_reconstructs_primal_F
+    threshold: floor_primal_psd_residual
+    failure_invalidates: [information_floor_primary]
+  C12:
+    name: floor_formulation_equivalence_and_optimality
+    requirements:
+      - F_t_formulation_and_branch_master_agree
+      - nonnegative_cost_optimum_has_t_equal_abs_F
+      - dual_is_feasible
+      - pricing_oracle_returns_no_violated_branch
+      - relative_primal_dual_gap_is_below_threshold
+    thresholds:
+      formulation: formulation_objective_agreement
+      dual: floor_dual_residual
+      separation: floor_separation_residual
+      gap: floor_relative_duality_gap
+    failure_invalidates: [optimal_cost_claims, information_floor_primary]
+  C13:
+    name: analytic_common_mode_curve
+    requirement: >-
+      On K_m with unit costs, A=1/sqrt(m) times the all-ones vector, the solver
+      reproduces OPT_m(gamma)=max(0,m(gamma-1)/2) through the pair-width maximum
+      and certifies infeasibility above it.
+    thresholds:
+      objective: common_mode_objective_absolute
+      contract: common_mode_contract_residual
+    failure_invalidates: [information_floor_primary, analytic_validation]
+  C14:
+    name: floor_infeasibility_and_nontriviality
+    requirements:
+      - every claimed infeasible_floor_has_a_psd_support_witness
+      - witness_margin_exceeds_threshold
+      - primary_noncontrol_contracts_fail_the_product_program_by_margin
+      - no_floor_is_silently_repaired_or_projected
+    threshold: infeasibility_witness_margin
+    failure_invalidates: [infeasibility_claims, primary_benchmark_validity]
+
+fixed_canaries:
+  pair_feasible_k3:
+    graph: complete_3
+    matrix:
+      - [1.0, 0.4, -0.3]
+      - [0.4, 1.0, 0.2]
+      - [-0.3, 0.2, 1.0]
+    expected_branches:
+      - {matching: [[0, 1]], signs: [1], probability: 0.4}
+      - {matching: [[0, 2]], signs: [-1], probability: 0.3}
+      - {matching: [[1, 2]], signs: [1], probability: 0.2}
+      - {matching: [], signs: [], probability: 0.1}
+    expected_active_pair_cost: 0.9
+  full_sector_infeasible_k3:
+    matrix:
+      - [1.0, -0.4, -0.4]
+      - [-0.4, 1.0, -0.4]
+      - [-0.4, -0.4, 1.0]
+    expected_psd_eigenvalues: [0.2, 1.4, 1.4]
+    expected_full_sector_status: infeasible
+    separating_inequality: "F_12+F_13+F_23 >= -1"
+    observed_left_side: -1.2
+  full_feasible_pair_infeasible_k3:
+    matrix:
+      - [1.0, 0.5, 0.5]
+      - [0.5, 1.0, 0.5]
+      - [0.5, 0.5, 1.0]
+    expected_full_sector_status: feasible
+    expected_pair_width_status: infeasible
+    expected_odd_set_load: 1.5
+    expected_odd_set_bound: 1.0
+  coherent_flag_loophole:
+    conditional_data_branches: computational_basis_eigenstates
+    expected_conditional_branch_qfim: zero
+    expected_coherent_qfim_source: covariance_of_branch_means
+    expected_after_dephasing: zero_or_branch_average_as_configured
+  common_mode_product_control:
+    m: 6
+    graph: complete
+    gamma: 1.0
+    expected_optimal_cost: 0.0
+  common_mode_nontrivial:
+    m: 6
+    graph: complete
+    gamma: 1.5
+    expected_optimal_cost: 1.5
+    expected_product_status: infeasible
+  common_mode_pair_maximum:
+    m: 6
+    graph: complete
+    gamma: 2.0
+    expected_optimal_cost: 3.0
+  common_mode_infeasible:
+    m: 6
+    graph: complete
+    gamma: 2.05
+    expected_status: infeasible
+    expected_pair_width_maximum: 2.0
+
+analytic_benchmarks:
+  common_mode_curve:
+    graph_family: complete
+    dimensions: [4, 5, 6, 8, 12, 16, 24, 32]
+    gamma_grid_rule: >-
+      include 0.75, 1.0, at least four interior points in
+      (1, 1+2 floor(m/2)/m), the exact maximum, and two points above the maximum
+    expected_cost: "0 for gamma<=1; m(gamma-1)/2 inside the pair-width range"
+    expected_infeasible_above: "1+2 floor(m/2)/m"
+    seeds: [2026]
+  multidirectional_balance:
+    description: >-
+      Use A whose columns are a normalized common mode and one or two orthogonal
+      contrast modes; choose G_req with all directions above their product baselines
+      or with coupled off-diagonal requirements so the optimizer must balance edges.
+    dimensions: [6, 8, 12, 16]
+    downstream_dimensions: [2, 3]
+    graph_families: [complete, cycle, grid, modular_two_cluster]
+    seeds: [2026, 3407, 9181, 17041, 27183]
+    require_product_infeasible: true
+
+pilot:
+  purpose: runtime_memory_and_effect_size_estimation_only
+  dimensions: [4, 6, 8, 12, 16]
+  downstream_dimensions: [1, 2, 3]
+  seeds: [2026, 3407, 9181]
+  graph_families: [complete, line, cycle, grid, random_bipartite, random_nonbipartite, modular_two_cluster]
+  final_performance_thresholds: freeze_after_pilot
+  forbidden_uses:
+    - headline_effect_size
+    - threshold_tuning_after_main_run
+
+primary_contract_families:
+  IF1_common_mode:
+    analytic_ground_truth: true
+    graph_families: [complete]
+    purpose: exact_cost_curve_and_pair_width_ceiling
+  IF2_multidirectional_balance:
+    analytic_ground_truth: partial
+    purpose: force_tradeoffs_across_downstream_directions
+  IF3_hidden_feasible_contracts:
+    generation: >-
+      sample a feasible signed-matching schedule, form F_source, choose A, and set
+      G_req=A^T F_source A - S for a registered PSD slack S; hide the source schedule.
+    require_product_infeasible: true
+  IF4_boundary_and_infeasible_floors:
+    include:
+      - exact_support_tangent_floors
+      - floors_beyond_pair_width_support
+      - hardware_nonedge_conflicts
+      - odd_set_bottlenecks
+    require_psd_witness: true
+  IF5_structured_multidirectional:
+    structures:
+      - block
+      - banded
+      - signed_community
+      - clustered
+      - graph_local
+      - low_effective_rank
+    require_product_infeasible: true
+  IF6_heterogeneous_native_costs:
+    costs:
+      - uniform
+      - calibrated_edge_error_proxy
+      - calibrated_duration_proxy
+      - intermodule_penalty
+    same_contract_across_cost_arms: true
+  IF7_application:
+    downstream_map: lorentzian_light_ray_J
+    contract: "J^T F_Pi J >=_Loewner G_theta_req"
+    require_declared_identifiable_support: true
+    forbid_claim_that_F_lifts_kernel_of_J: true
+
+secondary_exact_target_controls:
+  role: verification_and_comparison_not_primary_motivation
+  families:
+    hidden_matching_schedules:
+      generate_from_random_matching_distributions: true
+      hide_source_schedule_from_compiler: true
+    pair_boundary:
+      include_degree_tight: true
+      include_odd_set_tight: true
+    pair_infeasible:
+      include_explicit_odd_set_violations: true
+      include_degree_pass_odd_set_fail: true
+    full_sector_control:
+      max_vertex_enumeration_m: 12
+      include_psd_outside_full_sector: true
+      include_full_feasible_pair_infeasible: true
+
+compiler_arms:
+  primary:
+    - floor_ft_sdp_with_matching_separation
+    - floor_branch_master_column_generation
+    - floor_dual_certificate
+    - floor_infeasibility_support_witness
+  secondary:
+    - exact_matching_decomposition
+    - nearest_pair_projection_cutting_plane
+    - full_sector_small_instance_control
+  implementation_cross_checks:
+    - explicit_matching_column_formulation_small_graphs
+    - exhaustive_signed_matching_enumeration_tiny_graphs
+
+baselines:
+  information_floor_primary:
+    - product_probe_F_equals_I
+    - fixed_maximum_matching_mixture
+    - fixed_hardware_local_bell_policy
+    - variational_direct_contract_loss
+    - relaxed_information_design_without_qfim_achievability_lower_bound
+    - target_then_compile_pipeline_with_registered_target_extraction_rule
+  exact_target_secondary:
+    - quest_or_faithful_expectation_targeting
+    - sparse_caratheodory_pure_state
+    - same_decomposition_labeled_schedule
+    - coherent_sparse_data_state
+    - explicit_flag_data_purification
+    - variational_moment_matching
+    - fixed_global_cat
+    - fixed_block_cat
+  fairness:
+    same_A_and_G_req_for_floor_arms: true
+    same_target_and_tolerance_for_exact_arms: true
+    same_generator_frame: true
+    same_hardware_graph: true
+    same_cost_accounting: true
+    same_noise_model: true
+    baseline_feasibility_assumption_must_be_disclosed: true
+    relaxed_design_must_be_labeled_lower_bound_not_quantum_program: true
+
+hardware:
+  topologies:
+    - all_to_all
+    - line
+    - cycle
+    - square_grid
+    - heavy_hex_subgraph
+    - modular_two_cluster
+    - programmable_neutral_atom
+  direct_backend_primary: true
+  routed_backend_report_separately: true
+  cost_models:
+    - expected_active_pairs
+    - weighted_native_pair_cost
+    - expected_two_qubit_gates_parsed
+    - expected_two_qubit_duration
+    - calibrated_error_proxy
+  resources_parsed_from_emitted_circuits:
+    - settings
+    - branch_probabilities
+    - two_qubit_gates
+    - two_qubit_depth
+    - swaps
+    - ancillas
+    - expected_two_qubit_gates
+    - expected_weighted_native_cost
+    - compile_time
+
+noise:
+  models:
+    - local_dephasing
+    - two_qubit_depolarizing
+    - readout_error
+    - idle_decoherence
+    - routing_overhead
+  primary_noisy_question: >-
+    Does the emitted program still satisfy the downstream information contract under
+    an explicitly compiled readout or evaluated noisy-QFI bound, and at what additional cost?
+  report_separately:
+    - ideal_program_qfim
+    - noisy_observable_covariance
+    - noisy_qfim_when_actually_computed_or_rigorously_bounded
+    - classical_fisher_of_declared_readout
+    - realized_contract_margin
+  forbidden_shortcut: noisy_covariance_must_not_be_relabelled_as_mixed_state_qfi
+
+metrics:
+  contract:
+    - product_contract_slack
+    - ideal_contract_min_eigenvalue_margin
+    - realized_contract_min_eigenvalue_margin
+    - downstream_dimension
+    - identifiable_support_rank
+    - kernel_principal_angle
+  optimization:
+    - primal_objective
+    - dual_objective
+    - absolute_duality_gap
+    - relative_duality_gap
+    - primal_psd_residual
+    - dual_residual
+    - pricing_residual
+    - formulation_objective_difference
+    - solver_status
+    - solve_time
+    - separation_iterations
+    - generated_columns
+  program:
+    - branch_count
+    - caratheodory_bound
+    - matching_decomposition_residual
+    - expected_active_pairs
+    - expected_weighted_native_cost
+    - circuit_hashes
+    - readout_hashes
+  exact_target_controls:
+    - frobenius_error
+    - operator_error
+    - certificate_residual
+    - positive_minimum_eigenvalue
+    - positive_condition_number
+    - pseudoinverse_error
+  resources:
+    - settings
+    - two_qubit_gates
+    - two_qubit_depth
+    - swaps
+    - ancillas
+    - expected_two_qubit_gates
+    - compile_time
+  common_mode:
+    - gamma
+    - analytic_optimum
+    - measured_optimum
+    - absolute_objective_error
+    - pair_width_maximum
+
+execution_phases:
+  phase_0_theorem_and_semantics:
+    depends_on: []
+    work:
+      - prove_and_test_steps_2A_through_2D
+      - run_C1_through_C10
+      - run_fixed_K3_canaries
+      - run_coherent_flag_loophole
+    headline_results_allowed: false
+  phase_1_primary_floor_compiler:
+    depends_on: [phase_0_theorem_and_semantics]
+    work:
+      - prove_and_test_step_2E
+      - implement_F_t_primal
+      - implement_branch_master
+      - implement_maximum_weight_matching_pricing
+      - run_C11_through_C13
+      - run_common_mode_curve
+      - run_hidden_feasible_contracts
+  phase_2_certificates_and_multidirectional:
+    depends_on: [phase_1_primary_floor_compiler]
+    work:
+      - prove_and_test_step_2F
+      - implement_dual_lower_bound
+      - implement_psd_infeasibility_witness
+      - run_C14
+      - run_multidirectional_balance
+      - run_boundary_and_infeasible_floors
+  phase_3_secondary_exact_and_baselines:
+    depends_on: [phase_2_certificates_and_multidirectional]
+    work:
+      - exact_target_controls
+      - nearest_pair_projection
+      - full_sector_small_instance_control
+      - exact_target_baselines
+      - floor_baselines
+  phase_4_hardware_and_noise:
+    depends_on: [phase_3_secondary_exact_and_baselines]
+    work:
+      - direct_native_hardware
+      - routed_mode_separately
+      - clifford_frame_controls_separately
+      - noisy_contract_verification
+  phase_5_application:
+    depends_on: [phase_4_hardware_and_noise]
+    work:
+      - ingest_Paper1_J
+      - declare_G_theta_req_on_identifiable_support
+      - compile_J_transpose_F_J_floor
+      - verify_non_lifting
+
+registration:
+  correctness_thresholds_frozen: true
+  performance_thresholds_frozen: false
+  freeze_performance_thresholds_after_pilot: true
+  require_config_sha256: true
+  require_source_commit: true
+  require_environment_manifest: true
+  require_artifact_hashes: true
+  require_deterministic_seed_derivation: true
+  preserve_failed_and_absent_arms: true
+  distinguish_registered_corrective_posthoc: true
+  no_rerun_to_replace_unfavorable_result: true
+
+stop_rules:
+  fail_gate_stops_dependent_campaign: true
+  absent_gate_is_not_pass: true
+  no_silent_floor_repair: true
+  no_silent_exact_target_projection: true
+  no_runtime_tolerance_changes: true
+  no_optimality_claim_without_verified_dual_bound: true
+  no_infeasibility_claim_without_psd_support_witness: true
+  no_primary_contract_that_product_already_satisfies_unless_labeled_control: true
+  no_cost_claim_without_emitted_circuit_parse: true
+  no_noisy_qfi_claim_from_covariance_alone: true
+  no_claim_without_canonical_artifact: true
+
+canonical_outputs:
+  correctness_gates: results/correctness_gates.json
+  information_floor_primary: results/information_floor_primary.json
+  common_mode: results/common_mode.json
+  multidirectional: results/multidirectional.json
+  infeasible_floors: results/infeasible_floors.json
+  exact_target_controls: results/exact_target_controls.json
+  baselines: results/baselines.json
+  hardware: results/hardware.json
+  noise: results/noise.json
+  application: results/application.json
+  solver_traces: results/traces/
+  emitted_programs: results/programs/
+  emitted_circuits: results/circuits/
+  certificates: results/certificates/
