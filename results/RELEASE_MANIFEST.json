@@ -3,9 +3,9 @@
   "evidence_source_commit": [
     "daa5587ee9e6a9d4791ea0855b8f38a68ccff336"
   ],
-  "release_packaging_commit": "daa5587ee9e6a9d4791ea0855b8f38a68ccff336",
-  "release_commit": "daa5587ee9e6a9d4791ea0855b8f38a68ccff336",
-  "source_dirty": true,
+  "release_packaging_commit": "42ab6d4c7407873318f72be5728c06f04a29aef1",
+  "release_commit": "42ab6d4c7407873318f72be5728c06f04a29aef1",
+  "source_dirty": false,
   "environment": {
     "python": "3.11.15",
     "numpy": "2.4.6",
@@ -26,8 +26,8 @@
     },
     {
       "path": "STATUS.md",
-      "bytes": 22885,
-      "sha256": "492ef0baa601d0f5cfa08d99800aca70e364373f6a3e43178f3d9c716ed1867a"
+      "bytes": 23569,
+      "sha256": "9ba4e9e8657df1f282c8bf0dde1f2f56b671219ff8c158845957a955ca1bc315"
     },
     {
       "path": "charter/CovQ_Experiment_Protocol_v0.3.yaml",
@@ -66,8 +66,8 @@
     },
     {
       "path": "docs/audits/K3_QUEST_BASELINE_v0.2.md",
-      "bytes": 6091,
-      "sha256": "5c5d8d2ac39366911dd6d826bd426d12a302f58f60c748b6c9a33ff569ee0204"
+      "bytes": 8727,
+      "sha256": "c937ebf5395beef96dfaffc0fa939517808754ea3c5001e23596cce7aee00d72"
     },
     {
       "path": "docs/audits/MANUSCRIPT_V0_2_NUMERICAL_AUDIT.md",
@@ -286,8 +286,8 @@
     },
     {
       "path": "results/RELEASE_MANIFEST.json",
-      "bytes": 13307,
-      "sha256": "340bce8c1f54c63c39cfb21137f2721f2cc43ea451d0b202f1afc7f1e325b930"
+      "bytes": 13401,
+      "sha256": "91314fd6b898d604178339a273e664c15cf2129fd7c3f85eafa5be4ab5723e6d"
     },
     {
       "path": "results/baselines_k3_quest.json",
@@ -386,5 +386,5 @@
     "pushed": false,
     "reason": "this environment's git proxy refuses refs/tags; branch refs push normally, so the commit SHA is the durable identifier"
   },
-  "manifest_sha256": "2b700b10645a4a39d561a09620f9a502e09b5aaebfdc41f91ce2701a67fd8877"
+  "manifest_sha256": "22822e51384f52ebc4aecf4651626394f6aa7d23372ec7e918ba4b9e70bb8e80"
 }
