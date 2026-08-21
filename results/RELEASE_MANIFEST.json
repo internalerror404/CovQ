@@ -1,14 +1,14 @@
 {
   "schema_version": "covq.release_manifest/0.4",
-  "release_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
-  "dirty": true,
+  "release_commit": "f5c67d5a169c3c42084653450857046caaaa4313",
+  "source_dirty": false,
   "environment": {
     "python": "3.11.15",
     "numpy": "2.4.6",
     "scipy": "1.17.1",
     "platform": "Linux-6.18.44-fc-v21-x86_64-with-glibc2.39"
   },
-  "n_files": 69,
+  "n_files": 70,
   "files": [
     {
       "path": "README.md",
@@ -22,8 +22,8 @@
     },
     {
       "path": "STATUS.md",
-      "bytes": 21623,
-      "sha256": "b59b58390f7109540e17530234b796c911d7568a37ba1dd1b0025e0f7623a5ac"
+      "bytes": 22097,
+      "sha256": "efdfac61878b752792851f777aaa39173fe1b1d3951e6426646beb5734a6e362"
     },
     {
       "path": "charter/CovQ_Experiment_Protocol_v0.3.yaml",
@@ -147,8 +147,8 @@
     },
     {
       "path": "prototype/scripts/emit_release_manifest.py",
-      "bytes": 2320,
-      "sha256": "d7d3634065f83b053397addedf247fa41ec35434e4c0a9c23fe1b2cf06aff5dd"
+      "bytes": 2757,
+      "sha256": "faa6509fb4ac37324fecd0822b419934b5c5feea16f7b3ce1e0d08d08cfb17cc"
     },
     {
       "path": "prototype/scripts/emit_table_manifest.py",
@@ -266,6 +266,11 @@
       "sha256": "443d5d62d72a5367fedfee89b92f4c4951ae98d4bfd7bfb165d153a63cbbaa8d"
     },
     {
+      "path": "results/RELEASE_MANIFEST.json",
+      "bytes": 12330,
+      "sha256": "60fd1563345e62895fd71ba8aff62125ff31aab96f97d11935af4953eea5ab91"
+    },
+    {
       "path": "results/baselines_k3_quest.json",
       "bytes": 10132,
       "sha256": "1abfb436c68acfd5bda3200476116a420a6d0f48e73fb1376beb26ba7c893884"
@@ -356,5 +361,5 @@
       "sha256": "5ec128ad9dd35259018459429c212c31263ea76ef83c17adb3f387a8a66f1efa"
     }
   ],
-  "manifest_sha256": "f13ef7008eeeda03d1d47d5985340f219657c1bac823a880d425e0e84676fd48"
+  "manifest_sha256": "d8a61d5bb36d27e293abba4367ed0ec861942f615066464325c885a1561bc834"
 }

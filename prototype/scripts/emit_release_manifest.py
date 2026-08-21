@@ -69,7 +69,7 @@ def main() -> int:
     out = ROOT / "results/RELEASE_MANIFEST.json"
     out.write_text(json.dumps(manifest, indent=2) + "\n")
     print(f"{len(entries)} files  manifest_sha256={manifest['manifest_sha256'][:16]}...")
-    print(f"release_commit={manifest['release_commit'][:12]}  dirty={manifest['dirty']}")
+    print(f"release_commit={manifest['release_commit'][:12]}  source_dirty={manifest['source_dirty']}")
     return 0
 
 
