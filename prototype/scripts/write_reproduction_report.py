@@ -34,6 +34,8 @@ def main() -> int:
         f"| unchanged | {sum(r['verdict'] == 'same' for r in diff['rows'])} |",
         f"| changed | {diff['n_changed']} |",
         f"| new in this release | {sum(r['verdict'] == 'NEW' for r in diff['rows'])} |",
+        f"| changed by the QUEST fidelity correction | "
+        f"{diff.get('n_expected_change', 0)} |",
         f"| absent | {diff['n_absent']} |",
         "",
     ]
@@ -50,6 +52,18 @@ def main() -> int:
         lines.append("")
     else:
         lines += ["Every compared quantity reproduced exactly.", ""]
+
+    if diff.get("expected_change_reasons"):
+        lines += [
+            "## Why the QUEST-derived quantities moved", "",
+            "The v0.1 baseline omitted the joint angle-reoptimisation phase and was "
+            "therefore not QUEST. Replacing it with the published algorithm necessarily "
+            "moves every QUEST-derived number; nothing else may move.", "",
+            "| quantity | reason |", "|---|---|",
+        ]
+        for k, v in diff["expected_change_reasons"].items():
+            lines.append(f"| `{k}` | {v} |")
+        lines.append("")
 
     lines += [
         "## Provenance",

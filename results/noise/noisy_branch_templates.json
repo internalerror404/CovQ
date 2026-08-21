@@ -1,6 +1,6 @@
 {
   "schema_version": "covq.measurement.record/0.1",
-  "source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+  "source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
   "dirty": false,
   "dirty_scope": [
     "prototype/src",
@@ -252,5 +252,5 @@
     "declared_readout_cfi_max": 1.6536667212725877e-34
   },
   "status": "DONE",
-  "record_hash": "58d1fa491dec56c73060ffe19edbc3029b2fc1a3c1225d4fccf0ec0677e24353"
+  "record_hash": "7ee65f32e3a2670528a32dad9793102cae68081659846d50d80c627625c7efb3"
 }

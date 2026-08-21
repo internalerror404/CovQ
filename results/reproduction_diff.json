@@ -3,7 +3,7 @@
   "development_ref": "HEAD",
   "relative_tolerance": 1e-06,
   "n_compared": 27,
-  "n_changed": 0,
+  "n_changed": 4,
   "n_absent": 0,
   "rows": [
     {
@@ -83,9 +83,9 @@
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/n_converged",
       "development": 10,
-      "release": 10,
-      "relative_difference": 0.0,
-      "verdict": "same"
+      "release": 11,
+      "relative_difference": 0.09090909090909091,
+      "verdict": "CHANGED"
     },
     {
       "label": "k3_total",
@@ -110,9 +110,9 @@
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/max_cx_ratio_over_converged",
       "development": 135.55555555555554,
-      "release": 135.55555555555554,
-      "relative_difference": 0.0,
-      "verdict": "same"
+      "release": 32.6530612244898,
+      "relative_difference": 0.7591167614586819,
+      "verdict": "CHANGED"
     },
     {
       "label": "k3_depth_always_one",
@@ -224,9 +224,9 @@
       "artifact": "results/noise/quest_operational_comparison.json",
       "json_pointer": "/rows/0/quest_shots_noisy_qfi_upper_bound",
       "development": 1.6260855073181055,
-      "release": 1.6260855073181055,
-      "relative_difference": 0.0,
-      "verdict": "same"
+      "release": 1.6261456545651514,
+      "relative_difference": 3.698761354924423e-05,
+      "verdict": "CHANGED"
     },
     {
       "label": "n10_primary_field",
@@ -242,9 +242,9 @@
       "artifact": "results/noise/quest_operational_comparison.json",
       "json_pointer": "/quest_preparation/two_qubit_rotations",
       "development": 44,
-      "release": 44,
-      "relative_difference": 0.0,
-      "verdict": "same"
+      "release": 3,
+      "relative_difference": 0.9318181818181818,
+      "verdict": "CHANGED"
     },
     {
       "label": "sparse_preparation_cx",
@@ -256,5 +256,5 @@
       "verdict": "same"
     }
   ],
-  "submission_gate": "PASS"
+  "submission_gate": "PAUSE"
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": "covq.measurement.record/0.1",
-  "source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+  "source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
   "dirty": false,
   "dirty_scope": [
     "prototype/src",
@@ -27,8 +27,8 @@
       "artifact": "results/measurements/ideal_block_readout.json",
       "json_pointer": "/worst_attainment_gap",
       "value": 3.108624468950438e-15,
-      "record_hash": "863a5eb321fc211915031ab58ab8ff21175c8040f4040a63762ea76c1fd31014",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "c64c0888a4f8b85ab5a19b9edea349c86e714c7ddc9d5bcc1cf169ec0005330f",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -36,8 +36,8 @@
       "artifact": "results/measurements/schedule_attainability.json",
       "json_pointer": "/worst_schedule_gap",
       "value": 1.5667258001043705e-15,
-      "record_hash": "8246acc89ac5f487b8ff8f1d0138a6f514fbadbfab63bf2fe59895855f87d853",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "5866e45073342f6db39c3e5470ae27e93f5f115fcf01d23ab93e2e57a697d328",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -45,8 +45,8 @@
       "artifact": "results/measurements/readout_singularities.json",
       "json_pointer": "/cases/0/fixed_all_x_trace",
       "value": 0.0,
-      "record_hash": "06965d9cc671303ad316ce3601e3063d2da629a1bd4ae8357379a5091019195c",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "75462318f6e694791a0c9b9b69db367a1280c8d03946d7e19524f5bbe879999c",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -54,8 +54,8 @@
       "artifact": "results/measurements/readout_singularities.json",
       "json_pointer": "/cases/0/matched_readout_trace",
       "value": 3.9999999999999964,
-      "record_hash": "06965d9cc671303ad316ce3601e3063d2da629a1bd4ae8357379a5091019195c",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "75462318f6e694791a0c9b9b69db367a1280c8d03946d7e19524f5bbe879999c",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -63,8 +63,8 @@
       "artifact": "results/noise/qfi_covariance_separation.json",
       "json_pointer": "/dephasing_covariance_max_drift",
       "value": 1.1102230246251565e-16,
-      "record_hash": "4e9e3e309a2b897145e82597c02f571711a291cc7f181596df5b1fcef535bfa2",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "ec7bfc7e3cc4b3f0e7000caad74f455ef4203b577c598645abad96bd71389f07",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -72,8 +72,8 @@
       "artifact": "results/noise/qfi_covariance_separation.json",
       "json_pointer": "/dephasing_cfi_minus_qfim_max",
       "value": 6.661338147750939e-16,
-      "record_hash": "4e9e3e309a2b897145e82597c02f571711a291cc7f181596df5b1fcef535bfa2",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "ec7bfc7e3cc4b3f0e7000caad74f455ef4203b577c598645abad96bd71389f07",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -81,8 +81,8 @@
       "artifact": "results/measurements/estimator_efficiency.json",
       "json_pointer": "/status",
       "value": "DONE",
-      "record_hash": "f7dfcb9e515ec759f1a48cac912abccd1799e76ba7fba6288d15846ddc3af740",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "cf60a450962961e1700e446ecbd45a215196f1b7ce849e9e5d39e690947f629b",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -90,17 +90,17 @@
       "artifact": "results/measurements/adaptive_recentering.json",
       "json_pointer": "/status",
       "value": "DONE",
-      "record_hash": "dd42005f134ac29e9d3b715e1b74255ff0e095e271804a0258376f80d86b58f6",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "a5cba1017aa77c60666e40a753767e9a695118a59fcc2cc942e784df52eb2790",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
       "label": "k3_converged",
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/n_converged",
-      "value": 10,
-      "record_hash": "b9cba1652ae887c2272dc82b10e13a53b150ac3c444f6a95d3e0221cc32670da",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "value": 11,
+      "record_hash": "4aa949048de0a4c09f493381b858bb4ed96701a0ebdaef2e9e020115c01ca70d",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -108,8 +108,8 @@
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/n_total",
       "value": 11,
-      "record_hash": "b9cba1652ae887c2272dc82b10e13a53b150ac3c444f6a95d3e0221cc32670da",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "4aa949048de0a4c09f493381b858bb4ed96701a0ebdaef2e9e020115c01ca70d",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -117,17 +117,17 @@
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/min_cx_ratio_over_converged",
       "value": 2.5,
-      "record_hash": "b9cba1652ae887c2272dc82b10e13a53b150ac3c444f6a95d3e0221cc32670da",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "4aa949048de0a4c09f493381b858bb4ed96701a0ebdaef2e9e020115c01ca70d",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
       "label": "k3_max_cx_ratio",
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/max_cx_ratio_over_converged",
-      "value": 135.55555555555554,
-      "record_hash": "b9cba1652ae887c2272dc82b10e13a53b150ac3c444f6a95d3e0221cc32670da",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "value": 32.6530612244898,
+      "record_hash": "4aa949048de0a4c09f493381b858bb4ed96701a0ebdaef2e9e020115c01ca70d",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -135,8 +135,8 @@
       "artifact": "results/baselines_k3_quest.json",
       "json_pointer": "/covq_two_qubit_depth_is_always_one",
       "value": true,
-      "record_hash": "b9cba1652ae887c2272dc82b10e13a53b150ac3c444f6a95d3e0221cc32670da",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "4aa949048de0a4c09f493381b858bb4ed96701a0ebdaef2e9e020115c01ca70d",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -144,8 +144,8 @@
       "artifact": "results/noise/noisy_pricing_oracle.json",
       "json_pointer": "/worst_gap",
       "value": 8.881784197001252e-16,
-      "record_hash": "63e5e1eb55f8b714f43faef20ec0dfde130565af3c2c20328931d7c1c2386083",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "9b680967e6934ea253d63037bbbe1e73fc8990840d0c25d22301fa5bbbcfb853",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -153,8 +153,8 @@
       "artifact": "results/noise/noisy_pricing_oracle.json",
       "json_pointer": "/n_cases",
       "value": 12,
-      "record_hash": "63e5e1eb55f8b714f43faef20ec0dfde130565af3c2c20328931d7c1c2386083",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "9b680967e6934ea253d63037bbbe1e73fc8990840d0c25d22301fa5bbbcfb853",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -162,8 +162,8 @@
       "artifact": "results/noise/noise_aware_floor_compiler.json",
       "json_pointer": "/worst_optimality_gap",
       "value": 2.0954757928848256e-16,
-      "record_hash": "6602a16be707708b20337b267e9839430680d5fcad9f262d930920754155a339",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "734071c398b89581ed0fdba341078bc93a134cc1d3c59c65f6243ff82e22623f",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -174,8 +174,8 @@
         0.15,
         0.2
       ],
-      "record_hash": "6602a16be707708b20337b267e9839430680d5fcad9f262d930920754155a339",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "734071c398b89581ed0fdba341078bc93a134cc1d3c59c65f6243ff82e22623f",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -183,8 +183,8 @@
       "artifact": "results/noise/setting_cost_phase_diagram.json",
       "json_pointer": "/worst_crossover_at_c_setup_1e4",
       "value": 13046.859631079658,
-      "record_hash": "d0171afd573bdc25368d2541db9fcec9d74ff34f04181d17e758c0501b29ff5a",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "30fbeff69897c25772f455c46bc6fb5a1fce13cb8fadc83d6ba5e7ac41c4367d",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -192,8 +192,8 @@
       "artifact": "results/noise/fixed_setting_cost_solver.json",
       "json_pointer": "/worst_greedy_excess_percent",
       "value": 7.240561920959548,
-      "record_hash": "95461ab27334193f8798d0c91d54f830a3f4518374897d83e5b04bb553d3fad8",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "03194bc243dcd7e1e5c2c6635fb8e3e744fee1378cacfab053314e7ba34550e0",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -201,8 +201,8 @@
       "artifact": "results/noise/fixed_setting_cost_solver.json",
       "json_pointer": "/status",
       "value": "FAILS",
-      "record_hash": "95461ab27334193f8798d0c91d54f830a3f4518374897d83e5b04bb553d3fad8",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "03194bc243dcd7e1e5c2c6635fb8e3e744fee1378cacfab053314e7ba34550e0",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -210,8 +210,8 @@
       "artifact": "results/noise/adaptive_readout_performance.json",
       "json_pointer": "/arms/0/best_ratio",
       "value": 1.0000000000000002,
-      "record_hash": "65bfc35f7b90bc5adaef3e5dab363f6f7edf010808758bf4afacb5289047f450",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "c106f1e0f428f0e9b8eb39e86d66184cad0923294008a26b32bbee441a8d5a44",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -219,8 +219,8 @@
       "artifact": "results/noise/adaptive_readout_performance.json",
       "json_pointer": "/arms/2/best_ratio",
       "value": 0.9766612320619459,
-      "record_hash": "65bfc35f7b90bc5adaef3e5dab363f6f7edf010808758bf4afacb5289047f450",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "c106f1e0f428f0e9b8eb39e86d66184cad0923294008a26b32bbee441a8d5a44",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -228,17 +228,17 @@
       "artifact": "results/noise/quest_operational_comparison.json",
       "json_pointer": "/rows/0/covq_deployable_fixed_pilot_exposure",
       "value": 1.7854844662521132,
-      "record_hash": "f3e7624b1b94ebcc190ba4ae512f410005d082ee88dd41f16002617c950b9f76",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "d4539c38e7e8cc0e515fafbf4b0a97ca88860ff5b9bd17970b2c93c4d65e5ac5",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
       "label": "n10_noiseless_quest",
       "artifact": "results/noise/quest_operational_comparison.json",
       "json_pointer": "/rows/0/quest_shots_noisy_qfi_upper_bound",
-      "value": 1.6260855073181055,
-      "record_hash": "f3e7624b1b94ebcc190ba4ae512f410005d082ee88dd41f16002617c950b9f76",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "value": 1.6261456545651514,
+      "record_hash": "d4539c38e7e8cc0e515fafbf4b0a97ca88860ff5b9bd17970b2c93c4d65e5ac5",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -246,17 +246,17 @@
       "artifact": "results/noise/quest_operational_comparison.json",
       "json_pointer": "/primary_covq_field",
       "value": "covq_deployable_fixed_pilot_exposure",
-      "record_hash": "f3e7624b1b94ebcc190ba4ae512f410005d082ee88dd41f16002617c950b9f76",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "d4539c38e7e8cc0e515fafbf4b0a97ca88860ff5b9bd17970b2c93c4d65e5ac5",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
       "label": "quest_two_qubit_rotations",
       "artifact": "results/noise/quest_operational_comparison.json",
       "json_pointer": "/quest_preparation/two_qubit_rotations",
-      "value": 44,
-      "record_hash": "f3e7624b1b94ebcc190ba4ae512f410005d082ee88dd41f16002617c950b9f76",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "value": 3,
+      "record_hash": "d4539c38e7e8cc0e515fafbf4b0a97ca88860ff5b9bd17970b2c93c4d65e5ac5",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     },
     {
@@ -264,8 +264,8 @@
       "artifact": "results/noise/quest_operational_comparison.json",
       "json_pointer": "/sparse_caratheodory_preparation/cx_count",
       "value": 232,
-      "record_hash": "f3e7624b1b94ebcc190ba4ae512f410005d082ee88dd41f16002617c950b9f76",
-      "record_source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+      "record_hash": "d4539c38e7e8cc0e515fafbf4b0a97ca88860ff5b9bd17970b2c93c4d65e5ac5",
+      "record_source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
       "record_dirty": false
     }
   ],
@@ -275,8 +275,8 @@
   "all_records_clean": true,
   "single_source_commit": true,
   "source_commits": [
-    "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3"
+    "f141111cab92a2ac0f7c1cf64466453c6a7c6194"
   ],
   "status": "DONE",
-  "record_hash": "9f7a3a87f3525f25531941cfd7d5c64cb9fe0271569f804cadf8bcbb9fde32b3"
+  "record_hash": "772a23aa667802637ba015116606618b6eb8262826643933c607ce446083205d"
 }

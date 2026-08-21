@@ -31,6 +31,19 @@ EXPECTED_NEW = {
     "n10_primary_field",
 }
 
+# Quantities the QUEST fidelity correction was *supposed* to move.  The v0.1
+# baseline omitted the joint angle-reoptimisation phase and so was not QUEST;
+# replacing it with the published algorithm necessarily changes every
+# QUEST-derived number.  Naming them individually, with the reason, keeps the
+# gate meaningful: anything else that moves is still a reproduction failure.
+EXPECTED_CHANGED = {
+    "k3_converged": "path_m5 no longer hits the depth cap once angles are reoptimised",
+    "k3_max_cx_ratio": "greedy overestimated QUEST depth; 135.6 was an artefact",
+    "k3_min_cx_ratio": "unchanged families re-measured under the published algorithm",
+    "n10_noiseless_quest": "same target state, far fewer gates",
+    "quest_two_qubit_rotations": "44 under terminal greedy, 3 under QUEST-tE",
+}
+
 
 def git_show(ref: str, rel: str):
     try:
@@ -83,15 +96,22 @@ def main(ref: str = "HEAD") -> int:
             absent += 0 if expected_new else 1
             continue
         verdict, rel_diff = compare(dev, cur)
-        changed += verdict == "CHANGED"
-        rows.append({"label": label, "artifact": rel, "json_pointer": pointer,
-                     "development": dev, "release": cur,
-                     "relative_difference": rel_diff, "verdict": verdict})
+        row = {"label": label, "artifact": rel, "json_pointer": pointer,
+               "development": dev, "release": cur,
+               "relative_difference": rel_diff, "verdict": verdict}
+        if verdict == "CHANGED" and label in EXPECTED_CHANGED:
+            row["verdict"] = "EXPECTED_CHANGE"
+            row["reason"] = EXPECTED_CHANGED[label]
+        else:
+            changed += verdict == "CHANGED"
+        rows.append(row)
     payload = {
         "schema_version": "covq.reproduction_diff/0.4",
         "development_ref": ref,
         "relative_tolerance": REL_TOL,
         "n_compared": len(rows), "n_changed": changed, "n_absent": absent,
+        "n_expected_change": sum(r["verdict"] == "EXPECTED_CHANGE" for r in rows),
+        "expected_change_reasons": EXPECTED_CHANGED,
         "rows": rows,
         "submission_gate": "PASS" if changed == 0 and absent == 0 else "PAUSE",
     }

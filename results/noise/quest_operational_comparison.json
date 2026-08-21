@@ -1,6 +1,6 @@
 {
   "schema_version": "covq.measurement.record/0.1",
-  "source_commit": "dc2213544ffd2f1ccc0fa055cc54def2e0fcb5b3",
+  "source_commit": "f141111cab92a2ac0f7c1cf64466453c6a7c6194",
   "dirty": false,
   "dirty_scope": [
     "prototype/src",
@@ -33,7 +33,7 @@
   "diagnostic_covq_field": "covq_oracle_angle_exposure",
   "accounting": {
     "covq_metric": "classical Fisher matrix of the emitted readout under the frozen f=0.02 two-quadrature pilot policy; the matched-analyzer value is retained only as a ceiling",
-    "quest_metric": "mixed-state SLD QFIM (optimistic upper bound, no readout compiled)",
+    "quest_metric": "mixed-state SLD QFIM of QUEST-tE (optimistic upper bound, no readout compiled)",
     "sparse_metric": "mixed-state SLD QFIM (optimistic upper bound)",
     "two_qubit_noise": "charged per emitted two-qubit gate on every arm",
     "shot_metric": "shots to satisfy A^T F A >= G_req, i.e. 1 / floor margin"
@@ -42,10 +42,11 @@
     "cx_count": 232,
     "caveat": "this prototype's sparse-amplitude preparation is a dense upper bound, not a competitive routine; the arm's degradation reflects that circuit, not an intrinsic property of single-state realisation"
   },
+  "quest_variant": "tE (published: insert, then joint L-BFGS reoptimisation)",
   "quest_preparation": {
     "stop_reason": "converged",
-    "rotations": 50,
-    "two_qubit_rotations": 44
+    "rotations": 4,
+    "two_qubit_rotations": 3
   },
   "rows": [
     {
@@ -59,8 +60,8 @@
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 3.532127097800928,
       "product_only_shots": 3.255208333333339,
-      "quest_shots_noisy_qfi_upper_bound": 1.6260855073181055,
-      "quest_two_qubit_gates_total": 71.54776232199664,
+      "quest_shots_noisy_qfi_upper_bound": 1.6261456545651514,
+      "quest_two_qubit_gates_total": 4.878436963695454,
       "sparse_caratheodory_shots_noisy_qfi_upper_bound": 1.6274161414459365
     },
     {
@@ -74,8 +75,8 @@
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 3.603843585145322,
       "product_only_shots": 3.255208333333339,
-      "quest_shots_noisy_qfi_upper_bound": 2.876466464138612,
-      "quest_two_qubit_gates_total": 126.56452442209894,
+      "quest_shots_noisy_qfi_upper_bound": 1.6974840913223102,
+      "quest_two_qubit_gates_total": 5.092452273966931,
       "sparse_caratheodory_shots_noisy_qfi_upper_bound": 7.802496119814292
     },
     {
@@ -89,8 +90,8 @@
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 3.6777666574353693,
       "product_only_shots": 3.255208333333339,
-      "quest_shots_noisy_qfi_upper_bound": 5.122027213506929,
-      "quest_two_qubit_gates_total": 225.36919739430488,
+      "quest_shots_noisy_qfi_upper_bound": 1.769226634778542,
+      "quest_two_qubit_gates_total": 5.307679904335625,
       "sparse_caratheodory_shots_noisy_qfi_upper_bound": 46.889907384613664
     },
     {
@@ -104,8 +105,8 @@
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 3.913714235790504,
       "product_only_shots": 3.255208333333339,
-      "quest_shots_noisy_qfi_upper_bound": 32.80407844639222,
-      "quest_two_qubit_gates_total": 1443.3794516412577,
+      "quest_shots_noisy_qfi_upper_bound": 2.0009349912444754,
+      "quest_two_qubit_gates_total": 6.002804973733426,
       "sparse_caratheodory_shots_noisy_qfi_upper_bound": 31102.751890456668
     },
     {
@@ -119,8 +120,8 @@
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 4.360650738025838,
       "product_only_shots": 3.255208333333339,
-      "quest_shots_noisy_qfi_upper_bound": 835.7640289074677,
-      "quest_two_qubit_gates_total": 36773.61727192858,
+      "quest_shots_noisy_qfi_upper_bound": 2.4693665198097365,
+      "quest_two_qubit_gates_total": 7.40809955942921,
       "sparse_caratheodory_shots_noisy_qfi_upper_bound": 5200690140.044578
     },
     {
@@ -134,11 +135,11 @@
       "covq_entangled_settings": 3,
       "covq_expected_two_qubit_gates": 5.518948590313952,
       "product_only_shots": 3.255208333333339,
-      "quest_shots_noisy_qfi_upper_bound": 351088.950852985,
-      "quest_two_qubit_gates_total": 15447913.837531341,
+      "quest_shots_noisy_qfi_upper_bound": 3.8927998661627576,
+      "quest_two_qubit_gates_total": 11.678399598488273,
       "sparse_caratheodory_shots_noisy_qfi_upper_bound": null
     }
   ],
   "status": "DONE",
-  "record_hash": "f3e7624b1b94ebcc190ba4ae512f410005d082ee88dd41f16002617c950b9f76"
+  "record_hash": "d4539c38e7e8cc0e515fafbf4b0a97ca88860ff5b9bd17970b2c93c4d65e5ac5"
 }
