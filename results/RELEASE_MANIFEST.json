@@ -361,5 +361,11 @@
       "sha256": "5ec128ad9dd35259018459429c212c31263ea76ef83c17adb3f387a8a66f1efa"
     }
   ],
-  "manifest_sha256": "6f2b2a45896c68269a45d6a9195347d62150b5deb446b473649032e696d67fb0"
+  "manifest_sha256": "6f2b2a45896c68269a45d6a9195347d62150b5deb446b473649032e696d67fb0",
+  "release_tag": {
+    "name": "covq-v0.4-journal-release",
+    "target_commit": "455965e8ef2338abefe07a280b907c7cd51eb9c5",
+    "pushed": false,
+    "reason": "the git proxy in this environment refuses refs/tags; branch refs push normally"
+  }
 }

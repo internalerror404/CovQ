@@ -22,7 +22,7 @@ information-floor compiler is the reason anyone needs the engine.
 | `J5` documentation | `DONE` | `prototype/README.md` rewritten (it described an 85-test tree with no noise, estimator or QUEST work), `REGISTRATION.md` added, `STATUS.md` refreshed. |
 | `J6` machine-generated paper | `PASS / FIGURES_ABSENT` | LaTeX source vendored at `paper/CovQ_Paper_v0.4.tex`. All five result tables regenerate from records into `paper/generated/`; four **MATCH** the source to 0.5 % relative and N10 is `EXPECTED_CHANGE` (it gains the deployable column). Seven prose-quoted figures also bound and matching. 27/27 quantities resolved, all records clean, single source commit. **`make_figures.py` and the `.bib` never arrived**, so Figures 3–4 cannot be regenerated or checksummed. |
 | `J7` proof and citation audit | `PARTIAL` | `docs/audits/J7_PROOF_AUDIT_v0.4.md`. Self-audit only — it does not discharge the requirement for an independent reader. Four items flagged. Citations **not verifiable**: `arxiv.org` is blocked by the egress proxy. |
-| `J8` archive | `PARTIAL` | `results/RELEASE_MANIFEST.json`: SHA-256 over every source and result file plus an environment lock. **DOI minting is external**; figure and PDF checksums need those artifacts in-repo. |
+| `J8` archive | `PARTIAL` | `results/RELEASE_MANIFEST.json`: SHA-256 over every source and result file plus an environment lock (70 files, `6f2b2a45896c6826…`). Tag `covq-v0.4-journal-release` created locally at `455965e8ef23` but **the git proxy in this environment refuses tag refs** — branch pushes succeed, `refs/tags/*` does not. Recreate it after clone with `git tag -a covq-v0.4-journal-release 455965e8ef23`. **DOI minting is external**; figure and PDF checksums need those artifacts in-repo. |
 
 ## Disposition
 
