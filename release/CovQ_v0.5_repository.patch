@@ -1,0 +1,173 @@
+diff --git a/prototype/src/covq/quest.py b/prototype/src/covq/quest.py
+--- a/prototype/src/covq/quest.py
++++ b/prototype/src/covq/quest.py
+@@
+ def quest_circuit(result: QuestResult, n: int) -> Circuit:
+     """Emit the rotation sequence so resources are parsed, never estimated.
+ 
++    The registered published-QUEST baseline is optimized from ``|+>^n``.
++    The emitted artifact must therefore prepare that input itself; otherwise
++    simulating the circuit from the framework default ``|0...0>`` produces a
++    different state even though the stored optimizer state is correct.
++
+     Each two-qubit Pauli rotation lowers to basis changes, two CX, and one RZ;
+     single-qubit rotations lower to basis changes and one RZ.  Gate 9 of the
+     handoff requires resource claims to come from emitted artifacts, so the
+     comparison below counts these, not a formula.
+     """
+     c = Circuit(n)
++    for q in range(n):
++        c.h(q)
+     for rot, t in result.rotations:
+         pre = []
+@@
+     return c
+
+diff --git a/prototype/scripts/emit_campaign_records.py b/prototype/scripts/emit_campaign_records.py
+--- a/prototype/scripts/emit_campaign_records.py
++++ b/prototype/scripts/emit_campaign_records.py
+@@
+ from covq.noise import (FROZEN_PILOT_POLICY, BlockLocalNoise, branch_template,
+                         deployable_exposure, fixed_setting_cost_compile, floor_margin,
+                         noise_aware_floor_compile, pair_channel, pilot_recentered_block,
+-                        product_template, simulate_circuit_noisy, simulate_noisy_state)
++                        product_template, simulate_circuit_noisy)
+@@
+-from covq.quest import moment_constraints, quest_published
++from covq.quest import moment_constraints, quest_circuit, quest_published
+@@
+     qr = quest_published(moment_constraints(ps, F_target), m, variant='tE',
+                          max_depth=80, tol=1e-13)
++    quest_ir = quest_circuit(qr, m)
++    quest_low = lower_to_cx(quest_ir)
++    quest_resources = resources(quest_low)
++    quest_circuit_state = simulate(quest_low)
++    quest_optimizer_state = qr.state / np.linalg.norm(qr.state)
++    quest_circuit_state = quest_circuit_state / np.linalg.norm(quest_circuit_state)
++    quest_state_infidelity = float(
++        max(0.0, 1.0 - abs(np.vdot(quest_optimizer_state, quest_circuit_state)) ** 2))
+@@
+-        q_shots = shots_from(simulate_noisy_state(qr.rotations, m, noise))
++        # Equal physical accounting: every circuit arm is lowered to the same
++        # native CX representation and receives one identical two-qubit noise
++        # event after every emitted CX.  A weight-two Pauli rotation emits two
++        # CX gates and must not be charged as one physical entangler.
++        q_shots = shots_from(simulate_circuit_noisy(quest_low, noise, n_data=m))
+@@
+-            "quest_two_qubit_gates_total": (qr.two_qubit_rotations * q_shots
+-                                            if q_shots else None),
++            "quest_emitted_cx_total": (quest_resources["cx_count"] * q_shots
++                                       if q_shots else None),
++            # Backward-compatible alias, now explicitly emitted-CX based.
++            "quest_two_qubit_gates_total": (quest_resources["cx_count"] * q_shots
++                                            if q_shots else None),
+@@
+-                "two_qubit_noise": "charged per emitted two-qubit gate on every arm",
++                "two_qubit_noise": "one identical depolarizing event after every emitted CX on every circuit arm",
+@@
+-            "quest_preparation": {"stop_reason": qr.stop_reason,
+-                                  "rotations": qr.depth_adaptive_length,
+-                                  "two_qubit_rotations": qr.two_qubit_rotations},
++            "quest_preparation": {
++                "stop_reason": qr.stop_reason,
++                "total_pauli_rotations": qr.depth_adaptive_length,
++                "two_qubit_pauli_rotations": qr.two_qubit_rotations,
++                "emitted_cx_count": quest_resources["cx_count"],
++                "emitted_cx_depth": quest_resources["two_qubit_depth"],
++                "input_preparation": "|+>^n emitted inside quest_circuit",
++                "optimizer_vs_emitted_circuit_infidelity": quest_state_infidelity,
++            },
+             "rows": rows, "status": "DONE"}
+
+diff --git a/prototype/scripts/emit_k3_baseline.py b/prototype/scripts/emit_k3_baseline.py
+--- a/prototype/scripts/emit_k3_baseline.py
++++ b/prototype/scripts/emit_k3_baseline.py
+@@
+         parsed = resources(lower_to_cx(quest_circuit(res, m)))
+         psi = res.state / np.linalg.norm(res.state)
++        emitted_psi = simulate(lower_to_cx(quest_circuit(res, m)))
++        emitted_psi = emitted_psi / np.linalg.norm(emitted_psi)
++        emitted_infidelity = float(max(0.0, 1.0 - abs(np.vdot(psi, emitted_psi)) ** 2))
+@@
+-                "rotations": res.depth_adaptive_length,
+-                "two_qubit_rotations": res.two_qubit_rotations,
+-                "cx_per_shot": parsed["cx_count"],
+-                "two_qubit_depth": parsed["two_qubit_depth"],
++                "total_pauli_rotations": res.depth_adaptive_length,
++                "two_qubit_pauli_rotations": res.two_qubit_rotations,
++                "emitted_cx_count": parsed["cx_count"],
++                "emitted_cx_depth": parsed["two_qubit_depth"],
++                # Compatibility aliases for older table generators.
++                "rotations": res.depth_adaptive_length,
++                "two_qubit_rotations": res.two_qubit_rotations,
++                "cx_per_shot": parsed["cx_count"],
++                "two_qubit_depth": parsed["two_qubit_depth"],
++                "optimizer_vs_emitted_circuit_infidelity": emitted_infidelity,
+@@
+         "resource_provenance": "both sides parsed from emitted circuits",
++        "resource_units": {
++            "logical": ["total Pauli rotations", "two-qubit Pauli rotations"],
++            "physical": ["emitted CX count", "emitted CX depth"],
++        },
+
+diff --git a/prototype/tests/test_release_accounting_v0_5.py b/prototype/tests/test_release_accounting_v0_5.py
+new file mode 100644
+--- /dev/null
++++ b/prototype/tests/test_release_accounting_v0_5.py
+@@
++"""Release regressions for the faithful QUEST and emitted-CX accounting path."""
++
++import math
++
++import numpy as np
++
++import covq.noise as noise_mod
++from covq.circuits import lower_to_cx, resources
++from covq.noise import BlockLocalNoise, simulate_circuit_noisy
++from covq.quest import (PauliRotation, QuestResult, _apply_rotation, _dense,
++                        quest_circuit)
++from covq.sim import simulate
++
++
++def _same_state_up_to_phase(a, b, tol=1e-12):
++    a = np.asarray(a, dtype=complex) / np.linalg.norm(a)
++    b = np.asarray(b, dtype=complex) / np.linalg.norm(b)
++    return 1.0 - abs(np.vdot(a, b)) ** 2 <= tol
++
++
++def _one_weight_two_result(theta=0.37):
++    rot = PauliRotation(((0, "X"), (1, "Z")))
++    plus = np.ones(4, dtype=complex) / 2.0
++    state = _apply_rotation(plus, _dense(rot.axes, 2), theta)
++    return QuestResult(True, 0.0, [(rot, theta)], state, [1.0, 0.0], "converged")
++
++
++def test_quest_emitted_circuit_prepares_its_registered_input():
++    result = _one_weight_two_result()
++    got = simulate(lower_to_cx(quest_circuit(result, 2)))
++    assert _same_state_up_to_phase(got, result.state)
++
++
++def test_one_weight_two_pauli_rotation_emits_two_cx():
++    low = lower_to_cx(quest_circuit(_one_weight_two_result(), 2))
++    r = resources(low)
++    assert r["cx_count"] == 2
++
++
++def test_native_noise_is_applied_once_per_emitted_cx(monkeypatch):
++    low = lower_to_cx(quest_circuit(_one_weight_two_result(), 2))
++    calls = []
++    original = noise_mod._depolarize_pair_in_place
++
++    def counted(rho, qs, m, p):
++        calls.append(tuple(qs))
++        return original(rho, qs, m, p)
++
++    monkeypatch.setattr(noise_mod, "_depolarize_pair_in_place", counted)
++    simulate_circuit_noisy(
++        low,
++        BlockLocalNoise(edge_depolarizing={(0, 1): 0.02}),
++        n_data=2,
++    )
++    assert len(calls) == 2
++    assert calls == [(0, 1), (0, 1)]

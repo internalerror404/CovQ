@@ -1,0 +1,134 @@
+name: Apply CovQ v0.5 accounting correction and regenerate evidence
+
+on:
+  push:
+    branches:
+      - journal-v0.5-finish
+
+permissions:
+  contents: write
+
+jobs:
+  finish-release-evidence:
+    if: ${{ !contains(github.event.head_commit.message, '[v0.5 auto-finish]') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply the frozen v0.5 repository correction
+        shell: bash
+        run: |
+          set -euo pipefail
+          git apply --check release/CovQ_v0.5_repository.patch
+          git apply release/CovQ_v0.5_repository.patch
+
+      - name: Commit corrected source before evidence generation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "CovQ release automation"
+          git config user.email "actions@users.noreply.github.com"
+          git add \
+            prototype/src/covq/quest.py \
+            prototype/scripts/emit_campaign_records.py \
+            prototype/scripts/emit_k3_baseline.py \
+            prototype/tests/test_release_accounting_v0_5.py
+          git commit -m "[v0.5 auto-finish] Use self-contained QUEST circuits and per-emitted-CX accounting"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: prototype/requirements.txt
+
+      - name: Install prototype dependencies
+        shell: bash
+        run: python -m pip install -r prototype/requirements.txt
+
+      - name: Run frozen test suite
+        shell: bash
+        working-directory: prototype
+        run: PYTHONPATH=src python -m pytest tests -q
+
+      - name: Regenerate all canonical records from clean source
+        shell: bash
+        working-directory: prototype
+        run: |
+          set -euo pipefail
+          PYTHONPATH=src python scripts/run_evidence.py --out results/prototype_evidence.json
+          PYTHONPATH=src python scripts/emit_measurement_records.py
+          PYTHONPATH=src python scripts/emit_k3_baseline.py
+          PYTHONPATH=src python scripts/emit_noise_records.py
+          PYTHONPATH=src python scripts/emit_campaign_records.py
+
+      - name: Validate final release invariants
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import math
+          from pathlib import Path
+
+          root = Path('.')
+          k3 = json.loads((root / 'results/baselines_k3_quest.json').read_text())
+          n10 = json.loads((root / 'results/noise/quest_operational_comparison.json').read_text())
+
+          assert k3['status'] == 'DONE'
+          assert k3['n_converged'] == 11 and k3['n_total'] == 11
+          assert math.isclose(k3['min_cx_ratio_over_converged'], 2.5, rel_tol=0, abs_tol=1e-10)
+          assert math.isclose(k3['max_cx_ratio_over_converged'], 32.6530612244898,
+                              rel_tol=0, abs_tol=1e-8)
+          for case in k3['cases']:
+              if 'skipped' in case:
+                  continue
+              q = case['quest']
+              assert q['optimizer_vs_emitted_circuit_infidelity'] <= 1e-12
+
+          prep = n10['quest_preparation']
+          assert prep['total_pauli_rotations'] == 4
+          assert prep['two_qubit_pauli_rotations'] == 3
+          assert prep['emitted_cx_count'] == 6
+          assert prep['optimizer_vs_emitted_circuit_infidelity'] <= 1e-12
+          assert n10['dirty'] is False
+
+          expected = {
+              0.00: (1.7854844662521132, 1.6261456545651514),
+              0.01: (1.8219543336327084, 1.768),
+              0.02: (1.859557084169793, 1.917),
+              0.05: (1.9796381987912088, 2.441),
+              0.20: (2.7991476027280737, 8.961),
+          }
+          rows = {round(float(r['edge_depolarizing']), 8): r for r in n10['rows']}
+          for q, (covq, quest) in expected.items():
+              row = rows[q]
+              assert math.isclose(row['covq_deployable_fixed_pilot_exposure'], covq,
+                                  rel_tol=5e-4, abs_tol=5e-4)
+              assert math.isclose(row['quest_shots_noisy_qfi_upper_bound'], quest,
+                                  rel_tol=5e-4, abs_tol=5e-4)
+          assert rows[0.01]['quest_shots_noisy_qfi_upper_bound'] < rows[0.01]['covq_deployable_fixed_pilot_exposure']
+          assert rows[0.02]['quest_shots_noisy_qfi_upper_bound'] > rows[0.02]['covq_deployable_fixed_pilot_exposure']
+          assert math.isclose(rows[0.20]['quest_shots_noisy_qfi_upper_bound'] /
+                              rows[0.20]['covq_deployable_fixed_pilot_exposure'],
+                              3.201, rel_tol=5e-4, abs_tol=5e-4)
+          print('All v0.5 release invariants passed.')
+          PY
+
+      - name: Commit canonical evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add results prototype/results
+          if git diff --cached --quiet; then
+            echo "Canonical records were already current."
+          else
+            git commit -m "[v0.5 auto-finish] Regenerate clean canonical evidence under symmetric CX accounting"
+          fi
+
+      - name: Push corrected source and evidence
+        shell: bash
+        run: git push origin HEAD:journal-v0.5-finish
