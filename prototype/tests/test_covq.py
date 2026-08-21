@@ -739,3 +739,153 @@ def test_edge_and_branch_shot_scaled_agree_where_both_converge():
             assert rb["cost"] == pytest.approx(re_["cost"], abs=1e-6)
             agreed += 1
     assert agreed >= 4, "the unentangled regime should converge in both formulations"
+
+
+# ----------------------------------------------------------------------
+# Section 11: measurement compilation.  Gates M1-M3.
+# ----------------------------------------------------------------------
+
+def _schedule(m, seed, load=0.8):
+    from covq.instances import matching_target
+    rng = np.random.default_rng(seed)
+    dec = wid.decompose_width2(matching_target(m, rng, load=load).F)
+    assert dec.feasible
+    return prg.labelled_schedule_from_width(dec)
+
+
+def test_m1_compiled_local_readout_attains_the_branch_qfim():
+    """Section 11.1, made operational.
+
+    A *product of single-qubit* equatorial measurements attains the QFIM of
+    every cat-block branch exactly.  Because the label is retained, the
+    schedule's classical Fisher matrix then equals its QFIM -- so "realizes the
+    QFIM" holds in the operational sense too, for this backend.
+    """
+    from covq.measurement import compile_schedule_readout
+
+    rng = np.random.default_rng(17)
+    for m in (3, 4, 5, 6):
+        prog = _schedule(m, seed=m * 13)
+        ps = z_generators(m)
+        for theta in (np.zeros(m), rng.uniform(-2.0, 2.0, m)):
+            rep = compile_schedule_readout(prog, ps, theta)
+            assert rep["all_branches_attain"], (m, rep["max_branch_gap"])
+            assert rep["all_branches_dominated"]
+            assert rep["schedule_gap"] < 1e-9
+            assert rep["compiled_total_information"] == pytest.approx(float(m), abs=1e-9)
+
+
+def test_m1_attainment_survives_wider_cat_blocks():
+    """The construction is not special to pair width; k = 2, 3, 4 all attain."""
+    from covq.instances import block_diagonal
+    from covq.measurement import compile_schedule_readout
+
+    rng = np.random.default_rng(23)
+    for k in (2, 3, 4):
+        dec = wid.decompose_width_k(block_diagonal(6, k, rng).F, k)
+        if not dec.feasible:
+            continue
+        prog = prg.labelled_schedule_from_width(dec)
+        ps = z_generators(6)
+        for theta in (np.zeros(6), rng.uniform(-2.0, 2.0, 6)):
+            rep = compile_schedule_readout(prog, ps, theta)
+            assert rep["schedule_gap"] < 1e-9, (k, rep["schedule_gap"])
+            assert rep["all_branches_dominated"]
+
+
+def test_m2_fixed_readout_collapses_on_a_hyperplane_that_contains_theta_zero():
+    """Section 11.1(ii) is load-bearing, not a technicality.
+
+    The unmatched readout attains only off the union of hyperplanes
+    ``sum_{i in B} s_i theta_i = 0 mod pi``.  That set is measure zero, but it
+    contains ``theta = 0``, and it contains *every* uniform operating point as
+    soon as a branch carries a negatively signed edge.  Both are exactly where
+    an experiment would choose to sit.
+    """
+    from covq.measurement import compile_schedule_readout
+
+    from covq.instances import matching_target
+
+    dec = wid.decompose_width2(matching_target(4, np.random.default_rng(11), load=0.8).F)
+    assert dec.feasible
+    assert any(min(s) < 0 for _, _, s in dec.branches), "fixture must carry a negative edge"
+    prog = prg.labelled_schedule_from_width(dec)
+    ps = z_generators(4)
+
+    at_zero = compile_schedule_readout(prog, ps, np.zeros(4))
+    assert at_zero["fixed_x_total_information"] == pytest.approx(0.0, abs=1e-12)
+    assert at_zero["compiled_total_information"] == pytest.approx(4.0, abs=1e-9)
+
+    uniform = compile_schedule_readout(prog, ps, np.full(4, 0.3))
+    assert uniform["fixed_x_total_information"] < uniform["compiled_total_information"] - 1e-6
+    assert uniform["schedule_gap"] < 1e-9
+
+    generic = compile_schedule_readout(prog, ps, np.array([0.7, -0.35, 1.1, 0.2]))
+    assert generic["schedule_gap"] < 1e-9
+
+
+def test_m3_equation_110_reduces_to_the_covariance_formula_on_pure_states():
+    """Eq (110) and Eq (109) must coincide exactly where the paper says they do."""
+    from covq.measurement import covariance_surrogate, mixed_state_qfim
+
+    rng = np.random.default_rng(29)
+    for m in (1, 2, 3, 4):
+        ps = z_generators(m)
+        for _ in range(4):
+            psi = prg.signed_cat_circuit(rng.choice([-1, 1], size=m), n_qubits=m)
+            psi = data_statevector(psi)
+            rho = np.outer(psi, psi.conj())
+            ref = qfim_from_statevector(psi, ps)
+            assert mixed_state_qfim(rho, ps) == pytest.approx(ref, abs=1e-12)
+            assert covariance_surrogate(rho, ps) == pytest.approx(ref, abs=1e-12)
+
+
+def test_m3_covariance_surrogate_is_not_the_qfim_off_pure_states():
+    """Section 11.3, quantified.
+
+    Against the closed form for a depolarised phase probe, ``F_Q = v^2`` with
+    visibility ``v = 1 - 4p/3``, while ``4 Cov`` stays pinned at one.  The error
+    is unbounded, not a correction.
+    """
+    from covq.measurement import depolarize, noisy_report
+
+    ps = z_generators(1)
+    psi = np.array([1.0, 1.0], dtype=complex) / np.sqrt(2.0)
+    rho0 = np.outer(psi, psi.conj())
+    for p in (0.0, 0.05, 0.1, 0.25, 0.5):
+        rep = noisy_report(depolarize(rho0, p), ps)
+        v = 1.0 - 4.0 * p / 3.0
+        assert rep["trace_sld_qfim"] == pytest.approx(v * v, abs=1e-10)
+        assert rep["trace_covariance_surrogate"] == pytest.approx(1.0, abs=1e-10)
+        assert rep["surrogate_dominates"]
+
+
+def test_m3_z_correlators_are_blind_to_the_bell_primitive_s_own_dephasing():
+    """The sharpest form of the Section 11.3(a) warning.
+
+    Every generator is diagonal in ``Z``, so ``Z`` dephasing leaves the whole
+    observable covariance matrix *exactly* invariant -- including the edge
+    correlator the compiler was asked to hit -- while the SLD QFIM decays to
+    zero.  Reporting only 11.3(a) for a Bell schedule can therefore certify a
+    program that carries no information at all.
+    """
+    from covq.measurement import (cfi_of_readout_mixed, compile_branch_readout,
+                                  covariance_surrogate, dephase, mixed_state_qfim, _rotate)
+
+    ps = z_generators(2)
+    psi = _rotate(data_statevector(prg.signed_cat_circuit(np.array([1, 1]), n_qubits=2)),
+                  ps, np.array([0.4, 0.0]))
+    alphas = compile_branch_readout(psi, ps, [(0, 1)])
+    rho0 = np.outer(psi, psi.conj())
+    cov0 = covariance_surrogate(rho0, ps)
+
+    previous = np.inf
+    for p in (0.0, 0.1, 0.2, 0.35, 0.5):
+        rho = dephase(rho0, p)
+        assert covariance_surrogate(rho, ps) == pytest.approx(cov0, abs=1e-12)
+        fq = mixed_state_qfim(rho, ps)
+        cfi = cfi_of_readout_mixed(rho, ps, alphas)
+        assert np.linalg.eigvalsh(fq - cfi).min() >= -1e-9, "CFI must not exceed the QFIM"
+        assert np.trace(fq) <= previous + 1e-12
+        previous = float(np.trace(fq))
+    assert previous == pytest.approx(0.0, abs=1e-10)

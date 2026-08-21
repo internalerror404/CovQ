@@ -1,6 +1,6 @@
 # CovQ — STATUS
 
-Last updated: 2026-08-20. Decision of record: `docs/decisions/DECISION_001_PIVOT_TO_BOUNDED_WIDTH.md`.
+Last updated: 2026-08-21. Decision of record: `docs/decisions/DECISION_001_PIVOT_TO_BOUNDED_WIDTH.md`.
 Current documents: `charter/*_v0.3.*`. Proof of record:
 `docs/proofs/THEOREM_PAIR_WIDTH_AND_INFORMATION_FLOOR_v0.1.md`.
 
@@ -53,6 +53,13 @@ information-floor compiler is the reason anyone needs the engine.
 | `THEOREM_3_DUAL_EXPLICIT` | `DONE` | Conic dual derived and implemented for both formulations; Farkas rays certify infeasibility; separation oracle is an explicit interface. |
 | `K9_ANSWERED` | `CLOSED_FORM` | Pair entanglement beats the product probe iff `c_e < 2c₀/m`; max advantage exactly `2×`. With `c_e = c₀` the floor compiler is trivial — must be stated in §8. |
 | `WIDTH_3_HARDNESS` | `PROVED_IN_MANUSCRIPT` | Partition Into Triangles, §7.2; verified on 6 graphs. Supersedes the repo's `OPEN` status. |
+| `SECTION_11_MEASUREMENT` | `AUDITED / PARTIAL` | `docs/audits/SECTION_11_MEASUREMENT_COMPILATION_AUDIT_v0.1.md`. Local attainability closed operationally for cat-block schedules; minimum-cost measurement synthesis remains the frontier §11.5 declares. |
+| `LOCAL_READOUT_ATTAINS_QFIM` | `PROVED + VERIFIED` | A product of single-qubit equatorial measurements attains every branch QFIM exactly (`< 3.6e-15`), for block width `k = 2, 3, 4`. Label retention then gives `CFI_schedule = F`. No ancilla, no joint measurement. |
+| `READOUT_IS_NOT_OPTIONAL` | `NEW / VERIFIED` | The fixed all-X readout returns **identically zero** information at `θ = 0`, and loses every mixed-sign block along the whole uniform ray. §11.1(ii) is load-bearing; `Readout` in the Eq (114) output tuple cannot be defaulted. |
+| `EQ_110_IMPLEMENTED` | `VERIFIED` | Reduces to `4 Cov` on pure states to `4.4e-16`; matches the closed form `F_Q = v²` for the depolarised probe exactly. |
+| `Z_CORRELATORS_BLIND_TO_DEPHASING` | `NEW / VERIFIED` | All generators are `Z`-diagonal, so `Z` dephasing leaves the whole covariance matrix bit-for-bit invariant while the SLD QFIM decays to zero. At `p = 0.5` a Bell block reports `4 Cov = 2` and carries no information at all. Strengthens the §11.3(a) warning into a concrete statement. |
+| `MEASUREMENT_GATE_NUMBERING` | `DEFERRED` | New gates are `M1`–`M3`, not `C13`–`C16`. The contract that fixes the C-series numbering has not been received; renumbering is deferred rather than guessed. |
+| `MIN_COST_MEASUREMENT_SYNTHESIS` | `OPEN` | M1 exhibits *an* attaining readout, not the cheapest under a declared setting cost. Eq (112)'s estimator layer and §11.4's noisy objective (111) are also unimplemented. |
 | `PROTOTYPE` | `PARTIAL` | `prototype/`. Built before this decision arrived; retained as the audit's evidence, not as Task 0C. See `prototype/README.md`. |
 
 ## Corrections carried into v0.2
