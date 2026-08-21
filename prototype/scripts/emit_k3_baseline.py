@@ -133,6 +133,7 @@ def run() -> dict:
                 "starts_tried": tried,
                 "max_depth_cap": MAX_DEPTH,
             },
+            "quest_cross_check": cross_record,
         })
         c = cases[-1]
         if "skipped" not in c:
