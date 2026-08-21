@@ -3,8 +3,8 @@
   "evidence_source_commit": [
     "9b7f970153443263c16617788ae79784b9fe233c"
   ],
-  "release_packaging_commit": "0ec8971b448a0bb08f3161d076487080a3ddc436",
-  "release_commit": "0ec8971b448a0bb08f3161d076487080a3ddc436",
+  "release_packaging_commit": "a54bd14bc39f63bdd80e6279169b6c2eb4b3cf95",
+  "release_commit": "a54bd14bc39f63bdd80e6279169b6c2eb4b3cf95",
   "source_dirty": false,
   "environment": {
     "python": "3.11.15",
@@ -12,7 +12,7 @@
     "scipy": "1.17.1",
     "platform": "Linux-6.18.44-fc-v21-x86_64-with-glibc2.39"
   },
-  "n_files": 72,
+  "n_files": 73,
   "files": [
     {
       "path": "README.md",
@@ -26,8 +26,8 @@
     },
     {
       "path": "STATUS.md",
-      "bytes": 23922,
-      "sha256": "cf8c710e6477523a32d577a94b811c5d8d43e61966dcfd443149f574992e8e54"
+      "bytes": 24610,
+      "sha256": "40938c47ca006769559dab8fc6f2e811ec3251c7a7363d3dfe7d2493e3e04c17"
     },
     {
       "path": "charter/CovQ_Experiment_Protocol_v0.3.yaml",
@@ -66,8 +66,8 @@
     },
     {
       "path": "docs/audits/K3_QUEST_BASELINE_v0.2.md",
-      "bytes": 10566,
-      "sha256": "6d1d685cf7f138e989c29b5cd212d7e90af3b7cf3c639c05b9bd59a2b5109dd7"
+      "bytes": 13590,
+      "sha256": "2ad0520cfc8682424e5869522860294b036ed6954d7e7be9d3ff93e512fd0bd2"
     },
     {
       "path": "docs/audits/MANUSCRIPT_V0_2_NUMERICAL_AUDIT.md",
@@ -175,6 +175,11 @@
       "sha256": "0df3bf2d858acb9aaf445d1975fde643c6c9b31110e76c02d34d09ff5a0c2d06"
     },
     {
+      "path": "prototype/scripts/quest_strengthening_study.py",
+      "bytes": 4189,
+      "sha256": "7b6dd11c48f4dca28eed9f668e4133f6a5234b7ab8788c2085862b7fbc8287f0"
+    },
+    {
       "path": "prototype/scripts/reproduction_diff.py",
       "bytes": 6518,
       "sha256": "960bf7757237aac01f56be48b57a3dc52a57ff9ba5ee0bcb236d3823ac747c37"
@@ -256,8 +261,8 @@
     },
     {
       "path": "prototype/src/covq/quest.py",
-      "bytes": 18409,
-      "sha256": "3e0639baa9bc7fac26d00c4ab55782e5e4133ec0f069e64b0b8f35df3fd749fd"
+      "bytes": 19654,
+      "sha256": "4b45a52dd39bd66a1a76ee6a14b255151a804da5537aaba50e6e8b9388360bf7"
     },
     {
       "path": "prototype/src/covq/sim.py",
@@ -382,5 +387,5 @@
     "reason": "this environment's git proxy refuses refs/tags; branch refs push normally, so the commit SHA is the durable identifier",
     "recreate": "git tag -a covq-journal-v0.5 <commit containing this file>"
   },
-  "manifest_sha256": "9ef6123d9083d2707be0eed0aff9734b46724fa617647b3efa772b1bbe524315"
+  "manifest_sha256": "c21350dfd1dd4e077d5cd54cf13f9a87bae061e2bbb9645db48b444e6b8f2d2c"
 }
