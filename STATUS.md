@@ -73,7 +73,7 @@ information-floor compiler is the reason anyone needs the engine.
 | `GENERAL_MIN_COST_MEASUREMENT_SYNTHESIS` | `PARTIAL` | Optimal in 2q-gate and ancilla count. Unpriced: local basis changes, setting changes, calibration, robustness, Clifford unwrapping, coherent-flag joint readout. |
 | `CLIFFORD_FRAME_READOUT_COST` | `ABSENT` | |
 | `COHERENT_FLAG_JOINT_READOUT` | `ABSENT` | |
-| `ESTIMATOR_LAYER_EQ_112` | `ABSENT` | Block-parity likelihood is explicit; branch-conditioned MLE is the natural next object. |
+| `ESTIMATOR_LAYER_EQ_112` | `DONE` | Branch-conditioned MLE over block-parity counts. Sufficient statistic is one parity count per `(branch, block)`; its Fisher matrix equals the schedule QFIM exactly (`0.0`). Consistent, and saturates `F_Π⁺/N` on the identifiable quotient — efficiency eigenvalues in `[0.992, 1.039]` against a Marchenko–Pastur band of `[0.946, 1.056]` at `N = 5·10⁴`, `R = 4000`. Gate alias `C10d` / `M4`. `results/measurements/estimator_efficiency.json`. |
 | `NOISE_AWARE_OBJECTIVE_EQ_111` | `ABSENT` | M3 supplies the measuring stick; no compiler optimises it. |
 | `ADAPTIVE_RECENTERING_POLICY` | `ABSENT` | Backend needs a nominal operating point or a coarse-estimate-then-recentre rule. |
 | `PROTOTYPE` | `PARTIAL` | `prototype/`. Built before this decision arrived; retained as the audit's evidence, not as Task 0C. See `prototype/README.md`. |

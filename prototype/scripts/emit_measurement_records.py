@@ -196,12 +196,44 @@ def qfi_covariance_separation() -> dict:
             "status": "DONE" if cov_invariant < 1e-12 and gap < TOL["attainment_abs"] else "FAILS"}
 
 
+def estimator_efficiency() -> dict:
+    """Eq (112): does the branch-conditioned MLE saturate the readout's CRB?"""
+    from covq.estimator import efficiency_report, model_from_decomposition
+
+    rng = np.random.default_rng(9)
+    dec = decompose_width2(matching_target(3, np.random.default_rng(39), load=0.8).F)
+    model = model_from_decomposition(dec)
+    cases = []
+    for theta_name, theta in (("origin", np.zeros(3)),
+                              ("generic", np.array([0.21, -0.14, 0.33]))):
+        for n_shots in (500, 5_000, 50_000):
+            rep = efficiency_report(model, theta, n_shots, 4_000, rng)
+            cases.append({
+                "operating_point_name": theta_name, "operating_point": theta,
+                "n_shots": rep["n_shots"], "n_reps": rep["n_reps"], "rank": rep["rank"],
+                "max_abs_bias": rep["max_abs_bias"],
+                "bias_standard_error": rep["bias_standard_error"],
+                "bias_within_4_stderr": rep["bias_within_4_stderr"],
+                "efficiency_eigenvalues": rep["efficiency_eigenvalues"],
+                "marchenko_pastur_band": rep["mp_band"],
+                "efficiency_within_mp_band": rep["efficiency_within_mp_band"],
+            })
+    ok = all(c["efficiency_within_mp_band"] and c["bias_within_4_stderr"] for c in cases)
+    return {"gate": "C10d", "alias": "M4",
+            "claim": "branch-conditioned MLE over block-parity counts is consistent and "
+                     "attains F_Pi^+ / N on the identifiable quotient",
+            "estimator": "maximum likelihood, BFGS, sufficient statistic = one parity "
+                         "count per (branch, block)",
+            "cases": cases, "status": "DONE" if ok else "FAILS"}
+
+
 if __name__ == "__main__":
     for rel, builder in (
         ("results/measurements/ideal_block_readout.json", ideal_block_readout),
         ("results/measurements/schedule_attainability.json", schedule_attainability),
         ("results/measurements/readout_singularities.json", readout_singularities),
         ("results/noise/qfi_covariance_separation.json", qfi_covariance_separation),
+        ("results/measurements/estimator_efficiency.json", estimator_efficiency),
     ):
         payload = builder()
         path = _write(rel, payload)

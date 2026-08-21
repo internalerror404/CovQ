@@ -1005,3 +1005,49 @@ def test_m3_generator_basis_pinching_preserves_covariance_and_kills_all_informat
             assert covariance_surrogate(pinched, ps) == pytest.approx(
                 covariance_surrogate(rho, ps), abs=1e-10)
             assert np.abs(mixed_state_qfim(pinched, ps)).max() < 1e-18
+
+
+# ----------------------------------------------------------------------
+# Eq (112): the estimator layer.
+# ----------------------------------------------------------------------
+
+def test_estimator_parity_model_reproduces_the_schedule_qfim():
+    """The parity likelihood's Fisher matrix *is* the schedule QFIM.
+
+    Not approximately: the sufficient statistic is one parity count per
+    (branch, block), and its Fisher matrix is ``sum_r p_r sum_B s_B s_B^T``.
+    """
+    from covq.estimator import model_from_decomposition
+    from covq.instances import matching_target
+
+    for m in (3, 4, 5):
+        dec = wid.decompose_width2(matching_target(m, np.random.default_rng(m * 13),
+                                                   load=0.8).F)
+        assert dec.feasible
+        model = model_from_decomposition(dec)
+        assert model.fisher() == pytest.approx(dec.matrix(), abs=1e-12)
+
+
+def test_estimator_mle_is_consistent_and_saturates_the_cramer_rao_bound():
+    """Attaining the CFI at a point is not an estimator; this is the estimator.
+
+    Bias falls with the shot count and the empirical covariance matches
+    ``F^+/N`` on the identifiable quotient.  The tolerance band is set by Monte
+    Carlo error on sample-covariance eigenvalues at this replicate count, not by
+    what the estimator happens to achieve; a tighter study is recorded in
+    ``results/measurements/estimator_efficiency.json``.
+    """
+    from covq.estimator import efficiency_report, model_from_decomposition
+    from covq.instances import matching_target
+
+    rng = np.random.default_rng(9)
+    dec = wid.decompose_width2(matching_target(3, np.random.default_rng(39), load=0.8).F)
+    model = model_from_decomposition(dec)
+
+    coarse = efficiency_report(model, np.zeros(3), 500, 600, rng)
+    fine = efficiency_report(model, np.zeros(3), 20_000, 600, rng)
+    assert fine["max_abs_bias"] < coarse["max_abs_bias"]
+    for rep in (coarse, fine):
+        assert rep["rank"] == 3
+        assert rep["bias_within_4_stderr"], rep["max_abs_bias"]
+        assert rep["efficiency_within_mp_band"], rep["efficiency_eigenvalues"]

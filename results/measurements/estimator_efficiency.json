@@ -1,0 +1,164 @@
+{
+  "schema_version": "covq.measurement.record/0.1",
+  "source_commit": "e2aefe26e70192dd3b559cd215652e2a62740e69",
+  "dirty": true,
+  "tolerances": {
+    "attainment_abs": 1e-09,
+    "closed_form_abs": 1e-09,
+    "pinching_abs": 1e-10
+  },
+  "qfim_evaluator": "covq.qfim.qfim_from_statevector / covq.measurement.mixed_state_qfim",
+  "cfi_evaluator": "covq.measurement.cfi_of_readout(_mixed)",
+  "gate": "C10d",
+  "alias": "M4",
+  "claim": "branch-conditioned MLE over block-parity counts is consistent and attains F_Pi^+ / N on the identifiable quotient",
+  "estimator": "maximum likelihood, BFGS, sufficient statistic = one parity count per (branch, block)",
+  "cases": [
+    {
+      "operating_point_name": "origin",
+      "operating_point": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "n_shots": 500,
+      "n_reps": 4000,
+      "rank": 3,
+      "max_abs_bias": 0.002019152917938768,
+      "bias_standard_error": 0.00161400630997481,
+      "bias_within_4_stderr": true,
+      "efficiency_eigenvalues": [
+        0.9706676206533665,
+        1.032290062810438,
+        1.048829415785365
+      ],
+      "marchenko_pastur_band": [
+        0.9459777442494834,
+        1.0555222557505166
+      ],
+      "efficiency_within_mp_band": true
+    },
+    {
+      "operating_point_name": "origin",
+      "operating_point": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "n_shots": 5000,
+      "n_reps": 4000,
+      "rank": 3,
+      "max_abs_bias": 0.0008886667628540093,
+      "bias_standard_error": 0.0004962123900187508,
+      "bias_within_4_stderr": true,
+      "efficiency_eigenvalues": [
+        0.9534100867038556,
+        0.9939765158885108,
+        1.055351599122909
+      ],
+      "marchenko_pastur_band": [
+        0.9459777442494834,
+        1.0555222557505166
+      ],
+      "efficiency_within_mp_band": true
+    },
+    {
+      "operating_point_name": "origin",
+      "operating_point": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "n_shots": 50000,
+      "n_reps": 4000,
+      "rank": 3,
+      "max_abs_bias": 8.642364324704311e-05,
+      "bias_standard_error": 0.00015468806679742406,
+      "bias_within_4_stderr": true,
+      "efficiency_eigenvalues": [
+        0.952476215179567,
+        1.0039594716500813,
+        1.0301857586167245
+      ],
+      "marchenko_pastur_band": [
+        0.9459777442494834,
+        1.0555222557505166
+      ],
+      "efficiency_within_mp_band": true
+    },
+    {
+      "operating_point_name": "generic",
+      "operating_point": [
+        0.21,
+        -0.14,
+        0.33
+      ],
+      "n_shots": 500,
+      "n_reps": 4000,
+      "rank": 3,
+      "max_abs_bias": 0.005090462621965441,
+      "bias_standard_error": 0.0016022888380362885,
+      "bias_within_4_stderr": true,
+      "efficiency_eigenvalues": [
+        0.9846055118567056,
+        0.9949819125456796,
+        1.0361644815548343
+      ],
+      "marchenko_pastur_band": [
+        0.9459777442494834,
+        1.0555222557505166
+      ],
+      "efficiency_within_mp_band": true
+    },
+    {
+      "operating_point_name": "generic",
+      "operating_point": [
+        0.21,
+        -0.14,
+        0.33
+      ],
+      "n_shots": 5000,
+      "n_reps": 4000,
+      "rank": 3,
+      "max_abs_bias": 9.978011605837889e-05,
+      "bias_standard_error": 0.0004944652986049032,
+      "bias_within_4_stderr": true,
+      "efficiency_eigenvalues": [
+        0.9683237805262287,
+        0.9829939084316417,
+        1.0567300593293296
+      ],
+      "marchenko_pastur_band": [
+        0.9459777442494834,
+        1.0555222557505166
+      ],
+      "efficiency_within_mp_band": true
+    },
+    {
+      "operating_point_name": "generic",
+      "operating_point": [
+        0.21,
+        -0.14,
+        0.33
+      ],
+      "n_shots": 50000,
+      "n_reps": 4000,
+      "rank": 3,
+      "max_abs_bias": 1.9818070330676618e-05,
+      "bias_standard_error": 0.00015847724121526295,
+      "bias_within_4_stderr": true,
+      "efficiency_eigenvalues": [
+        0.9972849751728975,
+        1.026771188415713,
+        1.0578675164123703
+      ],
+      "marchenko_pastur_band": [
+        0.9459777442494834,
+        1.0555222557505166
+      ],
+      "efficiency_within_mp_band": true
+    }
+  ],
+  "status": "DONE",
+  "record_hash": "6119fd962fdbc2f8c87a560783e461083c29639c64970907a64c81f37a880376"
+}
